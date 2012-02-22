@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120217012956) do
+ActiveRecord::Schema.define(:version => 20120222195147) do
+
+  create_table "editors", :force => true do |t|
+    t.string   "sunetid"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "reserves", :force => true do |t|
     t.string   "cid"
@@ -26,6 +32,11 @@ ActiveRecord::Schema.define(:version => 20120217012956) do
     t.boolean  "has_been_sent"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+  end
+
+  create_table "reserves_editors", :id => false, :force => true do |t|
+    t.integer "reserve_id"
+    t.integer "editor_id"
   end
 
 end
