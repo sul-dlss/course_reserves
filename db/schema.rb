@@ -19,6 +19,11 @@ ActiveRecord::Schema.define(:version => 20120222195147) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "editors_reserves", :id => false, :force => true do |t|
+    t.integer "editor_id"
+    t.integer "reserve_id"
+  end
+
   create_table "reserves", :force => true do |t|
     t.string   "cid"
     t.string   "desc"
@@ -27,16 +32,10 @@ ActiveRecord::Schema.define(:version => 20120222195147) do
     t.string   "contact_name"
     t.string   "contact_phone"
     t.string   "contact_email"
-    t.string   "edit_sunet_ids"
     t.text     "item_list"
     t.boolean  "has_been_sent"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-  end
-
-  create_table "reserves_editors", :id => false, :force => true do |t|
-    t.integer "reserve_id"
-    t.integer "editor_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
 end

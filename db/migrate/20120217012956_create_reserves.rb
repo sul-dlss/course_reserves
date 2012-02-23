@@ -8,7 +8,6 @@ class CreateReserves < ActiveRecord::Migration
       t.string :contact_name
       t.string :contact_phone
       t.string :contact_email
-      t.string :edit_sunet_ids
       t.text :item_list
       t.boolean :has_been_sent
 
