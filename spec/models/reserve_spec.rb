@@ -20,6 +20,30 @@ describe Reserve do
       editors.include?('jkeck').should==true
     end
     
+    it "should generate editor relationships from instructor_sunet_ids field for single sunet_id" do
+      reserve = Reserve.create( { :instructor_sunet_ids => 'asmith', :cid => 'test_cid', :item_list => [{ :title => 'My Title' }] } )
+      reserve.save!
+      reserve.editors.length.should==1
+      reserve.editors.first[:sunetid].should=='asmith'   
+    end
+    
+    it "should generate editor relationships from instructor_sunet_ids field for multiple sunet_ids" do
+      reserve = Reserve.create( { :instructor_sunet_ids => 'jlavigne, jkeck', :cid => 'test_cid', :item_list => [{ :title => 'My Title' }] } )
+      reserve.save!
+      reserve.editors.length.should==2
+      editors = reserve.editors.map{|e| e[:sunetid] }
+      editors.include?('jlavigne').should==true
+      editors.include?('jkeck').should==true
+    end
+    
+    it "should generate editor relationships from instructor_sunet_ids & editor_sunet_ids fields for multiple sunet_ids" do
+      reserve = Reserve.create( { :editor_sunet_ids => 'asmith, bjones', :instructor_sunet_ids => 'jlavigne, jkeck', :cid => 'test_cid', :item_list => [{ :title => 'My Title' }] } )
+      reserve.save!
+      reserve.editors.length.should==4
+      editors = reserve.editors.map{|e| e[:sunetid] }
+      editors.should==['jlavigne', 'jkeck', 'asmith', 'bjones']
+    end
+    
   end
 
   describe "item_list serialization" do 

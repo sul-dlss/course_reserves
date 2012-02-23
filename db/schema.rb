@@ -32,11 +32,12 @@ ActiveRecord::Schema.define(:version => 20120222195147) do
     t.string   "contact_name"
     t.string   "contact_phone"
     t.string   "contact_email"
+    t.string   "instructor_sunet_ids"
     t.string   "editor_sunet_ids"
     t.text     "item_list"
     t.boolean  "has_been_sent"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
   end
 
 end
