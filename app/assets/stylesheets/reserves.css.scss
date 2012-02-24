@@ -1,3 +1,57 @@
 // Place all the styles related to the reserves controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+$cardinal: #990000; 
+$odd: #FFFFFF;
+$even: #CCCCCC;
+$data-header: #CCCCCC;
+
+body {
+	background:url("/assets/body.png") repeat scroll 0 0 transparent;
+}
+#wrapper {
+	background:url("/assets/wrapper.png") repeat-x scroll 0 0 transparent;
+	padding-top:15px;
+}
+
+#container {
+	background: url("/assets/top-container.png") repeat-x scroll 0 0 #FFFFFF;
+  border-radius: 3px 3px 3px 3px;
+  border-top: 1px solid #FFFFFF;
+	margin: 0 60px;
+	padding:15px;
+	background-color:#FFFFFF;
+}
+h1 {
+	font-weight:bold;
+	font-size: 1.5em;
+}
+h2 {
+	font-weight:bold;
+	font-size: 1.25em;
+	margin: 3px 0;
+}
+h3 {
+	font-weight:bold;
+	font-size:1em;
+}
+#course-details {
+	padding:10px 0 20px;
+	margin-bottom:10px;
+}
+#main-details {
+	float:left;
+}
+#main-details .section {
+	margin: 10px 0;
+}
+#list-management {
+	float:right;
+}
+
+
+fieldset#list-management {
+	padding:10px;
+	background-color:#FAFAFA;
+	border:1px solid #BAB7B6;
+}
