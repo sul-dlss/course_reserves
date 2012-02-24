@@ -37,7 +37,7 @@ class CourseWorkCourses
   end
   
   def all_courses
-    @all_course ||= process_all_courses_xml(self.raw_xml)
+    @all_courses ||= process_all_courses_xml(self.raw_xml)
   end
   
   private
@@ -46,7 +46,7 @@ class CourseWorkCourses
     Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))
   end
   
-  def process_all_courses_xml(xml)
+  def process_all_courses_xml(xml)   
     courses = []
     xml.xpath("//courseclass").each do |course|
       course_title = course[:title]
