@@ -6,9 +6,11 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
-<body>
-
-<%= yield %>
-
+<body id="<%= "#{params[:controller]}-#{params[:action]}" %>">
+  <div id="wrapper">
+    <div id="container">
+      <%= yield %>
+    </div>
+  </div>
 </body>
 </html>
