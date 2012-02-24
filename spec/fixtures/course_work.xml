@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+  <courseclass term="Winter 2012" title="Residential Racial Segregation and the Education of African-American Youth">
+    <class id="W12-EDUC-237X">
+      <section id="01">
+        <instructors>
+          <instructor sunetid="123">instructor's display name</instructor>
+          <instructor sunetid="456">instructor's display name</instructor>
+        </instructors>
+      </section>
+      <section id="02">
+        <instructors>
+          <instructor sunetid="123">instructor's display name</instructor>
+        </instructors>
+      </section>
+    </class>
+    <class id="W12-ETHICSOC-165E">
+      <section id="01">
+        <instructors>
+          <instructor sunetid="123">instructor's display name</instructor>
+        </instructors>
+      </section>
+    </class>
+    <class id="W12-AFRICAAM-165E">
+      <section id="01">
+        <instructors>
+          <instructor sunetid="123">instructor's display name</instructor>
+        </instructors>
+      </section>
+    </class>
+  </courseclass>
+
+  <courseclass term="Winter 2012" title="Global Positioning Systems">
+    <class id="W12-AA-272C">
+      <section id="01">
+        <instructors>
+          <instructor sunetid="123">instructor 1's display name</instructor>
+          <instructor sunetid="456">instructor 2's display name</instructor>
+        </instructors>
+      </section>
+    </class>
+  </courseclass>
+</response>
