@@ -4,4 +4,8 @@ module ApplicationHelper
     true  
   end
   
+  def app_config
+    CourseReserves::Application.config
+  end
+  
 end

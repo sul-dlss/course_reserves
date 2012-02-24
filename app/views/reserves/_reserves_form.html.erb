@@ -6,8 +6,11 @@
 		
 		<div><span>Instructor:</span> Some Professor</div>
 		<div>Send request to<br/>
-			<select>
-				<option>(select library)</option>
+			<select name="reserve[library]">
+				<option value="none">(select library)</option>
+				<% app_config.reserve_libraries.each do |email, library| %>
+					<option <%= "selected='selected'" if @reserve and @reserve.library == library -%> value="<%= library -%>"><%= library -%></option>
+				<% end %>
 			</select>
 		</div>
 		<div>
@@ -27,11 +30,11 @@
 	<fieldset>				
 		<h3>List management</h3>				
 		<p>Who should the library contact about this list?</p>
-		<label for="contact_name">Name</label> <input id="contact_name" type="text"/><br/>
-		<label for="contact_phone">Phone</label> <input id="contact_phone" type="text"/><br/>
-		<label for="contact_email">Email</label> <input id="contact_email" type="text"/><br/>
+		<label for="contact_name">Name</label> <input name="reserve[contact_name]" value="<%= @reserve.contact_name if @reserve -%>" id="contact_name" type="text" /><br/>
+		<label for="contact_phone">Phone</label> <input name="reserve[contact_phone]"  value="<%= @reserve.contact_phone if @reserve -%>" id="contact_phone" type="text"/><br/>
+		<label for="contact_email">Email</label> <input name="reserve[contact_email]" value="<%= @reserve.contact_email if @reserve -%>"  id="contact_email" type="text"/><br/>
 		<label for="editor_sunet_ids">Who can edit this list?</label><br/>
-		jdoe, <input id="editor_sunet_ids" type="text"/><br/>
+		jdoe, <input name="reserve[editor_sunet_ids]" value="<%= @reserve.editor_sunet_ids if @reserve -%>" id="editor_sunet_ids" type="text"/><br/>
 		<span>(SUNet IDs, separated by commas)</span>					
 	</fieldset>
 

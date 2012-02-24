@@ -56,4 +56,8 @@ module CourseReserves
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
   end
+
 end
+
+CourseReserves::Application.config.reserve_libraries = { :'jlavigne@stanford.edu' => 'Green Library', :'jkeck@stanford.edu' => 'Meyer Library' }
+  

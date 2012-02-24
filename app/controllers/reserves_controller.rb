@@ -9,7 +9,8 @@ class ReservesController < ApplicationController
   
   def create     
     @reserve = Reserve.create(params[:reserve])
-    @reserve.save!
+    @reserve.save! 
+    redirect_to({ :controller => 'reserves', :action => 'edit', :id => @reserve[:id] }) 
   end
   
   def edit    
@@ -17,8 +18,8 @@ class ReservesController < ApplicationController
   end
   
   def update    
-    Reserve.update(params[:reserve][:id], params[:reserve])
-    redirect_to edit_reserve(params[:reserve][:id])
+    Reserve.update(params[:id], params[:reserve])
+    redirect_to({ :controller => 'reserves', :action => 'edit', :id => params[:id] }) 
   end
   
   def show
