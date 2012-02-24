@@ -1,68 +1,11 @@
 <div>
 	
-	<h1>Course Reserve List Request</h1>
-
-    <div>
-    
-			<div>
-				<h2>Course ID and Title</h2>
-				
-				<div><span>Instructor:</span> Some Professor</div>
-				<div>Send request to<br/>
-					<select>
-						<option>(select library)</option>
-					</select>
-				</div>
-				<div>
-					When should these items be reserved?<br/>
-					<input type="radio" id="immediate"/><label for="immediate">immediately</label><br/>
-					<input type="radio" id="future"/>
-					<label for="future">for beginning of 
-						<select>
-							<option>Spring 2012</option>
-						</select> 
-						quarter
-					</label>
-				</div>
-				
- 			</div>
-
-			<fieldset>
-				
-				<h3>List management</h3>
-				
-				<p>Who should the library contact about this list?</p>
-				<label for="contact_name">Name</label> <input id="contact_name" type="text"/>
-				<label for="contact_phone">Phone</label> <input id="contact_phone" type="text"/>
-				<label for="contact_email">Email</label> <input id="contact_email" type="text"/>
-				<label for="editor_sunet_ids">Who can edit this list?</label><br/>
-				jdoe, <input id="editor_sunet_ids" type="text"/><br/>
-				<span>(SUNet IDs, separated by commas)</span>
-				
+	<h1>Edit Course Reserve List Request</h1>
+	<%= form_for @reserve do |f| -%>
 	
-			</fieldset>
-     
-
-    </div>	
-
-		<table>
+		<%= render "reserves_form" -%>
 			
-			<tr>
-				<th>&nbsp;</th>
-				<th>Title</th>
-				<th>Copies</th>
-				<th>Loan period</th>
-				<th>Delete</th>
-			</tr>
-			
-			<tr>
-				<td>&nbsp;</td>
-				<td>
-					Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "http://searchworks.stanford.edu/") %>.<br/>
-					<input type="text" /><input type="button" value="add" /> 
-				</td>	
-				<td colspan="3"> - or - <%= link_to("Reserve an item that's not in SearchWorks")%>
-			</tr>
-			
-		</table>	
+		<input type="submit" value="Send request"> <%= link_to "Cancel [discard changes]" -%>	
+		
+	<%- end -%>
 </div>

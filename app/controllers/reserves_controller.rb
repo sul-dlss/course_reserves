@@ -4,6 +4,9 @@ class ReservesController < ApplicationController
     #@my_reserves = Editor.find_by_sunetid(request.env['WEBAUTH_USER']).reserves
   end
   
+  def new
+  end
+  
   def create     
     @reserve = Reserve.create(params[:reserve])
     @reserve.save!

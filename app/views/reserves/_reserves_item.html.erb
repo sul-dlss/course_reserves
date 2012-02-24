@@ -1,0 +1,24 @@
+<tr>
+	<td>&nbsp;</td>
+	<td>
+		<% if item_not_in_searchworks? %>
+			<input type="textarea" />
+		<% else %>
+			<p>SearchWorks Title</p>
+			<p><%= link_to "http://searchworks.stanford.edu/view/12345" -%> <span><%= link_to "Add comment"-%></span></p>
+		<% end %>
+	</td>
+	<td>
+		<input type="text" /><br/>
+		<input type="checkbox" id="personal_copy"/>	<label for="personal_copy">personal copy available</label><br />
+		<% if item_not_in_searchworks? %>
+			<input type="checkbox" id="purchase_item"/>	<label for="purchase_item">purchase this item</label>
+		<% end %>
+	</td>
+	<td>
+		<select>
+			<option>2 hours</option>
+		</select>
+	</td>
+	<td><%= link_to "[delete]" -%></td>
+</tr>

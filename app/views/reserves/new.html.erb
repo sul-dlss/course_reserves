@@ -1,0 +1,12 @@
+<div>
+	
+	<h1>Course Reserve List Request</h1>
+	<%= form_for :reserve do |f| -%>
+	
+		<%= render "reserves_form" -%>
+		
+		<input type="submit" value="Send request"> <%= link_to "Cancel [discard changes]" -%>	
+			
+	<%- end -%>
+	
+</div>
