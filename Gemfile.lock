@@ -161,6 +161,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   jquery-rails
+  nokogiri
   rails (= 3.2.1)
   rspec-rails
   sass-rails (~> 3.2.3)
