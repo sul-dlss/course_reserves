@@ -39,26 +39,30 @@
   <div style="clear:both;"></div>
 </div>	
 <div>
-  <table>			
-  	<tr>
-  		<th>&nbsp;</th>
-  		<th>Title</th>
-  		<th>Copies</th>
-  		<th>Loan period</th>
-  		<th>Delete</th>
-  	</tr>		
-  	<% unless @reserve.blank? or @reserve.item_list.blank? %>
-  		<% @reserve.item_list.each_with_index do |item, index| %>
-  		<%= render :partial => "reserves_item", :locals => { :item => item, :index => index }-%>
-  		<% end %>
-  	<% end %>	
-  	<tr>
-  		<td><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
-  		<td>
-  			Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "http://searchworks.stanford.edu/") %>.<br/>
-  			<input type="text" /><input type="button" value="add" /> 
-  		</td>	
-  		<td colspan="3"> - or - <%= link_to("Reserve an item that's not in SearchWorks")%>
-  	</tr>			
+  <table>	
+    <thead>		
+    	<tr>
+    		<th>&nbsp;</th>
+    		<th>Title</th>
+    		<th>Copies</th>
+    		<th>Loan period</th>
+    		<th>Delete</th>
+    	</tr>
+  	</thead>	
+  	<tbody>
+    	<% unless @reserve.blank? or @reserve.item_list.blank? %>
+    		<% @reserve.item_list.each_with_index do |item, index| %>
+    		<%= render :partial => "reserves_item", :locals => { :item => item, :index => index }-%>
+    		<% end %>
+    	<% end %>	
+    	<tr>
+    		<td><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
+    		<td>
+    			Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "http://searchworks.stanford.edu/") %>.<br/>
+    			<input type="text" /><input type="button" value="add" /> 
+    		</td>	
+    		<td colspan="3"> - or - <%= link_to("Reserve an item that's not in SearchWorks")%>
+    	</tr>
+  	</tbody>		
   </table>
 </div>

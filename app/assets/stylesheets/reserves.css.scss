@@ -6,6 +6,25 @@ $odd: #FFFFFF;
 $even: #CCCCCC;
 $data-header: #CCCCCC;
 
+@mixin data-table {
+	thead {
+		background-color: $data-header;
+	}
+	th {
+		text-align: left;
+		padding: 5px 0;
+	}
+	td {
+		padding:10px;
+	}
+	tr.odd {
+		background-color: $odd;
+	}
+	tr.even {
+		background-color: $even;
+	}
+}
+
 body {
 	background:url("/assets/body.png") repeat scroll 0 0 transparent;
 }
@@ -55,4 +74,13 @@ fieldset#list-management {
 	padding:10px;
 	background-color:#FAFAFA;
 	border:1px solid #BAB7B6;
+}
+
+fieldset#list-management input {
+	width: 230px;
+}
+
+table {
+	width: 100%;
+	@include data-table;
 }
