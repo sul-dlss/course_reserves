@@ -32,9 +32,9 @@
 		<label for="contact_name">Name</label> <input name="reserve[contact_name]" value="<%= @reserve.contact_name if @reserve -%>" id="contact_name" type="text" /><br/>
 		<label for="contact_phone">Phone</label> <input name="reserve[contact_phone]"  value="<%= @reserve.contact_phone if @reserve -%>" id="contact_phone" type="text"/><br/>
 		<label for="contact_email">Email</label> <input name="reserve[contact_email]" value="<%= @reserve.contact_email if @reserve -%>"  id="contact_email" type="text"/><br/>
-		<label for="editor_sunet_ids">Who can edit this list?</label><br/>
-		jdoe, <input name="reserve[editor_sunet_ids]" value="<%= @reserve.editor_sunet_ids if @reserve -%>" id="editor_sunet_ids" type="text"/><br/>
-		<span>(SUNet IDs, separated by commas)</span>					
+		<label for="editor_sunet_ids" id="editors-list">Who can edit this list?</label><br/>
+		<span class="form-label">jdoe,</span> <input name="reserve[editor_sunet_ids]" value="<%= @reserve.editor_sunet_ids if @reserve -%>" id="editor_sunet_ids" type="text"/><br/>
+		<span class="help">(SUNet IDs, separated by commas)</span>					
 	</fieldset>
   <div style="clear:both;"></div>
 </div>	

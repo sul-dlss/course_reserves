@@ -15,7 +15,7 @@ $data-header: #CCCCCC;
 		padding: 5px 0;
 	}
 	td {
-		padding:10px;
+		padding: 10px;
 	}
 	tr.odd {
 		background-color: $odd;
@@ -26,11 +26,11 @@ $data-header: #CCCCCC;
 }
 
 body {
-	background:url("/assets/body.png") repeat scroll 0 0 transparent;
+	background: url("/assets/body.png") repeat scroll 0 0 transparent;
 }
 #wrapper {
-	background:url("/assets/wrapper.png") repeat-x scroll 0 0 transparent;
-	padding-top:15px;
+	background: url("/assets/wrapper.png") repeat-x scroll 0 0 transparent;
+	padding-top: 15px;
 }
 
 #container {
@@ -38,46 +38,60 @@ body {
   border-radius: 3px 3px 3px 3px;
   border-top: 1px solid #FFFFFF;
 	margin: 0 60px;
-	padding:15px;
-	min-width:670px;
-	background-color:#FFFFFF;
+	padding: 15px;
+	min-width: 670px;
+	background-color: #FFFFFF;
 }
 h1 {
-	font-weight:bold;
+	font-weight: bold;
 	font-size: 1.5em;
 }
 h2 {
-	font-weight:bold;
+	font-weight: bold;
 	font-size: 1.25em;
 	margin: 3px 0;
 }
 h3 {
-	font-weight:bold;
-	font-size:1em;
+	font-weight: bold;
+	font-size: 1em;
 }
 #course-details {
-	padding:10px 0 20px;
-	margin-bottom:10px;
+	padding: 10px 0 20px;
+	margin-bottom: 10px;
 }
 #main-details {
-	float:left;
+	float: left;
 }
 #main-details .section {
 	margin: 10px 0;
 }
 #list-management {
-	float:right;
+	float: right;
 }
 
 
 fieldset#list-management {
-	padding:10px;
-	background-color:#FAFAFA;
-	border:1px solid #BAB7B6;
+	padding: 10px;
+	background-color: #FAFAFA;
+	border: 1px solid #BAB7B6;
+}
+
+fieldset#list-management label, fieldset#list-management span.form-label {
+	display: inline-block;
+	width: 55px;
+  text-align: right;
+}
+fieldset#list-management label#editors-list {
+	width: auto;
 }
 
 fieldset#list-management input {
 	width: 230px;
+	margin-bottom: 5px;
+}
+
+fieldset#list-management span.help {
+	margin-left: 60px;
 }
 
 table {
