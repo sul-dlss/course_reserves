@@ -57,11 +57,10 @@
     	<% end %>	
     	<tr>
     		<td><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
-    		<td>
+    		<td colspan="4">
     			Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "http://searchworks.stanford.edu/") %>.<br/>
-    			<input type="text" /><input type="button" value="add" /> 
-    		</td>	
-    		<td colspan="3"> - or - <%= link_to("Reserve an item that's not in SearchWorks")%>
+    			<input type="text" /><input type="button" value="add" /> - or - <%= link_to("Reserve an item that's not in SearchWorks")%>
+    		</td>
     	</tr>
   	</tbody>		
   </table>
