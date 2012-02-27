@@ -1,17 +1,16 @@
 <tr>
-	<td>&nbsp;</td>
+	<td><%= index %></td>
 	<td>
-		<% if item_not_in_searchworks? %>
-			<input type="textarea" />
-		<% else %>
-			<p>SearchWorks Title</p>
-			<p><%= link_to "http://searchworks.stanford.edu/view/12345" -%> <span><%= link_to "Add comment"-%></span></p>
-		<% end %>
+		<% if item_in_searchworks? %>
+  		<p>SearchWorks Title</p>
+  		<p><%= link_to "http://searchworks.stanford.edu/view/12345" -%> <span><%= link_to "Add comment", "", :class=> "add-comment", :"data-item-index" => index -%></span></p>
+  	<%- end -%>
+  	<textarea cols="60" rows="5" class="item-comment" name="reserve[<%= index %>][comment]" data-item-index="<%= index %>" <%= "style='display:none;'" if item_in_searchworks? %>></textarea>
 	</td>
 	<td>
-		<input type="text" /><br/>
+		<input type="text" class="num_copies" maxlength="2" /><br/>
 		<input type="checkbox" id="personal_copy"/>	<label for="personal_copy">personal copy available</label>
-		<% if item_not_in_searchworks? %>
+		<% unless item_in_searchworks? %>
 			<br /><input type="checkbox" id="purchase_item"/>	<label for="purchase_item">purchase this item</label>
 		<% end %>
 	</td>
