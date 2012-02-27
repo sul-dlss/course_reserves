@@ -103,11 +103,18 @@ th.number {
 	width: 30px;
 }
 th.copies {
-	width:175px;
+	width: 200px;
 }
 th.loan_period {
-	width:125px;
+	width: 125px;
 }
 th.delete {
 	width: 80px;
+}
+
+input.num_copies {
+  width: 20px;
+}
+#sw_ckey {
+	width: 400px;
 }
