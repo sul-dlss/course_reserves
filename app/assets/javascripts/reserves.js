@@ -2,7 +2,7 @@
 $(document).ready(function(){
 	
 	// Add comment links
-	$(".add-comment").each(function(){
+	$(".add-comment a").each(function(){
 		var link = $(this);
 		var index = $(this).attr("data-item-index");
 		link.click(function(){

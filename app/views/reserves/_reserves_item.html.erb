@@ -3,7 +3,7 @@
 	<td>
 		<% if item_in_searchworks? %>
   		<p>SearchWorks Title</p>
-  		<p><%= link_to "http://searchworks.stanford.edu/view/12345" -%> <span><%= link_to "Add comment", "", :class=> "add-comment", :"data-item-index" => index -%></span></p>
+  		<p><%= link_to "http://searchworks.stanford.edu/view/12345" -%> <span class="add-comment"><%= link_to "Add comment", "", :class=> "add-comment", :"data-item-index" => index -%></span></p>
   	<%- end -%>
   	<textarea cols="60" rows="5" class="item-comment" name="reserve[<%= index %>][comment]" data-item-index="<%= index %>" <%= "style='display:none;'" if item_in_searchworks? %>></textarea>
 	</td>
