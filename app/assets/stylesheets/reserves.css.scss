@@ -13,6 +13,7 @@ $data-header: #CCCCCC;
 	th {
 		text-align: left;
 		padding: 5px 0;
+		font-weight: bold;
 	}
 	td {
 		padding: 10px;
@@ -97,4 +98,16 @@ fieldset#list-management span.help {
 table {
 	width: 100%;
 	@include data-table;
+}
+th.number {
+	width: 30px;
+}
+th.copies {
+	width:175px;
+}
+th.loan_period {
+	width:125px;
+}
+th.delete {
+	width: 80px;
 }
