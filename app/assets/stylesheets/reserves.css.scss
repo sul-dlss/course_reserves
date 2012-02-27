@@ -2,9 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 $cardinal: #990000; 
-$odd: #FFFFFF;
-$even: #CCCCCC;
-$data-header: #CCCCCC;
+$odd: #F6F6F6;
+$even: #ECECEC;
+$data-header: #DDDDDD;
 
 @mixin data-table {
 	thead {
