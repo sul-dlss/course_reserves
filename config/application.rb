@@ -60,4 +60,4 @@ module CourseReserves
 end
 
 CourseReserves::Application.config.reserve_libraries = { :'jlavigne@stanford.edu' => 'Green Library', :'jkeck@stanford.edu' => 'Meyer Library' }
-  
+CourseReserves::Application.config.load_periods = ["2 hours", "4 hours", "1 day", "2 days", "3 days"]

@@ -1,5 +1,5 @@
 <tr class="<%= cycle("odd","even") %>">
-	<td><%= index %></td>
+	<td><%= index + 1 %></td>
 	<td>
 		<% if item_in_searchworks? %>
   		<p>SearchWorks Title</p>
@@ -8,15 +8,17 @@
   	<textarea cols="60" rows="5" class="item-comment" name="reserve[<%= index %>][comment]" data-item-index="<%= index %>" <%= "style='display:none;'" if item_in_searchworks? %>></textarea>
 	</td>
 	<td>
-		<input type="text" class="num_copies" maxlength="2" /><br/>
-		<input type="checkbox" id="personal_copy"/>	<label for="personal_copy">personal copy available</label>
+		<input type="text" class="num_copies" name="reserve[<%= index %>][copies]" maxlength="2" /><br/>
+		<input type="checkbox" id="personal" name="reserve[<%= index %>][personal]" />	<label for="personal_copy">personal copy available</label>
 		<% unless item_in_searchworks? %>
-			<br /><input type="checkbox" id="purchase_item"/>	<label for="purchase_item">purchase this item</label>
+			<br /><input type="checkbox" id="purchase" name="reserve[<%= index %>][purchase]" />	<label for="purchase_item">purchase this item</label>
 		<% end %>
 	</td>
 	<td>
-		<select>
-			<option>2 hours</option>
+		<select name="reserve[<%= index %>][loan_period]">
+		  <%- app_config.load_periods.each do |lp| -%>
+  			<option<%= " selected='selected'" if lp == item[:load_period] %>><%= lp %></option>
+			<%- end -%>
 		</select>
 	</td>
 	<td><%= link_to "[delete]" -%></td>
