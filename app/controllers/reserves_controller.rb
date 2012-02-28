@@ -7,6 +7,17 @@ class ReservesController < ApplicationController
   def new
   end
   
+  def add_item
+    respond_to do |format|
+      format.js do
+        if params[:sw]=='false'
+          params[:item] = {}
+          params[:index] = 1 
+        end
+      end
+    end
+  end
+  
   def create     
     @reserve = Reserve.create(params[:reserve])
     @reserve.save! 

@@ -14,8 +14,11 @@ CourseReserves::Application.routes.draw do
   #   resources :products
   root :to => 'reserves#index'
   
+  match 'reserves/add_item(.:format)' => 'reserves#add_item', :as => :add_reserves_item, :via => :get 
+  
   resources :reserves
-
+  
+  
   # Sample resource route with options:
   #   resources :products do
   #     member do

@@ -57,11 +57,11 @@
     		  <%= render :partial => "reserves_item", :locals => { :item => item, :index => index }-%>
     		<% end %>
     	<% end %>	
-    	<tr class="<%= cycle("odd","even") %>">
+    	<tr id="add_row" class="<%= cycle("odd","even") %>">
     		<td><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
     		<td colspan="4">
     			Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "http://searchworks.stanford.edu/") %>.<br/>
-    			<input type="text" id="sw_ckey" /><input type="button" value="add" /> - or - <%= link_to("Reserve an item that's not in SearchWorks")%>
+    			<input type="text" id="sw_ckey" /><input type="button" value="add" /> - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :remote => true ) %>
     		</td>
     	</tr>
   	</tbody>		
