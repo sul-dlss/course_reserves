@@ -19,8 +19,7 @@ class ReservesController < ApplicationController
           params[:item] = {}       
         elsif params[:sw]=='true'
           params[:item] = {} 
-          #ckey = params[:url].strip[/(\d+)$/]
-          ckey = '1711966'
+          ckey = params[:url].strip[/(\d+)$/]
           url = "http://searchworks.stanford.edu/view/#{ckey}.mobile?covers=false"
           doc = Nokogiri::XML(Net::HTTP.get(URI.parse(url)))
           params[:item] = {:title => doc.xpath("//full_title").text, :ckey => ckey }

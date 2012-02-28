@@ -1,6 +1,11 @@
 // Things that need to document to be loaded to do.
 $(document).ready(function(){
 	
+	// Add item from SW
+	$(".add-sw-item").click(function(){
+		$(this).attr("href", $(this).attr("href") + "&url=" + $("#sw_url").attr("value"));
+	});
+	
 	// Add comment links
 	$(".add-comment a").live("click", function(){
 		$(this).toggle();
