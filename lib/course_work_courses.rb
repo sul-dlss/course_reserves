@@ -43,10 +43,14 @@ class CourseWorkCourses
   private
   
   def load_xml_from_coursework
-    Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))
+    if Rails.env.test?
+      Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))
+    else
+      Nokogiri::XML(File.open("#{Rails.root}/lib/course_work_xml/courseXML_F11.xml", 'r'))
+    end
   end
   
-  def process_all_courses_xml(xml)   
+  def process_all_courses_xml(xml)
     courses = []
     xml.xpath("//courseclass").each do |course|
       course_title = course[:title]
