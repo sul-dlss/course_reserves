@@ -25,11 +25,13 @@ class ReservesController < ApplicationController
   end
   
   def edit    
-    @reserve = Reserve.find(params[:id])    
+    @reserve = Reserve.find(params[:id])
   end
   
   def update    
+    params[:reserve][:item_list] = [] unless params[:reserve].has_key?(:item_list)
     Reserve.update(params[:id], params[:reserve])
+    
     redirect_to({ :controller => 'reserves', :action => 'edit', :id => params[:id] }) 
   end
   
