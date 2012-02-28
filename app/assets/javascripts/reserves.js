@@ -2,14 +2,10 @@
 $(document).ready(function(){
 	
 	// Add comment links
-	$(".add-comment a").each(function(){
-		var link = $(this);
-		var index = $(this).attr("data-item-index");
-		link.click(function(){
-			$('textarea.item-comment[data-item-index="' + index + '"]').toggle();
-			link.toggle();
-			return false;
-		});
+	$(".add-comment a").live("click", function(){
+		$(this).toggle();
+		$(this).parents("td").children("textarea").toggle();
+		return false;
 	});
 	
 	// Delete item links
