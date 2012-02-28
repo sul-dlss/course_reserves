@@ -53,6 +53,18 @@ describe Reserve do
       editors.should==['jlavigne', 'jkeck', 'asmith', 'bjones']
     end
     
+    it "should remove editor relationship when we remove a SUNet ID from the list" do
+      res = Reserve.create({:instructor_sunet_ids=>'jkeck, jlavigne'})
+      res.save!
+      res.editors.length.should == 2
+      Editor.find_by_sunetid("jlavigne").reserves.length.should == 1
+      upd_res = Reserve.update(res[:id], {:instructor_sunet_ids=>'jkeck'})
+      upd_res.save!
+      new_res = Reserve.find(res[:id])
+      new_res.editors.length.should == 1
+      Editor.find_by_sunetid("jlavigne").reserves.should be_blank
+    end
+    
   end
 
   describe "item_list serialization" do 
