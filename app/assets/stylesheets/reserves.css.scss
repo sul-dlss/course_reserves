@@ -17,6 +17,7 @@ $data-header: #DDDDDD;
 	}
 	td {
 		padding: 10px;
+		vertical-align: top;
 	}
 	tr.odd {
 		background-color: $odd;
@@ -95,7 +96,7 @@ fieldset#list-management span.help {
 	margin-left: 60px;
 }
 
-table {
+#item_list_table {
 	width: 100%;
 	@include data-table;
 }
