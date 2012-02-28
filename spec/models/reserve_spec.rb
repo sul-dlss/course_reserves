@@ -8,7 +8,7 @@ describe Reserve do
       reserve = Reserve.create( { :editor_sunet_ids => 'jlavigne', :cid => 'test_cid', :item_list => [{ :title => 'My Title' }] } )
       reserve.save!
       reserve.editors.length.should==1
-      reserve.editors.first[:sunetid].should=='jlavigne'   
+      reserve.editors.first[:sunetid].should=='jlavigne'
     end
     
     it "should generate editor relationships from editor_sunet_ids field for multiple sunet_id" do
@@ -34,6 +34,15 @@ describe Reserve do
       editors = reserve.editors.map{|e| e[:sunetid] }
       editors.include?('jlavigne').should==true
       editors.include?('jkeck').should==true
+    end
+    
+    it "should udpated editors when we save an item too." do
+      res = Reserve.create({:instructor_sunet_ids=>'jkeck'})
+      res.save!
+      Reserve.find(res[:id]).editors.length.should == 1
+      upd_res = Reserve.update(res[:id], {:instructor_sunet_ids=>'jkeck, jlavigne'})
+      upd_res.save!
+      Reserve.find(res[:id]).editors.length.should == 2
     end
     
     it "should generate editor relationships from instructor_sunet_ids & editor_sunet_ids fields for multiple sunet_ids" do
