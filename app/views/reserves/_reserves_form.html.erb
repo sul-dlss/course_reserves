@@ -17,8 +17,11 @@
 			<input type="radio" id="immediate" name="reserve[immediate]" value="true" <%= "checked='checked'" if @reserve and @reserve.immediate %> /><label for="immediate">immediately</label><br/>
 			<input type="radio" id="future" name="reserve[immediate]" value="false" <%= "checked='checked'" if @reserve and !@reserve.immediate %> />
 			<label for="future">for beginning of </label>
-			<select id="term">
-				<option>Spring 2012</option>
+			<select id="term" name="reserve[term]">
+				<option <%= "selected='selected'" if @reserve and @reserve.term == "Fall 2012" %>>Fall 2012</option>
+				<option <%= "selected='selected'" if @reserve and @reserve.term == "Winter 2012" %>>Winter 2012</option>
+				<option <%= "selected='selected'" if @reserve and @reserve.term == "Spring 2012" %>>Spring 2012</option>
+				<option <%= "selected='selected'" if @reserve and @reserve.term == "Summer 2012" %>>Summer 2012</option>
 			</select> 
 			<label for="term">quarter</label>
 		</div>
