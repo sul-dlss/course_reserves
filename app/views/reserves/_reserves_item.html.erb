@@ -3,7 +3,7 @@
 	<td>
 		<% if item_in_searchworks?(item) %>
   		<p><%= item["title"] -%> </p>
-  		<p><%= link_to "http://searchworks.stanford.edu/view/#{item["ckey"]}" -%> 
+  		<p><%= link_to "http://searchworks.stanford.edu/view/#{item["ckey"]}", "http://searchworks.stanford.edu/view/#{item["ckey"]}" -%></p>
   		<%- if item["comment"].blank? -%>
   		  <span class="add-comment"><%= link_to "Add comment", "", :class=> "add-comment" -%></span></p>
   		<%- end -%>
