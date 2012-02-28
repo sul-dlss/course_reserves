@@ -14,8 +14,8 @@
 		</div>
 		<div class="section">
 			When should these items be reserved?<br/>
-			<input type="radio" id="immediate" name="reserve[immediate]" value="true" /><label for="immediate">immediately</label><br/>
-			<input type="radio" id="future" name="reserve[immediate]" value="false" />
+			<input type="radio" id="immediate" name="reserve[immediate]" value="true" <%= "checked='checked'" if @reserve and @reserve.immediate %> /><label for="immediate">immediately</label><br/>
+			<input type="radio" id="future" name="reserve[immediate]" value="false" <%= "checked='checked'" if @reserve and !@reserve.immediate %> />
 			<label for="future">for beginning of </label>
 			<select id="term">
 				<option>Spring 2012</option>
