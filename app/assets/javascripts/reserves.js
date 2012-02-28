@@ -11,14 +11,15 @@ $(document).ready(function(){
 	// Delete item links
 	$(".delete").live("click", function(){
 		$(this).parents("tr").remove();
-		update_item_list_numbers();
+		update_item_list_numbers_and_classes();
 		return false;
 	});
 });
 
-function update_item_list_numbers(){
+function update_item_list_numbers_and_classes(){
 	i = 1;
 	$("#item_list_table tbody tr").each(function(){
+		$(this).attr("class", (i % 2 == 0) ? "even" : "odd");
 	  $(this).children("td:first").text(i);
 	  i += 1;
 	});
