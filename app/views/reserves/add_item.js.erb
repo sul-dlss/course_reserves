@@ -1,1 +1,6 @@
-alert("This is an alert")
+$("#add_row").before("<%= escape_javascript(render(:partial => 'reserves_item', :locals => {:item => params[:item], :index => params[:index]})) %>");
+var i = 1;
+$("#item_list_table tbody tr").each(function(){
+  $(this).children("td:first").text(i);
+  i += 1;
+});
