@@ -26,9 +26,11 @@ ActiveRecord::Schema.define(:version => 20120222195147) do
 
   create_table "reserves", :force => true do |t|
     t.string   "cid"
+    t.string   "sid"
     t.string   "desc"
     t.string   "library"
     t.boolean  "immediate"
+    t.string   "term"
     t.string   "contact_name"
     t.string   "contact_phone"
     t.string   "contact_email"
