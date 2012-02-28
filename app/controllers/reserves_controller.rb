@@ -12,7 +12,7 @@ class ReservesController < ApplicationController
       format.js do
         if params[:sw]=='false'
           params[:item] = {}
-          params[:index] = 1 
+          params[:index] = 0
         end
       end
     end
