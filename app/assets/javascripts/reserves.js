@@ -17,6 +17,7 @@ $(document).ready(function(){
 	$(".delete").live("click", function(){
 		$(this).parents("tr").remove();
 		update_item_list_numbers_and_classes();
+		show_changed($("#item_list_table"));
 		return false;
 	});
 
@@ -61,4 +62,7 @@ function update_item_list_numbers_and_classes(){
 	  $(this).children("td:first").text(i);
 	  i += 1;
 	});
+}
+function show_changed(table){
+	table.addClass("changed")
 }
