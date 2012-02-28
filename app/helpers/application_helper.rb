@@ -1,7 +1,11 @@
 module ApplicationHelper
   
-  def item_in_searchworks?    
-    true  
+  def item_in_searchworks?(item)
+    if params[:sw] == "true" or item.has_key?(:ckey) and !item[:ckey].blank?
+      true
+    else
+      false
+    end
   end
   
   def app_config
