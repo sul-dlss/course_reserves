@@ -23,3 +23,12 @@ class CreateReserves < ActiveRecord::Migration
     drop_table :reserves
   end
 end
+
+# Item list comprises
+# :title
+# :ckey
+# :comment
+# :copies
+# :personal
+# :purchase
+# :loan_period
