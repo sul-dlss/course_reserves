@@ -1,4 +1,8 @@
+require 'net/http'
+require 'nokogiri'
+
 class ReservesController < ApplicationController
+  
   
   def index
     #@my_reserves = Editor.find_by_sunetid(request.env['WEBAUTH_USER']).reserves
@@ -10,9 +14,16 @@ class ReservesController < ApplicationController
   def add_item
     respond_to do |format|
       format.js do
+        params[:index] = 0
         if params[:sw]=='false'
-          params[:item] = {}
-          params[:index] = 0
+          params[:item] = {}       
+        elsif params[:sw]=='true'
+          params[:item] = {} 
+          #ckey = params[:url].strip[/(\d+)$/]
+          ckey = '1711966'
+          url = "http://searchworks.stanford.edu/view/#{ckey}.mobile?covers=false"
+          doc = Nokogiri::XML(Net::HTTP.get(URI.parse(url)))
+          params[:item] = {:title => doc.xpath("//full_title").text, :ckey => ckey }
         end
       end
     end

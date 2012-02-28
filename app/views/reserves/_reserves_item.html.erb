@@ -2,27 +2,27 @@
 	<td><%= index + 1 %></td>
 	<td>
 		<% if item_in_searchworks?(item) %>
-  		<p>SearchWorks Title</p>
-  		<input type="hidden" name="reserve[item_list][][title]" value="<%= item[:title] if item[:title] %>" />
-  		<p><%= link_to "http://searchworks.stanford.edu/view/12345" -%> 
-  		<%- if item[:comment].blank? -%>
+  		<p><%= item["title"] -%> </p>
+  		<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
+  		<p><%= link_to "http://searchworks.stanford.edu/view/#{item["ckey"]}" -%> 
+  		<%- if item["comment"].blank? -%>
   		  <span class="add-comment"><%= link_to "Add comment", "", :class=> "add-comment" -%></span></p>
   		<%- end -%>
-  		<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item[:ckey] if item[:ckey] %>" />
+  		<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
   	<%- end -%>
-  	<textarea cols="60" rows="5" class="item-comment" name="reserve[item_list][][comment]" <%= "style='display:none;'" if item_in_searchworks?(item) and item[:comment].blank? %>><%= item[:comment] %></textarea>
+  	<textarea cols="60" rows="5" class="item-comment" name="reserve[item_list][][comment]" <%= "style='display:none;'" if item_in_searchworks?(item) and item["comment"].blank? %>><%= item["comment"] %></textarea>
 	</td>
 	<td>
-		<input type="text" class="num_copies" name="reserve[item_list][][copies]" maxlength="2" value="<%= item[:copies] %>" /><br/>
-		<input type="checkbox" id="personal" name="reserve[item_list][][personal]" value="true" <%= "checked='checked'" if item[:personal] %> />	<label for="personal_copy">personal copy available</label>
+		<input type="text" class="num_copies" name="reserve[item_list][][copies]" maxlength="2" value="<%= item["copies"] %>" /><br/>
+		<input type="checkbox" id="personal" name="reserve[item_list][][personal]" value="true" <%= "checked='checked'" if item["personal"] %> />	<label for="personal_copy">personal copy available</label>
 		<% unless item_in_searchworks?(item) %>
-			<br /><input type="checkbox" id="purchase" name="reserve[item_list][][purchase]" value="true" <%= "checked='checked'" if item[:purchase] %> />	<label for="purchase_item">purchase this item</label>
+			<br /><input type="checkbox" id="purchase" name="reserve[item_list][][purchase]" value="true" <%= "checked='checked'" if item["purchase"] %> />	<label for="purchase_item">purchase this item</label>
 		<% end %>
 	</td>
 	<td>
 		<select name="reserve[item_list][][loan_period]">
 		  <%- app_config.load_periods.each do |lp| -%>
-  			<option<%= " selected='selected'" if lp == item[:loan_period] %>><%= lp %></option>
+  			<option<%= " selected='selected'" if lp == item["loan_period"] %>><%= lp %></option>
 			<%- end -%>
 		</select>
 	</td>
