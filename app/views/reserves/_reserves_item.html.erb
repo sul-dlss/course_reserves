@@ -3,13 +3,13 @@
 	<td>
 		<% if item_in_searchworks?(item) %>
   		<p><%= item["title"] -%> </p>
-  		<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
   		<p><%= link_to "http://searchworks.stanford.edu/view/#{item["ckey"]}" -%> 
   		<%- if item["comment"].blank? -%>
   		  <span class="add-comment"><%= link_to "Add comment", "", :class=> "add-comment" -%></span></p>
   		<%- end -%>
-  		<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
   	<%- end -%>
+  	<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
+  	<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
   	<textarea cols="60" rows="5" class="item-comment" name="reserve[item_list][][comment]" <%= "style='display:none;'" if item_in_searchworks?(item) and item["comment"].blank? %>><%= item["comment"] %></textarea>
 	</td>
 	<td>
