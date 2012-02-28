@@ -11,4 +11,19 @@ $(document).ready(function(){
 			return false;
 		});
 	});
+	
+	// Delete item links
+	$(".delete").live("click", function(){
+		$(this).parents("tr").remove();
+		update_item_list_numbers();
+		return false;
+	});
 });
+
+function update_item_list_numbers(){
+	i = 1;
+	$("#item_list_table tbody tr").each(function(){
+	  $(this).children("td:first").text(i);
+	  i += 1;
+	});
+}
