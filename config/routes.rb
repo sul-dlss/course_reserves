@@ -15,6 +15,7 @@ CourseReserves::Application.routes.draw do
   root :to => 'reserves#index'
   
   match 'reserves/add_item(.:format)' => 'reserves#add_item', :as => :add_reserves_item, :via => :get 
+  match 'all_courses' => 'reserves#all_courses', :as => :all_courses, :via => :get 
   
   resources :reserves
   

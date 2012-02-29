@@ -8,6 +8,12 @@ class ReservesController < ApplicationController
     #@my_reserves = Editor.find_by_sunetid(request.env['WEBAUTH_USER']).reserves
   end
   
+  def all_courses
+    
+    @courses = CourseReserves::Application.config.courses.all_courses
+    
+  end
+  
   def new
   end
   
