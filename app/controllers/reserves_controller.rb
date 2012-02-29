@@ -13,15 +13,11 @@ class ReservesController < ApplicationController
   end
 
   def all_courses_response
-    text = '{ "aaData": ['
     items = []
     CourseReserves::Application.config.courses.all_courses.each do |course|
-      item = '[ "' << course[:cid] << '", "' << course[:title].gsub('"', "&#34").gsub("'","&#39") << '", "' << course[:instructors].map{|i| i[:name]}.compact.join(", ") << '" ]'
-      items << item
+      items << [course[:cid], course[:title], course[:instructors].map{|i| i[:name]}.compact.join(", ")]
     end
-    text << items.join(", ")
-    text << ' ] }'
-    render :text => text, :layout => false
+    render :json => {"aaData" => items}.to_json, :layout => false
   end
   
   def new
