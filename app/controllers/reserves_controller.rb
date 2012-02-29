@@ -11,7 +11,7 @@ class ReservesController < ApplicationController
   def all_courses
     
     @courses = CourseReserves::Application.config.courses.all_courses
-    
+    render :layout => false if request.xhr?
   end
   
   def new
