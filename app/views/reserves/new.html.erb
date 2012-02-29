@@ -1,9 +1,6 @@
 <div>
-	
-	<h1>Course Reserve List Request</h1>
 	<%= form_for :reserve, :url =>  { :action => 'create'} do |f| -%>
 		<%= render :partial => "reserves_form", :locals => { :f => f } -%>
 		<input type="submit" value="Send request"> <%= link_to "Cancel [discard changes]" -%>	
 	<%- end -%>
-	
 </div>

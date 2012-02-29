@@ -9,26 +9,50 @@ $data-header: #DDDDDD;
 @mixin data-table {
 	thead {
 		background-color: $data-header;
+		border-top: 1px solid #CCCCCC;
 	}
 	th {
 		text-align: left;
 		padding: 5px 0;
-		font-weight: bold;
+		font-weight: 700;
 	}
 	td {
-		padding: 10px;
+		padding: 15px 10px 15px 0;
 		vertical-align: top;
 	}
 	tr.odd {
 		background-color: $odd;
+		border-bottom: 1px solid #CCCCCC;
 	}
 	tr.even {
 		background-color: $even;
+		border-bottom: 1px solid #DDDDDD;
 	}
 }
 
 body {
 	background: url("/assets/body.png") repeat scroll 0 0 transparent;
+	font-family: Ludida Grande,Verdana,Arial,sans-serif;
+	font-size: 11px;
+	line-height: 1.5em;
+}
+a {
+	color: #575246;
+	text-decoration: none;
+	border-bottom: 1px dotted #84785A;
+}
+a:hover, a:active {
+	color: #6D1308;
+	border-bottom: 1px dotted #6D1308;
+}
+a.img-link {
+	border-bottom: none;
+}
+a.add-sw-item {
+	margin-left: 10px;
+}
+a.add-sw-item:hover {
+  color: #FFFFFF;	
 }
 #wrapper {
 	background: url("/assets/wrapper.png") repeat-x scroll 0 0 transparent;
@@ -40,12 +64,12 @@ body {
   border-radius: 3px 3px 3px 3px;
   border-top: 1px solid #FFFFFF;
 	margin: 0 60px;
-	padding: 15px;
+	padding: 10px 40px 40px;
 	min-width: 670px;
 	background-color: #FFFFFF;
 }
 #header {
-	margin-bottom: 40px;
+	margin-bottom: 20px;
 }
 #header #links {
 	float: right;
@@ -53,6 +77,7 @@ body {
 h1 {
 	font-weight: bold;
 	font-size: 1.5em;
+	margin-bottom: 20px;
 }
 h2 {
 	font-weight: bold;
@@ -64,7 +89,7 @@ h3 {
 	font-size: 1em;
 }
 #course-details {
-	padding: 10px 0 20px;
+	padding: 10px 0 10px;
 	margin-bottom: 10px;
 }
 #main-details {
@@ -76,14 +101,11 @@ h3 {
 #list-management {
 	float: right;
 }
-
-
 fieldset#list-management {
-	padding: 10px;
-	background-color: #FAFAFA;
-	border: 1px solid #BAB7B6;
+	padding: 20px;
+	background-color: $odd;
+	border: 1px solid #CCCCCC;
 }
-
 fieldset#list-management label, fieldset#list-management span.form-label {
 	display: inline-block;
 	width: 55px;
@@ -92,18 +114,32 @@ fieldset#list-management label, fieldset#list-management span.form-label {
 fieldset#list-management label#editors-list {
 	width: auto;
 }
-
 fieldset#list-management input {
 	width: 230px;
 	margin-bottom: 5px;
 }
-
+fieldset#list-management p, fieldset#list-management label#editors-list {
+	margin: 15px 0 10px;
+}
+fieldset#list-management input#editor_sunet_ids {
+	margin-bottom: 0;
+}
 fieldset#list-management span.help {
 	margin-left: 60px;
 }
-
+#libraries {
+	display: block;
+	margin-left: 20px;
+}
+#reserve-timing {
+	margin-left: 20px;
+}
+input {
+	margin-left: 0;
+}
 #item_list_table {
 	width: 100%;
+	margin-bottom: 20px;
 	@include data-table;
 }
 th.number {
@@ -118,9 +154,16 @@ th.loan_period {
 th.delete {
 	width: 80px;
 }
-
 input.num_copies {
   width: 20px;
+}
+#item_list_table td.enumerator {
+	padding-left: 15px;
+	font-size: 2em;
+	color: #999999;
+}
+#item_list_table td.last-row {
+	color: $data-header;
 }
 #sw_url {
 	width: 400px;
@@ -132,5 +175,35 @@ input.num_copies {
 	float:right;
 }
 .changed {
-	border:1px solid $cardinal;
+	border-left:2px solid $cardinal;
+	border-right: 2px solid $cardinal;
+}
+.active-button {
+	background: -moz-linear-gradient(center top , #9D3225, #7C1306) repeat scroll 0 0 transparent;
+  border: 1px solid #6D1308;
+  border-radius: 3px 3px 3px 3px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline;
+  height: 28px;
+  margin: 0 20px 0 0;
+  overflow: visible;
+  padding: 4px 8px 5px;
+  text-decoration: none;
+}
+.active-button:hover {
+	background: -moz-linear-gradient(center top , #9D3225, #510E06) repeat scroll 0 0 transparent;
+}
+.disabled-button {
+	background: -moz-linear-gradient(center top , #CCCCCC, #DDDDDD) repeat scroll 0 0 transparent;
+  border: 1px solid #999999;
+  border-radius: 3px 3px 3px 3px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline;
+  height: 28px;
+  margin: 0 20px 0 0;
+  overflow: visible;
+  padding: 4px 8px 5px;
+  text-decoration: none;
 }

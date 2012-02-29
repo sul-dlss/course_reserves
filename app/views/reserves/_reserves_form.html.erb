@@ -1,11 +1,11 @@
 <div id="course-details">
-
 	<div id="main-details">
+	  <h1>Course Reserves List Request</h1>
 		<h2>Course ID and Title</h2>
 		
 		<div class="section"><span>Instructor:</span> Some Professor</div>
-		<div class="section">Send request to<br/>
-			<select name="reserve[library]">
+		<div class="section">Send request to
+			<select id="libraries" name="reserve[library]">
 				<option value="none">(select library)</option>
 				<% app_config.reserve_libraries.each do |email, library| %>
 					<option <%= "selected='selected'" if @reserve and @reserve.library == library -%> value="<%= library -%>"><%= library -%></option>
@@ -13,17 +13,19 @@
 			</select>
 		</div>
 		<div class="section">
-			When should these items be reserved?<br/>
-			<input type="radio" id="immediate" name="reserve[immediate]" value="true" <%= "checked='checked'" if !@reserve or @reserve.immediate != "false" %> /><label for="immediate">immediately</label><br/>
-			<input type="radio" id="future" name="reserve[immediate]" value="false" <%= "checked='checked'" if @reserve and @reserve.immediate == "false" %> />
-			<label for="future">for beginning of </label>
-			<select id="term" name="reserve[term]">
-				<option <%= "selected='selected'" if @reserve and @reserve.term == "Fall 2012" %>>Fall 2012</option>
-				<option <%= "selected='selected'" if @reserve and @reserve.term == "Winter 2012" %>>Winter 2012</option>
-				<option <%= "selected='selected'" if @reserve and @reserve.term == "Spring 2012" %>>Spring 2012</option>
-				<option <%= "selected='selected'" if @reserve and @reserve.term == "Summer 2012" %>>Summer 2012</option>
-			</select> 
-			<label for="term">quarter</label>
+			When should these items be reserved?
+			<div id="reserve-timing">
+  			<input type="radio" id="immediate" name="reserve[immediate]" value="true" <%= "checked='checked'" if !@reserve or @reserve.immediate != "false" %> /> <label for="immediate">immediately</label><br/>
+  			<input type="radio" id="future" name="reserve[immediate]" value="false" <%= "checked='checked'" if @reserve and @reserve.immediate == "false" %> />
+  			<label for="future">for beginning of </label>
+  			<select id="term" name="reserve[term]">
+  				<option <%= "selected='selected'" if @reserve and @reserve.term == "Fall 2012" %>>Fall 2012</option>
+  				<option <%= "selected='selected'" if @reserve and @reserve.term == "Winter 2012" %>>Winter 2012</option>
+  				<option <%= "selected='selected'" if @reserve and @reserve.term == "Spring 2012" %>>Spring 2012</option>
+  				<option <%= "selected='selected'" if @reserve and @reserve.term == "Summer 2012" %>>Summer 2012</option>
+  			</select> 
+  			<label for="term">quarter</label>
+			</div>
 		</div>
 		
 	</div>
@@ -58,10 +60,10 @@
     		<% end %>
     	<% end %>	
     	<tr id="add_row" class="<%= cycle("odd","even") %>">
-    		<td><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
+    		<td class="enumerator last-row"><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
     		<td colspan="4">
     			Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "http://searchworks.stanford.edu/") %>.<br/>
-    			<input type="text" id="sw_url" /> <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item") -%> - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :remote => true ) %>
+    			<input type="text" id="sw_url" /> <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item active-button") -%> - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :remote => true ) %>
     		</td>
     	</tr>
   	</tbody>		
