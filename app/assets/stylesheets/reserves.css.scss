@@ -138,12 +138,13 @@ input {
 	margin-left: 0;
 }
 #item_list_table {
+	@include data-table;
 	width: 100%;
 	margin-bottom: 20px;
-	@include data-table;
 }
 #all_courses {
 	@include data-table;
+	width: 100%;
 }
 th.number {
 	width: 30px;
