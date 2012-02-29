@@ -97,4 +97,10 @@ describe "CourseWorkCourses" do
     
   end
   
+  describe "XML processing" do
+    it "should not add a course that doesn't have an instructor" do
+      CourseWorkCourses.new("<response><courseclass term='WINTER'><section id='01'></section></courseclass></response>").all_courses.should be_blank
+    end
+  end
+  
 end

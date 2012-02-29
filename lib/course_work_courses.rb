@@ -63,11 +63,13 @@ class CourseWorkCourses
           sec.xpath("./instructors/instructor").each do |inst|
             instructors << {:sunet=>inst[:sunetid], :name => inst.text}
           end
-          courses << {:title       => course_title,
-                      :term        => term,
-                      :cid         => class_id,
-                      :sid         => section_id,
-                      :instructors => instructors}
+          unless instructors.blank?
+            courses << {:title       => course_title,
+                        :term        => term,
+                        :cid         => class_id,
+                        :sid         => section_id,
+                        :instructors => instructors}
+          end
         end        
       end
     end
