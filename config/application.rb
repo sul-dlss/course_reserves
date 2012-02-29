@@ -59,5 +59,22 @@ module CourseReserves
 
 end
 
-CourseReserves::Application.config.reserve_libraries = { :'jlavigne@stanford.edu' => 'Green Library', :'jkeck@stanford.edu' => 'Meyer Library' }
+CourseReserves::Application.config.reserve_libraries = { 
+  "artlibrary@stanford.edu" => "Art Library",
+  "falconerlibrary@stanford.edu, zeynepb@stanford.edu, cwelborn@stanford.edu" => "Biology Library",
+  "swainlibrary@stanford.edu" => "Chemistry Library",
+  "brannerlibrary@stanford.edu" => "Earch Sciences Library",
+  "eastasialibrary@stanford.edu" => "East Asia Library",
+  "cubberley@stanford.edu, kells@stanford.edu" => "Education Library",
+  "englibrary@stanford.edu" => "Engineering Library",
+  "greenreserves@stanford.edu" => "Green Library",
+  "hoovercirc@hoover.stanford.edu" => "Hoover Library",
+  "hms-library@mailman.stanford.edu" => "Marine Biology Library",
+  "crowncirc@lists.stanford.edu" => "Law Library",
+  "mathstatlib@stanford.edu, zeynepb@stanford.edu, jshen@stanford.edu" => "Math Library",
+  "mediamtxt@lists.stanford.edu" => "Media Microtext Library",
+  "muslibcirc@stanford.edu" => "Music Library",
+  "tanner-library@stanford.edu" => "Philosophy Library"
+}
 CourseReserves::Application.config.load_periods = ["2 hours", "4 hours", "1 day", "2 days", "3 days"]
+CourseReserves::Application.config.super_sunets = %w[seestone jleggett laszloj mwh hoangl mholloma cherylc1 ssaini rruelas hmalcolm leiferik suziek dgaghan alvarezj cdescanz rwmantov quiambao daisun jjamison asharma4 bclaus rchaelv mnack ifadakar tcruzada linday zeynepb jshen rwedl cwelborn skota jwible dkohrs vpearse kells eshelton kkerns bbousman rpowers raymondh jlmcbrid nlorimer]

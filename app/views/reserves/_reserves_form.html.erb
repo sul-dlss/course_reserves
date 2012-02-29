@@ -6,7 +6,7 @@
 		<div class="section"><span>Instructor:</span> Some Professor</div>
 		<div class="section">Send request to
 			<select id="libraries" name="reserve[library]">
-				<option value="none">(select library)</option>
+				<option>(select library)</option>
 				<% app_config.reserve_libraries.each do |email, library| %>
 					<option <%= "selected='selected'" if @reserve and @reserve.library == library -%> value="<%= library -%>"><%= library -%></option>
 				<% end %>
