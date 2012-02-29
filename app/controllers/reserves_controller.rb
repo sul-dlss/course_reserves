@@ -3,19 +3,30 @@ require 'nokogiri'
 
 class ReservesController < ApplicationController
   
-  
   def index
     #@my_reserves = Editor.find_by_sunetid(request.env['WEBAUTH_USER']).reserves
   end
   
   def all_courses
-    
     @courses = CourseReserves::Application.config.courses.all_courses
     render :layout => false if request.xhr?
+  end
+
+  def all_courses_response
+    text = '{ "aaData": ['
+    items = []
+    CourseReserves::Application.config.courses.all_courses.each do |course|
+      item = '[ "' << course[:cid] << '", "' << course[:title].gsub('"', "&#34").gsub("'","&#39") << '", "' << course[:instructors].map{|i| i[:name]}.compact.join(", ") << '" ]'
+      items << item
+    end
+    text << items.join(", ")
+    text << ' ] }'
+    render :text => text, :layout => false
   end
   
   def new
   end
+
   
   def add_item
     respond_to do |format|

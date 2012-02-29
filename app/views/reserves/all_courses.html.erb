@@ -1,6 +1,6 @@
 <h1>Select a course</h1>
 
-<table id="all_courses">
+<table id="all_courses" data-href="<%= all_courses_response_path %>">
 	<thead>
 		<tr>
 			<th>Course ID</th>
@@ -9,12 +9,13 @@
 		</tr>
 	</thead>
 	<tbody>
-		<% @courses.each do |course| %>
-			<tr class="<%= cycle("odd","even") %>">
-				<td><%= course[:cid]-%></td>
-				<td><%= course[:title]-%></td>
-				<td><%= course[:instructors].map { |i| i[:name]}.join(", ")-%></td>
-			</tr>
-		<% end %>
+
 	</tbody>
 </table>
+<script type="text/javascript">
+  // data tables
+  $("#all_courses").dataTable({
+    "bProcessing": true,
+    "sAjaxSource": $("#all_courses").attr("data-href")
+  });
+</script>
