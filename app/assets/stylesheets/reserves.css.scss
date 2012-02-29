@@ -146,6 +146,9 @@ input {
 	@include data-table;
 	width: 100%;
 }
+#all_courses td {
+	padding: 7px 5px 7px 0;
+}
 th.number {
 	width: 30px;
 }
@@ -210,4 +213,18 @@ input.num_copies {
   overflow: visible;
   padding: 4px 8px 5px;
   text-decoration: none;
+}
+
+// data table overrides
+#all_courses_length, #all_courses_filter, #all_courses_info, #all_courses_paginate {
+	margin: 5px 0;
+	width: 48%;
+	float: left;
+}
+#all_courses_filter, #all_courses_paginate {
+  float: right;
+  text-align: right;
+}
+#all_courses_previous {
+	margin-right: 15px;
 }
