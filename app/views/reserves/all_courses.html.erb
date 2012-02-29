@@ -10,7 +10,7 @@
 	</thead>
 	<tbody>
 		<% @courses.each do |course| %>
-			<tr>
+			<tr class="<%= cycle("odd","even") %>">
 				<td><%= course[:cid]-%></td>
 				<td><%= course[:title]-%></td>
 				<td><%= course[:instructors].map { |i| i[:name]}.join(", ")-%></td>

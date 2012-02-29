@@ -142,6 +142,9 @@ input {
 	margin-bottom: 20px;
 	@include data-table;
 }
+#all_courses {
+	@include data-table;
+}
 th.number {
 	width: 30px;
 }
