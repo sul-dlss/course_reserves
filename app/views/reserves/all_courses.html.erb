@@ -1,0 +1,20 @@
+<h1>Select a course</h1>
+
+<table id="all_courses">
+	<thead>
+		<tr>
+			<th>Course ID</th>
+			<th>Description</th>
+			<th>Instructor</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @courses.each do |course| %>
+			<tr>
+				<td><%= course[:cid]-%></td>
+				<td><%= course[:title]-%></td>
+				<td><%= course[:instructors].map { |i| i[:name]}.join(", ")-%></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
