@@ -149,6 +149,9 @@ input {
 #all_courses td {
 	padding: 7px 5px 7px 0;
 }
+#my-reserves {
+	@include data-table;
+}
 th.number {
 	width: 30px;
 }

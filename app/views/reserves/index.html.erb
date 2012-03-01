@@ -1,1 +1,30 @@
 <%= link_to "Create a new reserve list", all_courses_path, :class => 'dialog active-button'  -%>
+
+<p>Modify an existing reserve list</p>
+
+<% unless @my_reserves.blank? %>
+	<table id="my-reserves">
+		<thead>
+			<tr>
+				<th>Term</th>
+				<th>Course ID</th>
+				<th>Description</th>
+				<th>Instructor</th>
+				<th>Clone for new quarter</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @my_reserves.each do |course| -%>
+				<tr class="<%= cycle("odd", "even") -%>">
+					<td><%= course.term -%></td>
+					<td><%= course.cid -%></td>
+					<td><%= course.desc -%></td>
+					<td><%= course.instructor_names %></td>
+					<td>Select quarter</td>
+				</tr>
+			<% end %>
+		</tbody>
+
+	
+	</table>
+<% end %>

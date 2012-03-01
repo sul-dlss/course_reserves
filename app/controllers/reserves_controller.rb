@@ -4,7 +4,8 @@ require 'nokogiri'
 class ReservesController < ApplicationController
   
   def index
-    #@my_reserves = Editor.find_by_sunetid(request.env['WEBAUTH_USER']).reserves
+    editor = Editor.find_by_sunetid(current_user)
+    @my_reserves = editor.nil? ? [] : editor.reserves
   end
   
   def all_courses
