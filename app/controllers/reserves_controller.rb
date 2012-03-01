@@ -24,8 +24,10 @@ class ReservesController < ApplicationController
   end
   
   def new
-    
-    
+    if CourseReserves::Application.config.super_sunets.include?(current_user)
+      reserve = Reserve.find_by_cid_and_sid(params[:cid], params[:sid])
+      redirect_to edit_reserve_path(reserve[:id]) unless reserve.nil?
+    end
   end
 
   
