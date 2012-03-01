@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20120222195147) do
     t.string   "contact_name"
     t.string   "contact_phone"
     t.string   "contact_email"
+    t.string   "instructor_names"
     t.string   "instructor_sunet_ids"
     t.string   "editor_sunet_ids"
     t.text     "item_list"
