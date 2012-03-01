@@ -18,7 +18,7 @@
 				<tr class="<%= cycle("odd", "even") -%>">
 					<td><%= course.term -%></td>
 					<td><%= course.cid -%></td>
-					<td><%= course.desc -%></td>
+					<td><%= link_to(course.desc, edit_reserve_path(course[:id])) -%></td>
 					<td><%= course.instructor_names %></td>
 					<td>Select quarter</td>
 				</tr>

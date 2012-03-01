@@ -6,7 +6,7 @@
 		<input type="hidden" name="reserve[desc]" value="<%= (params[:desc] || @reserve.desc) if (params.has_key?(:desc) or (@reserve and @reserve.desc)) -%>" />
 		<input type="hidden" name="reserve[sid]" value="<%= (params[:sid] || @reserve.sid) if (params.has_key?(:sid) or (@reserve and @reserve.sid)) -%>" />
 		<div class="section"><span>Instructor:</span> <%= (params[:instructor_names] || @reserve.instructor_names ) if (params.has_key?(:instructor_names) or (@reserve and @reserve.instructor_names))%></div>
-		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= (params[:instructors] || @reserve.instructor_sunet_ids ) if (params.has_key?(:instructors) or (@reserve and @reserve.instructor_sunet_ids))%>" />
+		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= (params[:instructor_sunet_ids] || @reserve.instructor_sunet_ids ) if (params.has_key?(:instructor_sunet_ids) or (@reserve and @reserve.instructor_sunet_ids))%>" />
 		<input type="hidden" name="reserve[instructor_names]" value="<%= (params[:instructor_names] || @reserve.instructor_names ) if (params.has_key?(:instructor_names) or (@reserve and @reserve.instructor_names))%>" />
 		<div class="section">Send request to
 			<select id="libraries" name="reserve[library]">

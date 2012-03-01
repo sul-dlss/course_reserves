@@ -16,12 +16,16 @@ class ReservesController < ApplicationController
   def all_courses_response
     items = []
     CourseReserves::Application.config.courses.all_courses.each do |course|
-      items << [course[:cid], "<a href='#{new_reserve_path(:cid=>course[:cid], :desc=>course[:title], :sid=>course[:sid], :instructor_sunet_ids=>course[:instructors].map{|i| i[:sunet] }.compact.join(", "), :instructor_names => course[:instructors].map{|i| i[:name] }.compact.join(", "))}'>#{course[:title]} [section #{course[:sid]}]</a>", course[:instructors].map{|i| i[:name]}.compact.join(", ")]
+      url = "#{new_reserve_path(:cid=>course[:cid], :desc=>course[:title], :sid=>course[:sid], :instructor_sunet_ids=>course[:instructors].map{|i| i[:sunet] }.compact.join(", "), :instructor_names => course[:instructors].map{|i| i[:name] }.compact.join(", "))}"
+      link = "<a href='#{url}'>#{course[:title]} [section #{course[:sid]}]</a>"
+      items << [course[:cid], link , course[:instructors].map{|i| i[:name]}.compact.join(", ")]
     end
     render :json => {"aaData" => items}.to_json, :layout => false
   end
   
   def new
+    
+    
   end
 
   
