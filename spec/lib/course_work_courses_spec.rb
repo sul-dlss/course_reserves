@@ -50,9 +50,9 @@ describe "CourseWorkCourses" do
   
     describe "by class id" do
       it "should return the appropriate course when passing a class id" do
-        two_section_course = @courses.find_by_class_id("W12-EDUC-237X")
+        two_section_course = @courses.find_by_class_id("EDUC-237X")
         two_section_course.length.should == 2
-        two_section_course.map{|c| "#{c[:cid]}-#{c[:sid]}"}.should == ["W12-EDUC-237X-01", "W12-EDUC-237X-02"]
+        two_section_course.map{|c| "#{c[:cid]}-#{c[:sid]}"}.should == ["EDUC-237X-01", "EDUC-237X-02"]
       end
       it "should be blank when a course doesn't exist with the specified class id" do
         @courses.find_by_class_id("DOES-NOT-EXIST").should be_blank
@@ -61,26 +61,26 @@ describe "CourseWorkCourses" do
   
     describe "by class id and section" do
       it "should return the appropriate course when passing a class id and section id" do
-        course = @courses.find_by_class_id_and_section("W12-EDUC-237X", "01")
+        course = @courses.find_by_class_id_and_section("EDUC-237X", "01")
         course.length.should == 1
         course.first[:title].should == "Residential Racial Segregation and the Education of African-American Youth"
-        course.first[:cid].should == "W12-EDUC-237X"
+        course.first[:cid].should == "EDUC-237X"
         course.first[:sid].should == "01"
       end
       it "should be blank when the class id doesn't exist" do
         @courses.find_by_class_id_and_section("DOES-NOT-EXIST", "01").should be_blank
       end
       it "should be blank when the class id is valid but not the section" do
-        @courses.find_by_class_id_and_section("W12-EDUC-237X", "03").should be_blank
+        @courses.find_by_class_id_and_section("EDUC-237X", "03").should be_blank
       end
     end
     
     describe "by class id, section, and SUNet ID" do
       it "should return the appripriate course when passing all valid information" do
-        course = @courses.find_by_class_id_and_section_and_sunet("W12-EDUC-237X", "01", "123")
+        course = @courses.find_by_class_id_and_section_and_sunet("EDUC-237X", "01", "123")
         course.length.should == 1
         course.first[:title].should == "Residential Racial Segregation and the Education of African-American Youth"
-        course.first[:cid].should == "W12-EDUC-237X"
+        course.first[:cid].should == "EDUC-237X"
         course.first[:sid].should == "01"
         course.first[:instructors].map{|i| i[:sunet] }.include?("123").should be_true
       end
@@ -88,10 +88,10 @@ describe "CourseWorkCourses" do
         @courses.find_by_class_id_and_section_and_sunet("DOES-NOT-EXIST", "01", "123").should be_blank
       end
       it "should return blank when the section does not exist for the given class id" do
-        @courses.find_by_class_id_and_section_and_sunet("W12-EDUC-237X", "03", "123").should be_blank
+        @courses.find_by_class_id_and_section_and_sunet("EDUC-237X", "03", "123").should be_blank
       end
       it "should return blank when the section SUNet isn't an instructor in for the given course id and section" do
-        @courses.find_by_class_id_and_section_and_sunet("W12-EDUC-237X", "02", "456").should be_blank
+        @courses.find_by_class_id_and_section_and_sunet("EDUC-237X", "02", "456").should be_blank
       end
     end
     
@@ -100,6 +100,11 @@ describe "CourseWorkCourses" do
   describe "XML processing" do
     it "should not add a course that doesn't have an instructor" do
       CourseWorkCourses.new("<response><courseclass term='WINTER'><section id='01'></section></courseclass></response>").all_courses.should be_blank
+    end
+    it "should remove term prefix on class id" do
+      @courses.all_courses.each do |c|
+        c[:cid].should_not match(/W12/)
+      end
     end
   end
   
