@@ -1,13 +1,23 @@
 <div id="course-details">
 	<div id="main-details">
 	  <h1>Course Reserves List Request</h1>
-		<h2><%= (params[:cid] || @reserve.cid) if (params.has_key?(:cid) or (@reserve and @reserve.cid)) -%>: <%= (params[:desc] || @reserve.desc) if (params.has_key?(:desc) or (@reserve and @reserve.desc)) -%></h2>
-		<input type="hidden" name="reserve[cid]" value="<%= (params[:cid] || @reserve.cid) if (params.has_key?(:cid) or (@reserve and @reserve.cid)) -%>" />
-		<input type="hidden" name="reserve[desc]" value="<%= (params[:desc] || @reserve.desc) if (params.has_key?(:desc) or (@reserve and @reserve.desc)) -%>" />
-		<input type="hidden" name="reserve[sid]" value="<%= (params[:sid] || @reserve.sid) if (params.has_key?(:sid) or (@reserve and @reserve.sid)) -%>" />
-		<div class="section"><span>Instructor:</span> <%= (params[:instructor_names] || @reserve.instructor_names ) if (params.has_key?(:instructor_names) or (@reserve and @reserve.instructor_names))%></div>
-		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= (params[:instructor_sunet_ids] || @reserve.instructor_sunet_ids ) if (params.has_key?(:instructor_sunet_ids) or (@reserve and @reserve.instructor_sunet_ids))%>" />
-		<input type="hidden" name="reserve[instructor_names]" value="<%= (params[:instructor_names] || @reserve.instructor_names ) if (params.has_key?(:instructor_names) or (@reserve and @reserve.instructor_names))%>" />
+	  <%- if params[:action] == "new" -%>
+  		<h2><%= @course[:cid] if (@course and @course.has_key?(:cid)) -%>: <%= @course[:title] if (@course and @course.has_key?(:title)) -%></h2>
+  		<input type="hidden" name="reserve[cid]" value="<%= @course[:cid] if (@course and @course.has_key?(:cid)) -%>" />
+  		<input type="hidden" name="reserve[desc]" value="<%= @course[:title] if (@course and @course.has_key?(:title)) -%>" />
+  		<input type="hidden" name="reserve[sid]" value="<%= @course[:sid] if (@course and @course.has_key?(:sid)) -%>" />
+  		<div class="section"><span>Instructor:</span> <%= @course[:instructors].map{|i| i[:name] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%></div>
+  		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @course[:instructors].map{|i| i[:sunet] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%>" />
+  		<input type="hidden" name="reserve[instructor_names]" value="<%= @course[:instructors].map{|i| i[:name] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%>" />
+		<%- else -%>
+  		<h2><%= @reserve.cid if (@reserve and @reserve.cid) -%>: <%= @reserve.desc if (@reserve and @reserve.desc) -%></h2>
+  		<input type="hidden" name="reserve[cid]" value="<%= @reserve.cid if (@reserve and @reserve.cid) -%>" />
+  		<input type="hidden" name="reserve[desc]" value="<%= @reserve.desc if (@reserve and @reserve.desc) -%>" />
+  		<input type="hidden" name="reserve[sid]" value="<%= @reserve.sid if (@reserve and @reserve.sid) -%>" />
+  		<div class="section"><span>Instructor:</span> <%= @reserve.instructor_names if (@reserve and @reserve.instructor_names) -%></div>
+  		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @reserve.instructor_sunet_ids if (@reserve and @reserve.instructor_sunet_ids) -%>" />
+  		<input type="hidden" name="reserve[instructor_names]" value="<%= @reserve.instructor_names if (@reserve and @reserve.instructor_names) -%>" />
+		<%- end -%>
 		<div class="section">Send request to
 			<select id="libraries" name="reserve[library]">
 				<option>(select library)</option>

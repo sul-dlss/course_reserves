@@ -3,19 +3,19 @@ require 'spec_helper'
 describe ReservesController do
   describe "new" do
     it "should redirect to an existing course list if it exists and the current user is an editor" do
-      r = Reserve.create({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"})
+      r = Reserve.create({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"})
       r.save!
       controller.stub(:current_user).and_return("user_sunet")
-      get :new, {:cid => "CID1", :sid => "01"}
+      get :new, {:cid => "CID1", :sid => "01", :term => "Winter 2012"}
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
     it "should redirect to an existing course list if it exists and the current user is a super user" do
-      r = Reserve.create({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"})
+      r = Reserve.create({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"})
       r.save!
       # rwmantov is in the super_sunet list as of the writing of this test.
       controller.stub(:current_user).and_return("rwmantov")
       r.editors.map{|e| e[:sunetid] }.include?("rwmantov").should be_false
-      get :new, {:cid => "CID1", :sid => "01"}
+      get :new, {:cid => "CID1", :sid => "01", :term => "Winter 2012"}
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
   end
@@ -34,6 +34,7 @@ describe ReservesController do
   describe "all_courses" do
     it "does something" do
       get :all_courses_response
+      response.should be_success
       body = JSON.parse(response.body)
       body.keys.length.should == 1
       body.has_key?("aaData").should be_true

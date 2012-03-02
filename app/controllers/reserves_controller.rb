@@ -16,19 +16,20 @@ class ReservesController < ApplicationController
   def all_courses_response
     items = []
     CourseReserves::Application.config.courses.all_courses.each do |course|
-      url = "#{new_reserve_path(:cid=>course[:cid], :desc=>course[:title], :sid=>course[:sid], :instructor_sunet_ids=>course[:instructors].map{|i| i[:sunet] }.compact.join(", "), :instructor_names => course[:instructors].map{|i| i[:name] }.compact.join(", "))}"
-      link = "<a href='#{url}'>#{course[:title]} [section #{course[:sid]}]</a>"
-      items << [course[:cid], link , course[:instructors].map{|i| i[:name]}.compact.join(", ")]
+      items << [course[:cid], "<a href='/reserves/new?cid=#{course[:cid]}&sid=#{course[:sid]}&term=#{course[:term]}'>#{course[:title]} [section #{course[:sid]}]</a>", course[:instructors].map{|i| i[:name]}.compact.join(", ")]
     end
     render :json => {"aaData" => items}.to_json, :layout => false
   end
   
   def new
-    reserve = Reserve.find_by_cid_and_sid(params[:cid], params[:sid])
+    reserve = Reserve.find_by_cid_and_sid_and_term(params[:cid], params[:sid], params[:term])
     unless reserve.nil?  
       if CourseReserves::Application.config.super_sunets.include?(current_user) or reserve.editors.map{|e| e[:sunetid] }.compact.include?(current_user)
         redirect_to edit_reserve_path(reserve[:id]) 
       end
+    else
+      # Do we need to find my term too?  There isn't a finder for that yet.
+      @course = CourseReserves::Application.config.courses.find_by_class_id_and_section(params[:cid], params[:sid]).first
     end
   end
 
