@@ -63,7 +63,10 @@ class CourseWorkCourses
             section_id = sec[:id]
             instructors = []
             sec.xpath("./instructors/instructor").each do |inst|
-              instructors << {:sunet=>inst[:sunetid], :name => inst.text}
+              sunet = inst[:sunetid]
+              name = inst.text
+              name = sunet if inst.text.blank?
+              instructors << {:sunet => sunet, :name => name}
             end
             unless instructors.blank?
               # could make courses a hash and assign this hash to the a key for quick lookup.
