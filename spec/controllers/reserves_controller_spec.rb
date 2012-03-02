@@ -36,6 +36,22 @@ describe ReservesController do
     end
   end
   
+  describe "create" do
+    it "should redirect to the edit screen for the item that was just created" do
+      get :create, :reserve => {:cid => "CID1", :sid => "SID1", :term => "Winter 2012"}
+      response.should redirect_to(edit_reserve_path("1"))
+    end
+  end
+  
+  describe "edit" do
+    it "should return the referenced item by id" do
+      r = Reserve.create({:cid=>"CID1", :sid=>"SID1", :term => "Winter 2012"})
+      r.save!
+      get :edit, :id => r[:id]
+      response.should be_success
+      assigns(:reserve).should == r
+    end
+  end
   
   describe "update" do
     it "should clear out the item_list if no item_list params is in the URL" do
