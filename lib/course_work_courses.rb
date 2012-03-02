@@ -37,6 +37,7 @@ class CourseWorkCourses
   end
   
   def all_courses
+    # if we end up going w/ a key based hash instead of an array we will need to change this to process_all_courses_xml(self.raw_xml).values
     @all_courses ||= process_all_courses_xml(self.raw_xml)
   end
   
@@ -65,6 +66,9 @@ class CourseWorkCourses
               instructors << {:sunet=>inst[:sunetid], :name => inst.text}
             end
             unless instructors.blank?
+              # could make courses a hash and assign this hash to the a key for quick lookup.
+              # if class_id + instructor is what really makes a unique course an instructor, this will need to be in the unstructor loop above.
+              # once we have this key, we can do an unless courses.has_key?("#{class_id}-#{inst[:sunetid]}".to_sym) or unless courses.has_key?("#{term}-#{class_id}-#{section_id}".to_sym)
               courses << {:title       => course_title,
                           :term        => term,
                           :cid         => class_id,
