@@ -18,7 +18,24 @@ describe ReservesController do
       get :new, {:cid => "CID1", :sid => "01", :term => "Winter 2012"}
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
+    it "should let you create a new course if you are a super user" do
+      # rwmantov is in the super_sunet list as of the writing of this test.
+      controller.stub(:current_user).and_return("rwmantov")
+      get :new, {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012"}
+      response.should be_success  
+    end
+    it "should let you create a new course if you are the professor" do
+      controller.stub(:current_user).and_return("123")
+      get :new, {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012"}
+      response.should be_success
+    end
+    it "should not let you create a course that you don't have permisisons to" do
+      get :new, {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012"}
+      response.should redirect_to(root_path)
+      flash[:error].should == "You are not the instructor for this course."
+    end
   end
+  
   
   describe "update" do
     it "should clear out the item_list if no item_list params is in the URL" do
@@ -32,7 +49,7 @@ describe ReservesController do
   end
   
   describe "all_courses" do
-    it "does something" do
+    it "should return parsable JSON" do
       get :all_courses_response
       response.should be_success
       body = JSON.parse(response.body)
