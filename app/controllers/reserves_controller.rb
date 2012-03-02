@@ -29,7 +29,12 @@ class ReservesController < ApplicationController
       end
     else
       # Do we need to find my term too?  There isn't a finder for that yet.
-      @course = CourseReserves::Application.config.courses.find_by_class_id_and_section(params[:cid], params[:sid]).first
+      course = CourseReserves::Application.config.courses.find_by_class_id_and_section(params[:cid], params[:sid]).first
+      if !course[:instructors].map{|i| i[:sunet] }.compact.include?(current_user) and !CourseReserves::Application.config.super_sunets.include?(current_user)
+        flash[:error] = "You are not the instructor for this course."
+        redirect_to root_path
+      end
+      @course = course
     end
   end
 
