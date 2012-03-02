@@ -37,19 +37,54 @@ describe ReservesController do
   end
   
   describe "create" do
-    it "should redirect to the edit screen for the item that was just created" do
-      get :create, :reserve => {:cid => "CID1", :sid => "SID1", :term => "Winter 2012"}
-      response.should redirect_to(edit_reserve_path("1"))
+    it "should allow you to create an item if you are the instructor" do
+      controller.stub(:current_user).and_return("user_sunet")
+      post :create, :reserve => {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"}
+      r = assigns(:reserve)
+      r.cid.should == "EDUC-237X"
+      response.should redirect_to(edit_reserve_path(r[:id]))
+    end
+    it "should allow you to create an item if you are a super sunet" do
+      # rwmantov is in the super_sunet list as of the writing of this test.
+      controller.stub(:current_user).and_return("rwmantov")
+      post :create, :reserve => {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"}
+      r = assigns(:reserve)
+      r.cid.should == "EDUC-237X"
+      response.should redirect_to(edit_reserve_path(r[:id]))
+    end
+    it "should redirecto the home page if the user does not have access to create this reserve list" do
+      controller.stub(:current_user).and_return("cannot_edit")
+      post :create, :reserve => {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"}
+      response.should redirect_to(root_path)
+      flash[:error].should == "You do not have permissions to create his course reserve list."
     end
   end
   
   describe "edit" do
-    it "should return the referenced item by id" do
-      r = Reserve.create({:cid=>"CID1", :sid=>"SID1", :term => "Winter 2012"})
+    it "should allow you to get to the edit screen if you are an editor if the item" do
+      controller.stub(:current_user).and_return("user_sunet")
+      r = Reserve.create({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"})
       r.save!
       get :edit, :id => r[:id]
       response.should be_success
       assigns(:reserve).should == r
+    end
+    it "should allow you to get to the edit screen if you are an super sunet" do
+      # rwmantov is in the super_sunet list as of the writing of this test.
+      controller.stub(:current_user).and_return("rwmantov")
+      r = Reserve.create({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"})
+      r.save!
+      get :edit, :id => r[:id]
+      response.should be_success
+      assigns(:reserve).should == r
+    end
+    it "should redirect if the user does not have permissions to edit the reserve" do
+      controller.stub(:current_user).and_return("some_user")
+      r = Reserve.create({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"})
+      r.save!
+      get :edit, :id => r[:id]
+      response.should redirect_to(root_path)
+      flash[:error].should == "You do not have permission to edit this course reserve."
     end
   end
   

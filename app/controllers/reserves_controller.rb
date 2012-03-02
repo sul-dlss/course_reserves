@@ -55,17 +55,27 @@ class ReservesController < ApplicationController
     end
   end
   
-  def create     
-    @reserve = Reserve.create(params[:reserve])
-    @reserve.save! 
-    redirect_to({ :controller => 'reserves', :action => 'edit', :id => @reserve[:id] }) 
+  def create
+    if CourseReserves::Application.config.super_sunets.include?(current_user) or params[:reserve][:instructor_sunet_ids].split(",").map{|sunet| sunet.strip }.include?(current_user)
+      @reserve = Reserve.create(params[:reserve])
+      @reserve.save! 
+      redirect_to({ :controller => 'reserves', :action => 'edit', :id => @reserve[:id] }) 
+    else
+      flash[:error] = "You do not have permissions to create his course reserve list."
+      redirect_to(root_path)
+    end
   end
   
   def edit    
-    @reserve = Reserve.find(params[:id])
+    reserve = Reserve.find(params[:id])
+    if !CourseReserves::Application.config.super_sunets.include?(current_user) and !reserve.editors.map{|e| e[:sunetid] }.compact.include?(current_user)
+      flash[:error] = "You do not have permission to edit this course reserve."
+      redirect_to(root_path)
+    end
+    @reserve = reserve
   end
   
-  def update    
+  def update
     params[:reserve][:item_list] = [] unless params[:reserve].has_key?(:item_list)
     Reserve.update(params[:id], params[:reserve])
     
