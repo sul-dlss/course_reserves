@@ -108,6 +108,11 @@ describe "CourseWorkCourses" do
         c[:cid].should_not match(/W12/)
       end
     end
+    it "should return the intructor SUNet as name if there is no name in the XML" do
+      course = CourseWorkCourses.new('<rsponse><courseclass title="MyTitle"><class id="CLASS-ID"><section id="01"><instructors><instructor sunetid="mysunet"></instructor></instructors></section></class></courseclass></response>').all_courses.first
+      course[:instructors].first[:sunet].should == "mysunet"
+      course[:instructors].first[:name].should == "mysunet"
+    end
   end
   
 end
