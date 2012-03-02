@@ -48,6 +48,20 @@ describe ReservesController do
     end
   end
   
+  describe "index" do
+    it "should return reserves for a user when they have them" do
+      r = Reserve.create({:cid=>"CID1", :sid => "SID1", :instructor_sunet_ids => "user_sunet"})
+      r.save!
+      controller.stub(:current_user).and_return("user_sunet")
+      get :index
+      response.should be_success
+      my_reserves = assigns(:my_reserves)
+      my_reserves.length.should == 1
+      my_reserves.first.cid.should == "CID1"
+      my_reserves.first.sid.should == "SID1"
+    end
+  end
+  
   describe "all_courses" do
     it "should return parsable JSON" do
       get :all_courses_response
