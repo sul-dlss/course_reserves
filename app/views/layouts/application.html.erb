@@ -15,6 +15,9 @@
           <%= current_user %> | <%= link_to("logout", "") %>
         </span>
       </header>
+      <%- unless flash[:error].blank? -%>
+        <div class="error"><%=  flash[:error] %></div>
+      <%- end -%>
       <%= yield %>
     </div>
   </div>
