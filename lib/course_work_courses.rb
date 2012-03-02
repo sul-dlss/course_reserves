@@ -2,7 +2,7 @@ require 'nokogiri'
 class CourseWorkCourses
   def initialize(xml=nil)
     if xml
-      @raw_xml = Nokogiri::XML(xml)
+      @raw_xml = [Nokogiri::XML(xml)]
     else
       @raw_xml = load_xml_from_coursework
     end
@@ -44,33 +44,35 @@ class CourseWorkCourses
   
   def load_xml_from_coursework
     if Rails.env.test?
-      Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))
+      [Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))]
     else
-      Nokogiri::XML(File.open("#{Rails.root}/lib/course_work_xml/courseXML_F11.xml", 'r'))
+      [Nokogiri::XML(File.open("#{Rails.root}/lib/course_work_xml/courseXML_F11.xml", 'r')), Nokogiri::XML(File.open("#{Rails.root}/lib/course_work_xml/courseXML_W12.xml", 'r'))]
     end
   end
   
-  def process_all_courses_xml(xml)
+  def process_all_courses_xml(xml_files)
     courses = []
-    xml.xpath("//courseclass").each do |course|
-      course_title = course[:title]
-      term = course[:term]
-      course.xpath("./class").each do |cl|
-        class_id = cl[:id].gsub(/^\w{1}\d{2}-/, "")
-        cl.xpath("./section").each do |sec|
-          section_id = sec[:id]
-          instructors = []
-          sec.xpath("./instructors/instructor").each do |inst|
-            instructors << {:sunet=>inst[:sunetid], :name => inst.text}
-          end
-          unless instructors.blank?
-            courses << {:title       => course_title,
-                        :term        => term,
-                        :cid         => class_id,
-                        :sid         => section_id,
-                        :instructors => instructors}
-          end
-        end        
+    xml_files.each do |xml|
+      xml.xpath("//courseclass").each do |course|
+        course_title = course[:title]
+        term = course[:term]
+        course.xpath("./class").each do |cl|
+          class_id = cl[:id].gsub(/^\w{1}\d{2}-/, "")
+          cl.xpath("./section").each do |sec|
+            section_id = sec[:id]
+            instructors = []
+            sec.xpath("./instructors/instructor").each do |inst|
+              instructors << {:sunet=>inst[:sunetid], :name => inst.text}
+            end
+            unless instructors.blank?
+              courses << {:title       => course_title,
+                          :term        => term,
+                          :cid         => class_id,
+                          :sid         => section_id,
+                          :instructors => instructors}
+            end
+          end        
+        end
       end
     end
     return courses

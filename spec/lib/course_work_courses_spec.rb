@@ -7,7 +7,9 @@ describe "CourseWorkCourses" do
 
   describe "loading raw XML" do
     it "should be a Nokogiri XML Document" do
-      @courses.raw_xml.is_a?(Nokogiri::XML::Document).should be_true
+      @courses.raw_xml.each do |xml|
+        xml.is_a?(Nokogiri::XML::Document).should be_true
+      end
     end
     it "should load XML when provided on object initialization" do
       courses = CourseWorkCourses.new('<rsponse><courseclass title="MyTitle"><class id="CLASS-ID"><section id="01"><instructors><instructor sunetid="mysunet">My Teacher</instructor></instructors></section></class></courseclass></response>').all_courses
