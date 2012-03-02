@@ -20,7 +20,7 @@
 		<% end %>
 	</td>
 	<td>
-		<select name="reserve[item_list][][loan_period]">
+		<select class="loan-select" name="reserve[item_list][][loan_period]">
 		  <%- app_config.load_periods.each do |lp| -%>
   			<option<%= " selected='selected'" if lp == item["loan_period"] %>><%= lp %></option>
 			<%- end -%>

@@ -52,7 +52,12 @@ $(document).ready(function(){
     });
     
   });
+  
 
+  // enforce loan period on library change
+  // $("select#libraries").change(function(){
+  // 	  check_loan_period();
+  // });
 });
 
 function update_item_list_numbers_and_classes(){
@@ -65,4 +70,23 @@ function update_item_list_numbers_and_classes(){
 }
 function show_changed(table){
 	table.addClass("changed")
+}
+function check_loan_period(){
+	var library = $("select#libraries").children("option:selected").text();
+	$("select.loan-select").each(function(){
+		var select = $(this);
+		if(library == "Music Library") {
+			select.children("option").each(function(){
+				var option = $(this);
+		    if(option.text() == "4 hours") {
+			  	option.attr("selected", true);
+		    }else{
+			    option.removeAttr("selected")
+		    }
+			});
+		  $(this).attr("disabled","true");
+		}else{
+			select.removeAttr("disabled");
+		}
+	});
 }
