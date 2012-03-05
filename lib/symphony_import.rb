@@ -21,8 +21,7 @@ module SymphonyImport
       r.save!
     end
     
-    # Just for now for testing
-    return courses
+    # return courses
     
   end # process_import_file
   
