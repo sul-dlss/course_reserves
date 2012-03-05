@@ -64,7 +64,7 @@ class CourseWorkCourses
         course_title = course[:title]
         term = course[:term]
         course.xpath("./class").each do |cl|
-          class_id = cl[:id].gsub(/^\w{1}\d{2}-/, "")
+          class_id = cl[:id].gsub(/^\w{1,2}\d{2}-/, "")
           cl.xpath("./section").each do |sec|
             section_id = sec[:id]
             instructors = []
