@@ -59,6 +59,7 @@ class ReservesController < ApplicationController
     if CourseReserves::Application.config.super_sunets.include?(current_user) or params[:reserve][:instructor_sunet_ids].split(",").map{|sunet| sunet.strip }.include?(current_user)
       @reserve = Reserve.create(params[:reserve])
       @reserve.save! 
+      send_course_reserve_request(@reserve) if params.has_key?(:send_request)
       redirect_to({ :controller => 'reserves', :action => 'edit', :id => @reserve[:id] }) 
     else
       flash[:error] = "You do not have permissions to create his course reserve list."
@@ -76,14 +77,73 @@ class ReservesController < ApplicationController
   end
   
   def update
+    reserve = Reserve.find(params[:id])
     params[:reserve][:item_list] = [] unless params[:reserve].has_key?(:item_list)
-    Reserve.update(params[:id], params[:reserve])
-    
+    if params.has_key?(:send_request) and reserve.has_been_sent == true
+      send_updated_course_reserve_request(reserve)
+    elsif reserve.has_been_sent == false
+      send_course_reserve_request(reserve)
+    else
+      reserve.update_attributes(params[:reserve])
+      #Reserve.update(params[:id], params[:reserve])
+    end
     redirect_to({ :controller => 'reserves', :action => 'edit', :id => params[:id] }) 
   end
   
   def show
     @reserve = Reserve.find(params[:id])
+  end
+  
+  
+  protected
+  
+  def send_course_reserve_request(reserve)
+    #send email here
+    reserve.update_attributes(:has_been_sent => true)
+  end
+  
+  def send_updated_reserve_request(reserve)
+    old_reserve = reserve.dup
+    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true))
+    email_body = process_diff(old_reserve,reserve)
+    #send email here
+  end
+  
+  def process_diff(old_reserve,new_reserve)
+    total_reserves = []
+    item_text = ""
+    new_reserve.item_list.each_with_index do |new_item, index|
+      total_reserves << new_item
+      unless old_reserve.item_list[index] == new_item or old_reserve.item_list.include?(new_item)
+        total_reserves << old_reserve.item_list[index]
+        # we should assume this is the same item at that point.
+        if old_reserve.item_list[index] and old_reserve.item_list[index][:ckey] == new_item[:ckey] and old_reserve.item_list[index][:title] == new_item[:title]
+          item_text << "Changed item\n"
+          new_item.each do |key,value|
+            if old_reserve.item_list[index][key] == value
+              # maybe to a key translate here for human consumption
+              item_text << "#{key}: #{value}\n"
+            else
+              item_text << "#{key}: #{value} (was: #{old_reserve.item_list[index][key]})\n"
+            end
+          end
+        else
+          item_text << "New item\n"
+          new_item.each do |key,value|
+            # maybe to a key translate here for human consumption
+            item_text << "#{key}: #{value}\n"
+          end
+        end
+      end
+    end
+    (old_reserve.item_list - total_reserves).each do |delete_item|
+      item_text << "Deleted item\n"
+      delete_item.each do |key,value|
+        # maybe to a key translate here for human consumption
+        item_text << "#{key}: #{value}\n"
+      end
+    end
+    item_text
   end
   
 end
