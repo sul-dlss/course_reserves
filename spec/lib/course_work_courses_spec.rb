@@ -77,6 +77,21 @@ describe "CourseWorkCourses" do
       end
     end
     
+    describe "find by class id and sunet" do
+      it "should return the appropriate course when passing a class id and sunet" do
+        course = @courses.find_by_class_id_and_sunet("EDUC-237X", "456")
+        course.length.should == 1
+        course.first[:title].should == "Residential Racial Segregation and the Education of African-American Youth"
+        course.first[:cid].should == "EDUC-237X"
+      end
+      it "should be blank when the class id doesn't exist" do
+        @courses.find_by_class_id_and_sunet("NOT-A-COURSE", "456").should be_blank
+      end
+      it "should be blank when the provided sunet isn't in the course" do
+        @courses.find_by_class_id_and_sunet("EDUC-237X", "654").should be_blank
+      end
+    end
+    
     describe "by class id, section, and SUNet ID" do
       it "should return the appripriate course when passing all valid information" do
         course = @courses.find_by_class_id_and_section_and_sunet("EDUC-237X", "01", "123")
