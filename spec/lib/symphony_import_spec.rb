@@ -52,26 +52,18 @@ describe "SymphonyImport" do
   
   describe "adding eleven reserves records" do
     it "should take a file path and call the process_import_file method to add eleven records to the database" do
-      # Just getting back the courses and course_lists hashes for the moment. This creates records in test db acc to test.log
-      # but how do I see them in the db??
-      courses = @si_class.process_import_file(test_file_path)
-      # Note all the following just tests whether the returned courses array has the stuff from the test input file in the right place
-      courses.length.should == 11
-      courses.has_key?('CLASSHIS-114-amemiya').should be_true
-      #puts courses['CLASSHIS-114-amemiya'].inspect
-      courses['CLASSHIS-114-amemiya'][:item_list].length.should==1
-      courses['CLASSHIS-114-amemiya'][:item_list][0][:ckey].should=='32837'
+      #courses = @si_class.process_import_file(test_file_path)
+      @si_class.process_import_file(test_file_path)
+      Reserve.all.length.should==11
       Reserve.find_by_cid("CLASSHIS-114").cid.should=='CLASSHIS-114'
-      #Reserve.find(r[:id]).item_list.should be_blank
-      #Reserve.find_by_sunet("amemiya")
-      #courses.each do |key,value|
-      #  value.each do |k2,v2|
-      #    puts "#{k2} => #{v2}"  
-      #  end
-      #  puts '<br>==============' + "<br>\n"
+      Reserve.find_by_cid("CLASSHIS-114")[:item_list].length.should==1
+      Reserve.find_by_cid("CLASSHIS-114")[:item_list][0][:ckey].should=='32837'
+      Reserve.find_by_cid("HISTORY-273G")[:item_list].length.should==4
+      Reserve.find_by_cid("HISTORY-273G")[:item_list][2][:ckey].should=='9247690'
+      #courses.each do |k,v|
+      #  puts v.inspect
+      #  puts '<br>===================<br>'
       #end
-      #puts courses.inspect
-      #courses.has_key?("AMSTUD-160-rgillam").should be_true
     end    
   end
   
