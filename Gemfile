@@ -5,7 +5,6 @@ gem 'rails', '3.2.1'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
 gem 'therubyracer'
 gem 'nokogiri'
 
@@ -31,6 +30,15 @@ group :test do
   gem 'database_cleaner'
 end
 
+# to be run on machines w/ mysql
+group :mysql do
+  gem "mysql"
+end
+
+# to be run on machines w/ sqlite3
+group :sqlite do
+  gem "sqlite3"
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
