@@ -29,6 +29,12 @@ class CourseWorkCourses
       course if course[:cid] == class_id and course[:sid] == section
     end.compact
   end
+
+  def find_by_class_id_and_sunet(class_id, sunet)
+    self.all_courses.map do |course|
+      course if course[:cid] == class_id and course[:instructors].map{|i| i[:sunet]}.include?(sunet)
+    end.compact
+  end
   
   def find_by_class_id_and_section_and_sunet(class_id, section, sunet)
     self.all_courses.map do |course|
