@@ -1,16 +1,19 @@
 require 'spec_helper'
 
 describe ReservesController do
+  before(:each) do
+    @reserve_params = {:library => "Green", :immediate=>"true", :contact_name => "John Doe", :contact_phone=>"(555)555-5555", :contact_email=>"jdoe@example.com"}
+  end
   describe "new" do
     it "should redirect to an existing course list if it exists and the current user is an editor" do
-      r = Reserve.create({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"})
+      r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"}))
       r.save!
       controller.stub(:current_user).and_return("user_sunet")
       get :new, {:cid => "CID1", :sid => "01", :term => "Winter 2012"}
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
     it "should redirect to an existing course list if it exists and the current user is a super user" do
-      r = Reserve.create({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"})
+      r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"}))
       r.save!
       # rwmantov is in the super_sunet list as of the writing of this test.
       controller.stub(:current_user).and_return("rwmantov")
@@ -39,7 +42,7 @@ describe ReservesController do
   describe "create" do
     it "should allow you to create an item if you are the instructor" do
       controller.stub(:current_user).and_return("user_sunet")
-      post :create, :reserve => {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"}
+      post :create, :reserve => @reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"})
       r = assigns(:reserve)
       r.cid.should == "EDUC-237X"
       response.should redirect_to(edit_reserve_path(r[:id]))
@@ -47,14 +50,14 @@ describe ReservesController do
     it "should allow you to create an item if you are a super sunet" do
       # rwmantov is in the super_sunet list as of the writing of this test.
       controller.stub(:current_user).and_return("rwmantov")
-      post :create, :reserve => {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"}
+      post :create, :reserve => @reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"})
       r = assigns(:reserve)
       r.cid.should == "EDUC-237X"
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
     it "should redirecto the home page if the user does not have access to create this reserve list" do
       controller.stub(:current_user).and_return("cannot_edit")
-      post :create, :reserve => {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"}
+      post :create, :reserve => @reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"})
       response.should redirect_to(root_path)
       flash[:error].should == "You do not have permissions to create his course reserve list."
     end
@@ -63,7 +66,7 @@ describe ReservesController do
   describe "edit" do
     it "should allow you to get to the edit screen if you are an editor if the item" do
       controller.stub(:current_user).and_return("user_sunet")
-      r = Reserve.create({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"})
+      r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
       r.save!
       get :edit, :id => r[:id]
       response.should be_success
@@ -72,7 +75,7 @@ describe ReservesController do
     it "should allow you to get to the edit screen if you are an super sunet" do
       # rwmantov is in the super_sunet list as of the writing of this test.
       controller.stub(:current_user).and_return("rwmantov")
-      r = Reserve.create({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"})
+      r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
       r.save!
       get :edit, :id => r[:id]
       response.should be_success
@@ -80,7 +83,7 @@ describe ReservesController do
     end
     it "should redirect if the user does not have permissions to edit the reserve" do
       controller.stub(:current_user).and_return("some_user")
-      r = Reserve.create({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"})
+      r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
       r.save!
       get :edit, :id => r[:id]
       response.should redirect_to(root_path)
@@ -90,7 +93,7 @@ describe ReservesController do
   
   describe "update" do
     it "should clear out the item_list if no item_list params is in the URL" do
-      r = Reserve.create({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :item_list => [{:ckey => "item1"}]})
+      r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :item_list => [{:ckey => "item1"}]}))
       r.save!
       r.item_list.length.should == 1
       get :update, {:id => r[:id], :reserve => {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"}}
@@ -101,7 +104,7 @@ describe ReservesController do
   
   describe "index" do
     it "should return reserves for a user when they have them" do
-      r = Reserve.create({:cid=>"CID1", :sid => "SID1", :instructor_sunet_ids => "user_sunet"})
+      r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid => "SID1", :instructor_sunet_ids => "user_sunet"}))
       r.save!
       controller.stub(:current_user).and_return("user_sunet")
       get :index
