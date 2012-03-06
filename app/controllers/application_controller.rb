@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   
   def current_user
-    params[:usr] || "jdoe"
+    Rails.env.production? ? request.env["WEBAUTH_USER"] : "jdoe"
   end
   
   helper_method(:current_user)
