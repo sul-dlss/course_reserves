@@ -27,9 +27,15 @@ $(document).ready(function(){
 		$(this).parents("tr").remove();
 		update_item_list_numbers_and_classes();
 		show_changed($("#item_list_table"));
+		check_validations();
 		return false;
 	});
 
+  // form change hook
+  $("#reserve_form input, #reserve_form textarea, #reserve_form select").live("change", function(){
+    check_validations();
+  });
+  
   // jQuery dialog
   $("a.dialog").each(function() {
     var dialog_box = "empty";
@@ -68,6 +74,18 @@ $(document).ready(function(){
   // 	  check_loan_period();
   // });
 });
+
+function check_validations(){
+	if($("#reserve_form input#contact_name").val() == "" || $("#reserve_form input#contact_phone").val() == "" || $("#reserve_form input#contact_email").val() == "" || $("#item_list_table tbody tr").length < 2){
+	  $("input#send").attr("disabled", "true");	
+	  $("input#send").removeClass("active-button");
+	  $("input#send").addClass("disabled-button");
+  }else{
+	  $("input#send").removeAttr("disabled");
+	  $("input#send").addClass("active-button");
+	  $("input#send").removeClass("disabled-button");
+  }
+}
 
 function update_item_list_numbers_and_classes(){
 	i = 1;

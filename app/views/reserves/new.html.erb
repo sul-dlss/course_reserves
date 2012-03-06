@@ -1,6 +1,6 @@
 <div>
-	<%= form_for :reserve, :url =>  { :action => 'create'} do |f| -%>
+	<%= form_for :reserve, :url =>  { :action => 'create'}, :html => {:id=>"reserve_form"} do |f| -%>
 		<%= render :partial => "reserves_form", :locals => { :f => f } -%>
-		<input type="submit" value="Send request" class="active-button"> <%= link_to "Cancel [discard changes]" -%>	
+		<input type="submit" value="Send request" class="disabled-button" id="send" disabled="true"> <%= link_to "Cancel [discard changes]" -%>	
 	<%- end -%>
 </div>
