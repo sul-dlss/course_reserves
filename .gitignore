@@ -16,3 +16,6 @@
 
 .idea
 coverage
+
+# Ignoring vendorized gems
+/vendor/bundle
