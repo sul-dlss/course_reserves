@@ -1,3 +1,4 @@
 $("#add_row").before("<%= escape_javascript(render(:partial => 'reserves_item', :locals => {:item => params[:item], :index => params[:index]})) %>");
 update_item_list_numbers_and_classes();
 show_changed($("#item_list_table"));
+$("body").css("cursor", "auto");
