@@ -17,6 +17,7 @@ describe "SymphonyImport" do
     @si_class.extend(SymphonyImport)
   end
   
+  
   describe "parsing an entry line and getting back a key and hash" do
     it "should take an entry line and return a key and hash of entry elements" do
       entry_key, entry_hash = @si_class.get_entry_hash_and_key('GREEN-RESV|20120323|CURRENT|8634|36105011709016  |STACKS|GREEN-RESV|ON_RESERVE|White collar; the American middle classes|2H|20120323|ACTIVE|AMSTUD-160|Perspectives on American Identity|WINTER|2555460971|01157452|Gillam, Richard A|RGILLAM|rgillam@stanford.edu|(650) 723-4965|')
@@ -50,16 +51,17 @@ describe "SymphonyImport" do
   end
   
   
-  describe "adding eleven reserves records" do
-    it "should take a file path and call the process_import_file method to add eleven records to the database" do
+  describe "adding twelve reserves records" do
+    it "should take a file path and call the process_import_file method to add twelve records to the database" do
       #courses = @si_class.process_import_file(test_file_path)
       @si_class.process_import_file(test_file_path)
-      Reserve.all.length.should==11
+      Reserve.all.length.should==12
       Reserve.find_by_cid("CLASSHIS-114").cid.should=='CLASSHIS-114'
       Reserve.find_by_cid("CLASSHIS-114")[:item_list].length.should==1
       Reserve.find_by_cid("CLASSHIS-114")[:item_list][0][:ckey].should=='32837'
       Reserve.find_by_cid("HISTORY-273G")[:item_list].length.should==4
       Reserve.find_by_cid("HISTORY-273G")[:item_list][2][:ckey].should=='9247690'
+      Reserve.find_by_cid("EDUC-237X").sid.should=='01'
       #courses.each do |k,v|
       #  puts v.inspect
       #  puts '<br>===================<br>'

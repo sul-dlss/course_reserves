@@ -39,6 +39,14 @@ module SymphonyImport
             ]
     fields_hash = Hash[*keys.zip(fields).flatten]
     fields_hash[:instructor_sunet_id].downcase!
+    course_from_xml = CourseReserves::Application.config.courses.find_by_class_id_and_sunet(fields_hash[:course_id], fields_hash[:instructor_sunet_id])
+    if course_from_xml.blank?
+      fields_hash[:sid] = '01'
+    else
+      fields_hash[:sid] = course_from_xml.first[:sid]
+      #puts "course from xml" + course_from_xml.first.inspect
+    end
+    #puts "fieldsid is " + fields_hash[:sid].inspect
     entry_key = fields_hash[:course_id] + '-' + fields_hash[:instructor_sunet_id]
 
     return entry_key, fields_hash
@@ -50,7 +58,7 @@ module SymphonyImport
   def add_to_courses( courses, key, fields_hash )
 
      courses[key] = { :cid => fields_hash[:course_id],
-                      :sid => '01',
+                      :sid => fields_hash[:sid],
                       :desc => fields_hash[:course_name],
                       :library => fields_hash[:reserve_desk],
                       :term => fields_hash[:term],
