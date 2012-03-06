@@ -141,6 +141,8 @@ describe ReservesController do
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/New item/)
         diff_item_list.should match(/ckey: 54321/)
+        diff_item_list.should_not match(/Changed item/)
+        diff_item_list.should_not match(/Deleted item/)
       end
       it "should return changed items from the item list" do
         old_item_list = mock("reserve")
@@ -151,6 +153,8 @@ describe ReservesController do
         diff_item_list.should match(/Changed item/)
         diff_item_list.should match(/ckey: 54321/)
         diff_item_list.should match(/copies: 2 \(was: 1\)/)
+        diff_item_list.should_not match(/New item/)
+        diff_item_list.should_not match(/Deleted item/)
       end
       it "should return items deleted from the item list" do
         old_item_list = mock("reserve")
@@ -161,7 +165,22 @@ describe ReservesController do
         diff_item_list.should match(/Deleted item/)
         diff_item_list.should match(/ckey: 54321/)
         diff_item_list.should match(/ToBeDeleted/)
+        diff_item_list.should_not match(/New item/)
+        diff_item_list.should_not match(/Changed item/)
       end
+      it "should get an item w/ the same ckey that is drastically out of the old order" do
+        old_item_list = mock("reserve")
+        new_item_list = mock("reserve2")
+        old_item_list.stub(:item_list).and_return([{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"23456", :title=>"SecondTitle", :copies=>"1"}, {:ckey=>"34567", :title=>"ThirdTitle", :copies=>"1"}])
+        new_item_list.stub(:item_list).and_return([{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"34567", :title=>"ThirdTitle", :copies=>"1"}, {:ckey=>"23456", :title=>"ChangedTitle", :copies=>"1"}, ])
+        diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
+        diff_item_list.should match(/Changed item/)
+        diff_item_list.should match(/ckey: 23456/)
+        diff_item_list.should match(/ChangedTitle \(was: SecondTitle\)/)
+        diff_item_list.should_not match(/New item/)
+        diff_item_list.should_not match(/Deleted item/)
+      end
+      
       it "should not return unchanged items from the item list" do
         old_item_list = mock("reserve")
         new_item_list = mock("reserve2")
