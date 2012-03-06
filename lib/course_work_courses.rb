@@ -53,7 +53,7 @@ class CourseWorkCourses
     if Rails.env.test?
       [Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))]
     else
-      [Nokogiri::XML(File.open("#{Rails.root}/lib/course_work_xml/courseXML_F11.xml", 'r')), Nokogiri::XML(File.open("#{Rails.root}/lib/course_work_xml/courseXML_W12.xml", 'r'))]
+      [Nokogiri::XML(File.open("#{Rails.root}/lib/course_work_xml/courseXML_Sp12.xml", 'r')), Nokogiri::XML(File.open("#{Rails.root}/lib/course_work_xml/courseXML_Su12.xml", 'r'))]
     end
   end
   
