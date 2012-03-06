@@ -146,8 +146,20 @@ input {
 	@include data-table;
 	width: 100%;
 }
+#all_courses th {
+	cursor: pointer;
+}
 #all_courses td {
 	padding: 7px 5px 7px 0;
+}
+#all_courses td:first-child, #all_courses th:first-child {
+	padding-left: 5px;
+}
+#all_courses #course_id {
+	width: 100px;
+}
+#all_courses #instructor {
+	width: 150px;
 }
 #my-reserves {
 	@include data-table;
@@ -226,10 +238,14 @@ input.num_copies {
 	margin: 5px 0;
 	width: 48%;
 	float: left;
+	text-align: left;
 }
-#all_courses_filter, #all_courses_paginate {
+#all_courses_length, #all_courses_paginate {
   float: right;
   text-align: right;
+}
+#all_courses_paginate a:hover {
+	cursor: pointer;
 }
 #all_courses_previous {
 	margin-right: 15px;
