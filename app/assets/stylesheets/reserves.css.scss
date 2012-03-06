@@ -189,6 +189,7 @@ input.num_copies {
 	border-right: 2px solid $cardinal;
 }
 .active-button {
+	background: -webkit-gradient(linear, left top, left bottom, from(#9D3225), to(#7C1306));
 	background: -moz-linear-gradient(center top , #9D3225, #7C1306) repeat scroll 0 0 transparent;
   border: 1px solid #6D1308;
   border-radius: 3px 3px 3px 3px;
@@ -202,9 +203,11 @@ input.num_copies {
   text-decoration: none;
 }
 .active-button:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#9D3225), to(#510E06));
 	background: -moz-linear-gradient(center top , #9D3225, #510E06) repeat scroll 0 0 transparent;
 }
 .disabled-button {
+	background: -webkit-gradient(linear, left top, left bottom, from(#CCCCCC), to(#DDDDDD));
 	background: -moz-linear-gradient(center top , #CCCCCC, #DDDDDD) repeat scroll 0 0 transparent;
   border: 1px solid #999999;
   border-radius: 3px 3px 3px 3px;
