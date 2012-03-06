@@ -77,7 +77,7 @@
     		<td class="enumerator last-row"><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
     		<td colspan="4">
     			Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "http://searchworks.stanford.edu/") %>.<br/>
-    			<input type="text" id="sw_url" /> <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item active-button") -%> - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :remote => true ) %>
+    			<input type="text" id="sw_url" /> <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item active-button") -%> - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :id=>"add_custom", :remote => true ) %>
     		</td>
     	</tr>
   	</tbody>		

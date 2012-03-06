@@ -3,7 +3,16 @@ $(document).ready(function(){
 	
 	// Add item from SW
 	$(".add-sw-item").click(function(){
-		$(this).attr("href", $(this).attr("href") + "&url=" + $("#sw_url").attr("value"));
+		if($("#sw_url").attr("value") != ""){
+			$("body").css("cursor", "progress");
+		  $(this).attr("href", $(this).attr("href") + "&url=" + $("#sw_url").attr("value"));	
+		}else{
+			return false;
+		}
+	});
+	
+	$("#add_custom").click(function(){
+		$("body").css("cursor", "progress");
 	});
 	
 	// Add comment links
