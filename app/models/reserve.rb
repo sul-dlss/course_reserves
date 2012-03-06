@@ -4,13 +4,15 @@ class Reserve < ActiveRecord::Base
 
   has_and_belongs_to_many :editors
   
-  validates :library, :presence => true # need to make sure (select library) isn't selected
   # taking immediate validation out for now.  Enforced in the UI.
-  #validates :immediate, :presence => true 
-  validates :contact_name, :presence => true
-  validates :contact_phone, :presence => true
-  validates :contact_email, :presence => true
+  #validates :immediate, :presence => true
   
+  # maybe turn these validations on during initial import?
+  #validates :library, :presence => true # need to make sure (select library) isn't selected
+  #validates :contact_name, :presence => true
+  #validates :contact_phone, :presence => true
+  #validates :contact_email, :presence => true
+
   serialize :item_list, Array
   
   private
