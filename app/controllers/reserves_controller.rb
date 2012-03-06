@@ -115,9 +115,10 @@ class ReservesController < ApplicationController
     new_reserve.item_list.each_with_index do |new_item, index|
       total_reserves << new_item
       unless old_reserve.item_list[index] == new_item or old_reserve.item_list.include?(new_item)
-        total_reserves << old_reserve.item_list[index]
+        #total_reserves << old_reserve.item_list[index]
         # we should assume this is the same item at that point.
         if old_reserve.item_list[index] and old_reserve.item_list[index][:ckey] == new_item[:ckey] and old_reserve.item_list[index][:title] == new_item[:title]
+          total_reserves << old_reserve.item_list[index]
           item_text << "Changed item\n"
           new_item.each do |key,value|
             if old_reserve.item_list[index][key] == value
@@ -125,6 +126,18 @@ class ReservesController < ApplicationController
               item_text << "#{key}: #{value}\n"
             else
               item_text << "#{key}: #{value} (was: #{old_reserve.item_list[index][key]})\n"
+            end
+          end
+        elsif !new_item[:ckey].blank? and !old_reserve.item_list.map{|old_r| old_r if old_r[:ckey] == new_item[:ckey]}.compact.blank?
+          old_item = old_reserve.item_list.map{|old_r| old_r if old_r[:ckey] == new_item[:ckey]}.compact.first
+          total_reserves << old_item
+          item_text << "Changed item\n"
+          new_item.each do |key,value|
+            if old_item[key] == value
+              # maybe to a key translate here for human consumption
+              item_text << "#{key}: #{value}\n"
+            else
+              item_text << "#{key}: #{value} (was: #{old_item[key]})\n"
             end
           end
         else
