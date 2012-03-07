@@ -36,6 +36,11 @@ $(document).ready(function(){
     check_validations();
   });
   
+  // Term processing
+  $("#reserve_form select#term").click(function(){
+	  $("#reserve_form input#future").attr("checked", "checked");
+  });
+
   // jQuery dialog
   $("a.dialog").each(function() {
     var dialog_box = "empty";
