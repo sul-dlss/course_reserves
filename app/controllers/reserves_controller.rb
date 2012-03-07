@@ -66,6 +66,8 @@ class ReservesController < ApplicationController
   
   def create
     if CourseReserves::Application.config.super_sunets.include?(current_user) or params[:reserve][:instructor_sunet_ids].split(",").map{|sunet| sunet.strip }.include?(current_user)
+      # Will need to do something like this.  But we need a way to find the current term programatically
+      # params[:reserve][:term] == "current_term" unless params[:reserve][:immediate] == "false"
       @reserve = Reserve.create(params[:reserve])
       @reserve.save! 
       send_course_reserve_request(@reserve) if params.has_key?(:send_request)
@@ -87,6 +89,8 @@ class ReservesController < ApplicationController
   
   def update
     reserve = Reserve.find(params[:id])
+    # Will need to do something like this.  But we need a way to find the current term programatically
+    # params[:reserve][:term] == "current_term" unless params[:reserve][:immediate] == "false"
     params[:reserve][:item_list] = [] unless params[:reserve].has_key?(:item_list)
     if params.has_key?(:send_request) and reserve.has_been_sent == true
       send_updated_course_reserve_request(reserve)
