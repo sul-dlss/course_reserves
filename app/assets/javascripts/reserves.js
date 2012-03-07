@@ -118,7 +118,7 @@ function check_loan_period(){
 				$("option:contains('4 hours')", $(this)).attr("selected", true);
 			});
 		  $(this).attr("disabled","true");
-		}else{
+		}else if(!select.hasClass("media")){
 			select.removeAttr("disabled");
 		}
 	});
