@@ -75,9 +75,13 @@ class CourseWorkCourses
             end
             unless instructors.blank?
               key = "#{class_id}-#{instructors.map{|i| i[:sunet]}.sort.join("-")}".to_sym
-              if courses.has_key?(key)
-                # comment the line below and look at the first page of all courses section numbers.  They are all one.  (40 - 50 all section 01)
-                courses[key][:sid] = "01"
+              # Not sure if we need this twice or can do a more complicated if logic
+              if courses.has_key?(key) and courses[key][:term] == term and section_id == "01"
+                courses[key] = {:title       => course_title,
+                                :term        => term,
+                                :cid         => class_id,
+                                :sid         => section_id,
+                                :instructors => instructors}                
               else
                 courses[key] = {:title       => course_title,
                                 :term        => term,
