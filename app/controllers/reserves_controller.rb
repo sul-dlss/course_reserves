@@ -22,24 +22,21 @@ class ReservesController < ApplicationController
   
   def new
     reserve = Reserve.find_all_by_cid(params[:cid])
-    #unless reserve.blank?
-      reserve.each do |res|
-        editors = res.editors.map{|e| e[:sunetid] }.compact
-        if CourseReserves::Application.config.super_sunets.include?(current_user) or params[:instructors].split(",").map{|i| editors.include?(i.strip) }.include?(true)
-          redirect_to edit_reserve_path(res[:id]) and return
-        end
+    reserve.each do |res|
+      editors = res.editors.map{|e| e[:sunetid] }.compact
+      if CourseReserves::Application.config.super_sunets.include?(current_user) or params[:instructors].split(",").map{|i| editors.include?(i.strip) }.include?(true)
+        redirect_to edit_reserve_path(res[:id]) and return
       end
-    #else
-      courses = CourseReserves::Application.config.courses.find_by_class_id(params[:cid])
-      instructors = courses.map{|c| c[:instructors].map{|i| i[:sunet] } }.flatten.compact.uniq 
-      unless courses.blank?
-        if !instructors.include?(current_user) and !CourseReserves::Application.config.super_sunets.include?(current_user)
-          flash[:error] = "You are not the instructor for this course."
-          redirect_to root_path
-        end
-        @course = params[:instructors].split(",").map{|i| CourseReserves::Application.config.courses.find_by_class_id_and_sunet(params[:cid], i.strip).first}.first
+    end
+    courses = CourseReserves::Application.config.courses.find_by_class_id(params[:cid])
+    instructors = courses.map{|c| c[:instructors].map{|i| i[:sunet] } }.flatten.compact.uniq 
+    unless courses.blank?
+      if !instructors.include?(current_user) and !CourseReserves::Application.config.super_sunets.include?(current_user)
+        flash[:error] = "You are not the instructor for this course."
+        redirect_to root_path
       end
-    #end
+      @course = params[:instructors].split(",").map{|i| CourseReserves::Application.config.courses.find_by_class_id_and_sunet(params[:cid], i.strip).first}.first
+    end
   end
 
   
@@ -98,7 +95,6 @@ class ReservesController < ApplicationController
       send_course_reserve_request(reserve)
     else
       reserve.update_attributes(params[:reserve])
-      #Reserve.update(params[:id], params[:reserve])
     end
     redirect_to({ :controller => 'reserves', :action => 'edit', :id => params[:id] }) 
   end
@@ -128,7 +124,6 @@ class ReservesController < ApplicationController
     new_reserve.item_list.each_with_index do |new_item, index|
       total_reserves << new_item
       unless old_reserve.item_list[index] == new_item or old_reserve.item_list.include?(new_item)
-        #total_reserves << old_reserve.item_list[index]
         # we should assume this is the same item at that point.
         if old_reserve.item_list[index] and old_reserve.item_list[index][:ckey] == new_item[:ckey] and old_reserve.item_list[index][:title] == new_item[:title]
           total_reserves << old_reserve.item_list[index]
