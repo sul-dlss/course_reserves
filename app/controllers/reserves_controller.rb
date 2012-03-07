@@ -94,7 +94,7 @@ class ReservesController < ApplicationController
     params[:reserve][:item_list] = [] unless params[:reserve].has_key?(:item_list)
     if params.has_key?(:send_request) and reserve.has_been_sent == true
       send_updated_course_reserve_request(reserve)
-    elsif reserve.has_been_sent == false
+    elsif reserve.has_been_sent == false or reserve.has_been_sent.nil?
       send_course_reserve_request(reserve)
     else
       reserve.update_attributes(params[:reserve])
