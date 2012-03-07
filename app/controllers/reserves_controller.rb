@@ -15,26 +15,31 @@ class ReservesController < ApplicationController
   def all_courses_response
     items = []
     CourseReserves::Application.config.courses.all_courses.each do |course|
-      items << [course[:cid], "<a href='/reserves/new?cid=#{course[:cid]}&sid=#{course[:sid]}&term=#{course[:term]}'>#{course[:title]} [section #{course[:sid]}]</a>", course[:instructors].map{|i| i[:name]}.compact.join(", ")]
+      items << [course[:cid], "<a href='/reserves/new?cid=#{course[:cid]}&instructors=#{course[:instructors].map{|i| i[:sunet]}.compact.join(",")}'>#{course[:title]} [section #{course[:sid]}]</a>", course[:instructors].map{|i| i[:name]}.compact.join(", ")]
     end
     render :json => {"aaData" => items}.to_json, :layout => false
   end
   
   def new
-    reserve = Reserve.find_by_cid_and_sid_and_term(params[:cid], params[:sid], params[:term])
-    unless reserve.nil?  
-      if CourseReserves::Application.config.super_sunets.include?(current_user) or reserve.editors.map{|e| e[:sunetid] }.compact.include?(current_user)
-        redirect_to edit_reserve_path(reserve[:id]) 
+    reserve = Reserve.find_all_by_cid(params[:cid])
+    #unless reserve.blank?
+      reserve.each do |res|
+        editors = res.editors.map{|e| e[:sunetid] }.compact
+        if CourseReserves::Application.config.super_sunets.include?(current_user) or params[:instructors].split(",").map{|i| editors.include?(i.strip) }.include?(true)
+          redirect_to edit_reserve_path(res[:id]) and return
+        end
       end
-    else
-      # Do we need to find my term too?  There isn't a finder for that yet.
-      course = CourseReserves::Application.config.courses.find_by_class_id_and_section(params[:cid], params[:sid]).first
-      if !course[:instructors].map{|i| i[:sunet] }.compact.include?(current_user) and !CourseReserves::Application.config.super_sunets.include?(current_user)
-        flash[:error] = "You are not the instructor for this course."
-        redirect_to root_path
+    #else
+      courses = CourseReserves::Application.config.courses.find_by_class_id(params[:cid])
+      instructors = courses.map{|c| c[:instructors].map{|i| i[:sunet] } }.flatten.compact.uniq 
+      unless courses.blank?
+        if !instructors.include?(current_user) and !CourseReserves::Application.config.super_sunets.include?(current_user)
+          flash[:error] = "You are not the instructor for this course."
+          redirect_to root_path
+        end
+        @course = params[:instructors].split(",").map{|i| CourseReserves::Application.config.courses.find_by_class_id_and_sunet(params[:cid], i.strip).first}.first
       end
-      @course = course
-    end
+    #end
   end
 
   

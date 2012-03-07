@@ -43,8 +43,7 @@ class CourseWorkCourses
   end
   
   def all_courses
-    # if we end up going w/ a key based hash instead of an array we will need to change this to process_all_courses_xml(self.raw_xml).values
-    @all_courses ||= process_all_courses_xml(self.raw_xml)
+    @all_courses ||= process_all_courses_xml(self.raw_xml).values
   end
   
   private
@@ -58,7 +57,7 @@ class CourseWorkCourses
   end
   
   def process_all_courses_xml(xml_files)
-    courses = []
+    courses = {}
     xml_files.each do |xml|
       xml.xpath("//courseclass").each do |course|
         course_title = course[:title]
@@ -75,14 +74,17 @@ class CourseWorkCourses
               instructors << {:sunet => sunet, :name => name}
             end
             unless instructors.blank?
-              # could make courses a hash and assign this hash to the a key for quick lookup.
-              # if class_id + instructor is what really makes a unique course an instructor, this will need to be in the unstructor loop above.
-              # once we have this key, we can do an unless courses.has_key?("#{class_id}-#{inst[:sunetid]}".to_sym) or unless courses.has_key?("#{term}-#{class_id}-#{section_id}".to_sym)
-              courses << {:title       => course_title,
-                          :term        => term,
-                          :cid         => class_id,
-                          :sid         => section_id,
-                          :instructors => instructors}
+              key = "#{class_id}-#{instructors.map{|i| i[:sunet]}.sort.join("-")}".to_sym
+              if courses.has_key?(key)
+                # comment the line below and look at the first page of all courses section numbers.  They are all one.  (40 - 50 all section 01)
+                courses[key][:sid] = "01"
+              else
+                courses[key] = {:title       => course_title,
+                                :term        => term,
+                                :cid         => class_id,
+                                :sid         => section_id,
+                                :instructors => instructors}
+              end
             end
           end        
         end
