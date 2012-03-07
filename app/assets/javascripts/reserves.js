@@ -17,8 +17,13 @@ $(document).ready(function(){
 	
 	// Add comment links
 	$(".add-comment a").live("click", function(){
-		$(this).toggle();
+		if($(this).text() == "Add comment"){
+		  $(this).text("Remove comment");	
+		}else{
+			$(this).text("Add comment");
+		}
 		$(this).parents("td").children("textarea").toggle();
+		$(this).parents("td").children("textarea").val("");
 		return false;
 	});
 	
