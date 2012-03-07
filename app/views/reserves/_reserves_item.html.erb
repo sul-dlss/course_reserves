@@ -6,6 +6,8 @@
   		<p><%= link_to "http://searchworks.stanford.edu/view/#{item["ckey"]}", "http://searchworks.stanford.edu/view/#{item["ckey"]}" -%></p>
   		<%- if item["comment"].blank? -%>
   		  <span class="add-comment"><%= link_to "Add comment", "", :class=> "add-comment" -%></span></p>
+  		<%- else -%>
+    		<span class="add-comment"><%= link_to "Remove comment", "", :class=> "add-comment" -%></span></p>
   		<%- end -%>
   	<%- end -%>
   	<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
