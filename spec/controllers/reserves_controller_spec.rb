@@ -6,10 +6,12 @@ describe ReservesController do
   end
   describe "new" do
     it "should redirect to an existing course list if it exists and the current user is an editor" do
+      r1 = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "02", :instructor_sunet_ids => "another_sunet", :term => "Winter 2012"}))
+      r1.save!
       r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"}))
       r.save!
       controller.stub(:current_user).and_return("user_sunet")
-      get :new, {:cid => "CID1", :sid => "01", :term => "Winter 2012"}
+      get :new, {:cid => "CID1", :instructors=>"user_sunet"}
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
     it "should redirect to an existing course list if it exists and the current user is a super user" do
@@ -18,22 +20,37 @@ describe ReservesController do
       # rwmantov is in the super_sunet list as of the writing of this test.
       controller.stub(:current_user).and_return("rwmantov")
       r.editors.map{|e| e[:sunetid] }.include?("rwmantov").should be_false
-      get :new, {:cid => "CID1", :sid => "01", :term => "Winter 2012"}
+      get :new, {:cid => "CID1", :instructors=>"user_sunet"}
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
     it "should let you create a new course if you are a super user" do
       # rwmantov is in the super_sunet list as of the writing of this test.
       controller.stub(:current_user).and_return("rwmantov")
-      get :new, {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012"}
+      get :new, {:cid => "EDUC-237X", :instructors=>"456"}
       response.should be_success  
+      course = assigns(:course)
+      course[:cid].should == "EDUC-237X"
+      course[:instructors].map{|i| i[:sunet] }.include?("456").should be_true
     end
     it "should let you create a new course if you are the professor" do
       controller.stub(:current_user).and_return("123")
-      get :new, {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012"}
+      get :new, {:cid => "EDUC-237X", :instructors => "123"}
       response.should be_success
+      course = assigns(:course)
+      course[:cid].should == "EDUC-237X"
+      course[:instructors].map{|i| i[:sunet] }.include?("123").should be_true
+    end
+    it "should bring you to the correct new screen for multiple instructors" do
+      # rwmantov is in the super_sunet list as of the writing of this test.
+      controller.stub(:current_user).and_return("rwmantov")
+      get :new, {:cid => "AA-272C", :instructors => "123,456"}
+      response.should be_success
+      course = assigns(:course)
+      course[:cid].should == "AA-272C"
+      course[:instructors].map{|i| i[:sunet] }.join(",").should == "123,456"
     end
     it "should not let you create a course that you don't have permisisons to" do
-      get :new, {:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012"}
+      get :new, {:cid => "EDUC-237X", :instructors => "user_sunet"}
       response.should redirect_to(root_path)
       flash[:error].should == "You are not the instructor for this course."
     end

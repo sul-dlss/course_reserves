@@ -128,6 +128,12 @@ describe "CourseWorkCourses" do
       course[:instructors].first[:sunet].should == "mysunet"
       course[:instructors].first[:name].should == "mysunet"
     end
+    it "should de-dup courses on the same class id and normalized sunets" do
+      course = @courses.find_by_class_id("AA-272C")
+      course.length.should == 1
+      course.first[:title].should == "Global Positioning Systems"
+      course.first[:sid].should == "01"
+    end
   end
   
 end

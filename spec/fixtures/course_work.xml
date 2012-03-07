@@ -32,6 +32,17 @@
 
   <courseclass term="Winter 2012" title="Global Positioning Systems">
     <class id="W12-AA-272C">
+      <section id="02">
+        <instructors>
+          <instructor sunetid="123">instructor 1's display name</instructor>
+          <instructor sunetid="456">instructor 2's display name</instructor>
+        </instructors>
+      </section>
+    </class>
+  </courseclass>
+  
+  <courseclass term="Summer 2012" title="Global Positioning Systems">
+    <class id="Su12-AA-272C">
       <section id="01">
         <instructors>
           <instructor sunetid="123">instructor 1's display name</instructor>
