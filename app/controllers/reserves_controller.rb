@@ -112,7 +112,7 @@ class ReservesController < ApplicationController
   
   def send_course_reserve_request(reserve)
     #send email here
-    reserve.update_attributes(:has_been_sent => true)
+    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true))
   end
   
   def send_updated_reserve_request(reserve)
