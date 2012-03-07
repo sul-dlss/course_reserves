@@ -76,7 +76,11 @@ $(document).ready(function(){
 });
 
 function check_validations(){
-	if($("#reserve_form input#contact_name").val() == "" || $("#reserve_form input#contact_phone").val() == "" || $("#reserve_form input#contact_email").val() == "" || $("#item_list_table tbody tr").length < 2){
+	if($("#reserve_form #libraries").val() == "(select library)" ||
+		 $("#reserve_form input#contact_name").val() == ""  || 
+	   $("#reserve_form input#contact_phone").val() == "" || 
+	   $("#reserve_form input#contact_email").val() == "" || 
+	   $("#item_list_table tbody tr").length < 2 ){
 	  $("input#send").attr("disabled", "true");	
 	  $("input#send").removeClass("active-button");
 	  $("input#send").addClass("disabled-button");
