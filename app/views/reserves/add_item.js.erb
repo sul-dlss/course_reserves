@@ -2,4 +2,5 @@ $("#add_row").before("<%= escape_javascript(render(:partial => 'reserves_item', 
 update_item_list_numbers_and_classes();
 show_changed($("#item_list_table"));
 check_validations();
+check_loan_period();
 $("body").css("cursor", "auto");

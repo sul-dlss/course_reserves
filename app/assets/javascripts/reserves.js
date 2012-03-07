@@ -68,11 +68,15 @@ $(document).ready(function(){
     
   });
   
-
+  
   // enforce loan period on library change
-  // $("select#libraries").change(function(){
-  // 	  check_loan_period();
-  // });
+  $("select#libraries").live("change", function(){
+  	  check_loan_period();
+  });
+  // enforce loan period on page load
+  if($("#reserve_form").length > 0){
+	  check_loan_period();
+  }
 });
 
 function check_validations(){
@@ -107,13 +111,11 @@ function check_loan_period(){
 	$("select.loan-select").each(function(){
 		var select = $(this);
 		if(library == "Music Library") {
-			select.children("option").each(function(){
-				var option = $(this);
-		    if(option.text() == "4 hours") {
-			  	option.attr("selected", true);
-		    }else{
-			    option.removeAttr("selected")
-		    }
+			$(".loan-select").each(function(){
+				$("option", $(this)).each(function(){
+					$(this).removeAttr("selected");
+				});
+				$("option:contains('4 hours')", $(this)).attr("selected", true);
 			});
 		  $(this).attr("disabled","true");
 		}else{
