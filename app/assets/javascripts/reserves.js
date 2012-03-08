@@ -11,6 +11,16 @@ $(document).ready(function(){
 		}
 	});
 	
+	// Create hidden elements reflecting the value of all disabled elements
+	$("#send, #save").click(function(){
+		$("#reserve_form select:disabled").each(function(){
+			$(this).after("<input type='hidden' name='" + $(this).attr("name") + "' value='" + $(this).val() + "' />");
+		});
+		// We may not need to do this.  I won't hurt, but since we don't allow people to edit the term once we've disabled term, it really doesn't need to update.
+		var radio = $("#reserve_form #reserve-timing input:checked");
+		radio.after("<input type='hidden' name='" + radio.attr("name") + "' value='" + radio.val() + "' />");
+	});
+	
 	$("#add_custom").click(function(){
 		$("body").css("cursor", "progress");
 	});

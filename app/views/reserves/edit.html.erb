@@ -2,7 +2,7 @@
   <p><%= link_to("Home", root_path) %></p>
 	<%= form_for @reserve, :url => { :action => 'update'}, :html => {:id=>"reserve_form"} do |f| -%>
 		<%= render :partial => "reserves_form", :locals => {:f => f} -%>
-		<input type="submit" value="Save" class="active-button"> <input type="submit" name="send_request" value="Send request" class="disabled-button" id="send" disabled="true"> <%= link_to "Cancel [discard changes]" -%>	
+		<input type="submit" id="save" value="Save" class="active-button"> <input type="submit" name="send_request" value="Send request" class="disabled-button" id="send" disabled="true"> <%= link_to "Cancel [discard changes]" -%>	
 	<%- end -%>
 </div>
 <script type="text/javascript">
