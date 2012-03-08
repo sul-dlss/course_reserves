@@ -4,15 +4,17 @@
 		<% if item_in_searchworks?(item) %>
   		<p><%= item["title"] -%> </p>
   		<p><%= link_to "http://searchworks.stanford.edu/view/#{item["ckey"]}", "http://searchworks.stanford.edu/view/#{item["ckey"]}" -%></p>
-  		<%- if item["comment"].blank? -%>
-  		  <span class="add-comment"><%= link_to "Add comment", "", :class=> "add-comment" -%></span></p>
-  		<%- else -%>
-    		<span class="add-comment"><%= link_to "Remove comment", "", :class=> "add-comment" -%></span></p>
-  		<%- end -%>
   	<%- end -%>
   	<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
   	<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
   	<textarea cols="60" rows="5" class="item-comment" name="reserve[item_list][][comment]" <%= "style='display:none;'" if item_in_searchworks?(item) and item["comment"].blank? %>><%= item["comment"] %></textarea>
+  	<%- if item_in_searchworks?(item) -%>
+    	<%- if item["comment"].blank? -%>
+  		  <span class="add-comment"><%= link_to "Add comment", "", :class=> "add-comment" -%></span></p>
+  		<%- else -%>
+    		<span class="add-comment"><%= link_to "Remove comment", "", :class=> "add-comment" -%></span></p>
+  		<%- end -%>
+		<%- end -%>
 	</td>
 	<td>
 		<input type="text" class="num_copies" name="reserve[item_list][][copies]" maxlength="2" value="<%= item["copies"] || "1" %>" /><br/>
