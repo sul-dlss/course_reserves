@@ -64,6 +64,13 @@ describe ReservesController do
       r.cid.should == "EDUC-237X"
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
+    it "should save the configured current term when immediate is selected" do
+      controller.stub(:current_user).and_return("user_sunet")
+      post :create, :reserve => @reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"})
+      r = assigns[:reserve]
+      r.term.should == CourseReserves::Application.config.current_term
+      response.should redirect_to(edit_reserve_path(r[:id]))
+    end
     it "should redirecto the home page if the user does not have access to create this reserve list" do
       controller.stub(:current_user).and_return("cannot_edit")
       post :create, :reserve => @reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"})
@@ -108,6 +115,13 @@ describe ReservesController do
       get :update, {:id => r[:id], :reserve => {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"}}
       response.should redirect_to(edit_reserve_path(r[:id]))
       Reserve.find(r[:id]).item_list.should be_blank
+    end
+    it "should save the configured current term when immediate is selected" do
+      r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"}))
+      r.save!
+      get :update, {:id=>r[:id], :reserve => @reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"})}
+      response.should redirect_to(edit_reserve_path(r[:id]))
+      Reserve.find(r[:id]).term.should == CourseReserves::Application.config.current_term
     end
   end
   
