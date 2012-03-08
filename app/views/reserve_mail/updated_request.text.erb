@@ -1,6 +1,10 @@
 <%= @reserve.cid %>-<%= @reserve.sid %>: <%= @reserve.desc %>
+Cross listed as: <%= @reserve.cross_listings unless @reserve.cross_listings.blank? %>
 <%= @reserve.instructor_names %>
 <%= @reserve.instructor_sunet_ids %>
+
+Reserve at: <%= @reserve.library %>
+
 Contact Name: <%= @reserve.contact_name %>
 Contact Email: <%= @reserve.contact_email %>
 Contact Phone: <%= @reserve.contact_phone %>
