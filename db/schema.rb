@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(:version => 20120222195147) do
     t.string   "editor_sunet_ids"
     t.text     "item_list"
     t.boolean  "has_been_sent"
+    t.string   "sent_date"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
   end

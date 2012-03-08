@@ -92,8 +92,8 @@ class ReservesController < ApplicationController
     # params[:reserve][:term] == "current_term" unless params[:reserve][:immediate] == "false"
     params[:reserve][:item_list] = [] unless params[:reserve].has_key?(:item_list)
     if params.has_key?(:send_request) and reserve.has_been_sent == true
-      send_updated_course_reserve_request(reserve)
-    elsif reserve.has_been_sent == false or reserve.has_been_sent.nil?
+      send_updated_reserve_request(reserve)
+    elsif params.has_key?(:send_request) and (reserve.has_been_sent == false or reserve.has_been_sent.nil?)
       send_course_reserve_request(reserve)
     else
       reserve.update_attributes(params[:reserve])
@@ -110,12 +110,12 @@ class ReservesController < ApplicationController
   
   def send_course_reserve_request(reserve)
     #send email here
-    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true))
+    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
   end
   
   def send_updated_reserve_request(reserve)
     old_reserve = reserve.dup
-    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true))
+    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
     email_body = process_diff(old_reserve,reserve)
     #send email here
   end

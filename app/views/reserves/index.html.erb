@@ -13,6 +13,7 @@
   				<th id="course_id">Course ID</th>
   				<th id="course_description">Description</th>
   				<th id="instructor">Instructor</th>
+  				<th id="status">Status</th>
   				<th id="clone">Clone for new quarter</th>
   			</tr>
   		</thead>
@@ -23,6 +24,7 @@
   					<td><%= course.cid -%></td>
   					<td><%= link_to(course.desc, edit_reserve_path(course[:id])) -%></td>
   					<td><%= course.instructor_names %></td>
+  					<td><%= (course.sent_date.blank? or course.sent_date.nil?) ? "Not sent" : "Sent #{course.sent_date}" %></td>
   					<td>Select quarter</td>
   				</tr>
   			<% end %>

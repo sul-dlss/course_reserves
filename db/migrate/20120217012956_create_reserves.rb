@@ -17,6 +17,7 @@ class CreateReserves < ActiveRecord::Migration
       t.string :editor_sunet_ids
       t.text :item_list
       t.boolean :has_been_sent
+      t.string :sent_date
 
       t.timestamps
     end
