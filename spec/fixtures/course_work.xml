@@ -42,11 +42,28 @@
   </courseclass>
   
   <courseclass term="Winter 2012" title="Global Positioning Systems">
-    <class id="Su12-AA-272C">
+    <class id="W12-AA-272C">
       <section id="01">
         <instructors>
           <instructor sunetid="123">instructor 1's display name</instructor>
           <instructor sunetid="456">instructor 2's display name</instructor>
+        </instructors>
+      </section>
+    </class>
+  </courseclass>
+  
+  <courseclass term="Summer 2012" title="Art/Hist Cross Listed Course">
+    <class id="Su12-ART-102">
+      <section id="01">
+        <instructors>
+          <instructor sunetid="789">instructor 1's display name</instructor>
+        </instructors>
+      </section>
+    </class>
+    <class id="Su12-HIST-201">
+      <section id="01">
+        <instructors>
+          <instructor sunetid="789">instructor 1's display name</instructor>
         </instructors>
       </section>
     </class>

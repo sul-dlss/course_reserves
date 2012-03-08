@@ -24,6 +24,12 @@ class CourseWorkCourses
     end.compact
   end
   
+  def find_by_compound_key(key)
+    self.all_courses.map do |course|
+      course if course[:comp_key] == key
+    end.compact
+  end
+  
   def find_by_class_id_and_section(class_id, section)
     self.all_courses.map do |course|
       course if course[:cid] == class_id and course[:sid] == section
@@ -62,6 +68,10 @@ class CourseWorkCourses
       xml.xpath("//courseclass").each do |course|
         course_title = course[:title]
         term = course[:term]
+        cids = []
+        course.xpath("./class").each do |cl|
+          cids << cl[:id].gsub(/^\w{1,2}\d{2}-/, "")
+        end
         course.xpath("./class").each do |cl|
           class_id = cl[:id].gsub(/^\w{1,2}\d{2}-/, "")
           cl.xpath("./section").each do |sec|
@@ -74,20 +84,27 @@ class CourseWorkCourses
               instructors << {:sunet => sunet, :name => name}
             end
             unless instructors.blank?
-              key = "#{class_id}-#{instructors.map{|i| i[:sunet]}.sort.join("-")}".to_sym
+              instructor_sunets = instructors.map{|i| i[:sunet]}.sort
+              key = "#{class_id}-#{instructor_sunets.join("-")}".to_sym
+              compound_key = "#{cids.sort.join(",")},#{instructor_sunets.join(",")}"
+              cross_listings = cids.map{|c| c unless c == class_id}.compact.join(", ")
               # Not sure if we need this twice or can do a more complicated if logic
               if courses.has_key?(key) and courses[key][:term] == term and section_id == "01"
-                courses[key] = {:title       => course_title,
-                                :term        => term,
-                                :cid         => class_id,
-                                :sid         => section_id,
-                                :instructors => instructors}                
+                courses[key] = {:title          => course_title,
+                                :term           => term,
+                                :comp_key       => compound_key,
+                                :cross_listings => cross_listings,
+                                :cid            => class_id,
+                                :sid            => section_id,
+                                :instructors    => instructors}                
               else
-                courses[key] = {:title       => course_title,
-                                :term        => term,
-                                :cid         => class_id,
-                                :sid         => section_id,
-                                :instructors => instructors}
+                courses[key] = {:title          => course_title,
+                                :term           => term,
+                                :comp_key       => compound_key,
+                                :cross_listings => cross_listings,
+                                :cid            => class_id,
+                                :sid            => section_id,
+                                :instructors    => instructors}
               end
             end
           end        

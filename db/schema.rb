@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(:version => 20120222195147) do
     t.string   "library"
     t.boolean  "immediate"
     t.string   "term"
+    t.string   "compound_key"
+    t.string   "cross_listings"
     t.string   "contact_name"
     t.string   "contact_phone"
     t.string   "contact_email"

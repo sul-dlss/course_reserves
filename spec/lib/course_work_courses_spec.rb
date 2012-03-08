@@ -23,13 +23,13 @@ describe "CourseWorkCourses" do
     before(:each) do
       @course_list = @courses.all_courses
     end
-    it "should have all 5 courses in fixture XML" do
-      @course_list.length.should == 5
+    it "should have all 7 courses in fixture XML" do
+      @course_list.length.should == 7
     end
-    it "should countain the 2 different course titles from the fixture XML" do
+    it "should countain the 3 different course titles from the fixture XML" do
       course_titles = @course_list.map{|c| c[:title] }.uniq
-      course_titles.length.should == 2
-      course_titles.should == ["Residential Racial Segregation and the Education of African-American Youth", "Global Positioning Systems"]
+      course_titles.length.should == 3
+      course_titles.should == ["Residential Racial Segregation and the Education of African-American Youth", "Global Positioning Systems", "Art/Hist Cross Listed Course"]
     end
   end
   
@@ -133,6 +133,20 @@ describe "CourseWorkCourses" do
       course.length.should == 1
       course.first[:title].should == "Global Positioning Systems"
       course.first[:sid].should == "01"
+    end
+    it "should compute the compound key correctly" do
+      course = @courses.find_by_class_id("ART-102")
+      course.length.should == 1
+      course.first[:cid].should == "ART-102"
+      course.first[:comp_key].should == "ART-102,HIST-201,789"
+      course.first[:cross_listings].should == "HIST-201"
+    end
+    it "should computer the cross listed courses properly" do
+      course = @courses.find_by_class_id("HIST-201")
+      course.length.should == 1
+      course.first[:cid].should == "HIST-201"
+      course.first[:comp_key].should == "ART-102,HIST-201,789"
+      course.first[:cross_listings].should == "ART-102"
     end
   end
   

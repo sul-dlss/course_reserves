@@ -15,27 +15,29 @@ class ReservesController < ApplicationController
   def all_courses_response
     items = []
     CourseReserves::Application.config.courses.all_courses.each do |course|
-      items << [course[:cid], "<a href='/reserves/new?cid=#{course[:cid]}&instructors=#{course[:instructors].map{|i| i[:sunet]}.compact.join(",")}'>#{course[:title]} [section #{course[:sid]}]</a>", course[:instructors].map{|i| i[:name]}.compact.join(", ")]
+      cl = course[:cross_listings].blank? ? "" : "(#{course[:cross_listings]})"
+      items << [course[:cid], "<a href='/reserves/new?comp_key=#{course[:comp_key]}'>#{course[:title]}</a> #{cl}", course[:instructors].map{|i| i[:name]}.compact.join(", ")]
     end
     render :json => {"aaData" => items}.to_json, :layout => false
   end
   
   def new
-    reserve = Reserve.find_all_by_cid(params[:cid])
-    reserve.each do |res|
-      editors = res.editors.map{|e| e[:sunetid] }.compact
-      if CourseReserves::Application.config.super_sunets.include?(current_user) or params[:instructors].split(",").map{|i| editors.include?(i.strip) }.include?(true)
-        redirect_to edit_reserve_path(res[:id]) and return
+    reserve = Reserve.find_by_compound_key(params[:comp_key])
+    unless reserve.nil?
+      editors = reserve.editors.map{|e| e[:sunetid] }.compact
+      if CourseReserves::Application.config.super_sunets.include?(current_user) or editors.include?(current_user)
+        redirect_to edit_reserve_path(reserve[:id]) and return
       end
-    end
-    courses = CourseReserves::Application.config.courses.find_by_class_id(params[:cid])
-    instructors = courses.map{|c| c[:instructors].map{|i| i[:sunet] } }.flatten.compact.uniq 
-    unless courses.blank?
-      if !instructors.include?(current_user) and !CourseReserves::Application.config.super_sunets.include?(current_user)
-        flash[:error] = "You are not the instructor for this course."
-        redirect_to root_path
+    else
+      course = CourseReserves::Application.config.courses.find_by_compound_key(params[:comp_key]).first
+      unless course.blank?
+        instructors = course[:instructors].map{|i| i[:sunet] }.compact.uniq
+        if !instructors.include?(current_user) and !CourseReserves::Application.config.super_sunets.include?(current_user)
+          flash[:error] = "You are not the instructor for this course."
+          redirect_to root_path
+        end
+        @course = course
       end
-      @course = params[:instructors].split(",").map{|i| CourseReserves::Application.config.courses.find_by_class_id_and_sunet(params[:cid], i.strip).first}.first
     end
   end
 

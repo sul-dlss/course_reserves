@@ -2,18 +2,28 @@
 	<div id="main-details">
 	  <h1>Course Reserves List Request</h1>
 	  <%- if params[:action] == "new" -%>
-  		<h2><%= @course[:cid] if (@course and @course.has_key?(:cid)) -%>: <%= @course[:title] if (@course and @course.has_key?(:title)) -%></h2>
+  		<h2>
+  		  <%= @course[:cid] if (@course and @course.has_key?(:cid)) -%>: <%= @course[:title] if (@course and @course.has_key?(:title)) -%>
+  		  <%= "(#{@course[:cross_listings]})" if @course and @course.has_key?(:cross_listings) and !@course[:cross_listings].blank? %>
+  		</h2>
   		<input type="hidden" name="reserve[cid]" value="<%= @course[:cid] if (@course and @course.has_key?(:cid)) -%>" />
   		<input type="hidden" name="reserve[desc]" value="<%= @course[:title] if (@course and @course.has_key?(:title)) -%>" />
   		<input type="hidden" name="reserve[sid]" value="<%= @course[:sid] if (@course and @course.has_key?(:sid)) -%>" />
+  		<input type="hidden" name="reserve[compound_key]" value="<%= @course[:comp_key] if (@course and @course.has_key?(:comp_key)) -%>" />
+  		<input type="hidden" name="reserve[cross_listings]" value="<%= @course[:cross_listings] if (@course and @course.has_key?(:cross_listings)) -%>" />
   		<div class="section"><span>Instructor:</span> <%= @course[:instructors].map{|i| i[:name] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%></div>
   		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @course[:instructors].map{|i| i[:sunet] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%>" />
   		<input type="hidden" name="reserve[instructor_names]" value="<%= @course[:instructors].map{|i| i[:name] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%>" />
 		<%- else -%>
-  		<h2><%= @reserve.cid if (@reserve and @reserve.cid) -%>: <%= @reserve.desc if (@reserve and @reserve.desc) -%></h2>
+  		<h2>
+  		  <%= @reserve.cid if (@reserve and @reserve.cid) -%>: <%= @reserve.desc if (@reserve and @reserve.desc) -%>
+  		  <%= "(#{@reserve.cross_listings})" if @reserve and @reserve.cross_listings and !@reserve.cross_listings.blank? %>
+  		</h2>
   		<input type="hidden" name="reserve[cid]" value="<%= @reserve.cid if (@reserve and @reserve.cid) -%>" />
   		<input type="hidden" name="reserve[desc]" value="<%= @reserve.desc if (@reserve and @reserve.desc) -%>" />
   		<input type="hidden" name="reserve[sid]" value="<%= @reserve.sid if (@reserve and @reserve.sid) -%>" />
+  		<input type="hidden" name="reserve[compound_key]" value="<%= @reserve.compound_key if (@reserve and @reserve.compound_key) -%>" />
+  		<input type="hidden" name="reserve[cross_listings]" value="<%= @reserve.cross_listings if (@reserve and @reserve.cross_listings) -%>" />
   		<div class="section"><span>Instructor:</span> <%= @reserve.instructor_names if (@reserve and @reserve.instructor_names) -%></div>
   		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @reserve.instructor_sunet_ids if (@reserve and @reserve.instructor_sunet_ids) -%>" />
   		<input type="hidden" name="reserve[instructor_names]" value="<%= @reserve.instructor_names if (@reserve and @reserve.instructor_names) -%>" />
@@ -28,7 +38,6 @@
 		</div>
 		<div class="section">
 			When should these items be reserved?
-<%- puts @reserve.inspect -%>
 			<div id="reserve-timing">
   			<input type="radio" id="immediate" name="reserve[immediate]" value="true" <%= "checked='checked'" if !@reserve or @reserve.immediate != "false" %> <%= "disabled='disabled'" if @reserve and @reserve.has_been_sent %>/> <label for="immediate">immediately</label><br/>
   			<input type="radio" id="future" name="reserve[immediate]" value="false" <%= "checked='checked'" if @reserve and @reserve.immediate == "false" %> <%= "disabled='disabled'" if @reserve and @reserve.has_been_sent %> />
