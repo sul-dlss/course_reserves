@@ -26,7 +26,7 @@
 	<td>
 	  <input type="hidden" name="reserve[item_list][][media]" value="<%= item["media"] %>" />
 		<select class="loan-select<%= " media" if item["media"] == "true" %>" name="reserve[item_list][][loan_period]" <%= "disabled='disabled'" if item["media"] == "true" %>>
-		  <%- app_config.load_periods.each do |lp| -%>
+		  <%- app_config.loan_periods.values.each do |lp| -%>
   			<option<%= " selected='selected'" if lp == item["loan_period"] %>><%= lp %></option>
 			<%- end -%>
 		</select>

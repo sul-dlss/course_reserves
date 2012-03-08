@@ -93,5 +93,11 @@ CourseReserves::Application.config.email_mapping = {
   "MUSIC-RESV" => "muslibcirc@stanford.edu",
   "TANN-RESV" => "tanner-library@stanford.edu"
 }
-CourseReserves::Application.config.load_periods = ["2 hours", "4 hours", "1 day", "2 days", "3 days"]
+CourseReserves::Application.config.loan_periods = {
+  "2HWF-RES"   => "2 hours",
+  "4HWF-RES"   => "4 hours",
+  "1DNDWF-RES" => "1 day",
+  "2DWF-RES"   => "2 days",
+  "3DWF-RES"   => "3 days"
+}
 CourseReserves::Application.config.super_sunets = %w[seestone jleggett laszloj mwh hoangl mholloma cherylc1 ssaini rruelas hmalcolm leiferik suziek dgaghan alvarezj cdescanz rwmantov quiambao daisun jjamison asharma4 bclaus rchaelv mnack ifadakar tcruzada linday zeynepb jshen rwedl cwelborn skota jwible dkohrs vpearse kells eshelton kkerns bbousman rpowers raymondh jlmcbrid nlorimer jlavigne jvine jkeck dlrueda tcramer rns makeller ctierney mchris]

@@ -22,7 +22,7 @@ describe ReserveMail do
       body = email.body.raw_source
       body.should match(/Title: SW Item/)
       body.should match(/CKey: 12345 : http:\/\/searchworks.stanford.edu\/view\/12345/)
-      body.should match(/Loan Period: 4 hours/)
+      body.should match(/Circ rule: 4HWF-RES/)
       body.should match(/Copies: 2/)
     end
   end
