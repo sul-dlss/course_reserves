@@ -131,9 +131,9 @@ class ReservesController < ApplicationController
           new_item.each do |key,value|
             if old_reserve.item_list[index][key] == value
               # maybe to a key translate here for human consumption
-              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)}\n" unless value.blank? and old_reserve.item_list[index][key].blank?
+              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank? and old_reserve.item_list[index][key].blank?
             else
-              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)} (was: #{translate_value_for_email(old_reserve.item_list[index][key])})\n"
+              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)} (was: #{translate_value_for_email(key, old_reserve.item_list[index][key])})\n"
             end
           end
           item_text << "====================================\n"
@@ -144,9 +144,9 @@ class ReservesController < ApplicationController
           new_item.each do |key,value|
             if old_item[key] == value
               # maybe to a key translate here for human consumption
-              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)}\n" unless value.blank? and old_item[key].blank?
+              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank? and old_item[key].blank?
             else
-              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)} (was: #{translate_value_for_email(old_item[key])})\n"
+              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)} (was: #{translate_value_for_email(key, old_item[key])})\n"
             end
           end
           item_text << "====================================\n"
@@ -154,7 +154,7 @@ class ReservesController < ApplicationController
           item_text << "***ADDED ITEM***\n"
           new_item.each do |key,value|
             # maybe to a key translate here for human consumption
-            item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)}\n" unless value.blank?
+            item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank?
           end
           item_text << "====================================\n"
         end
@@ -164,7 +164,7 @@ class ReservesController < ApplicationController
       item_text << "***DELETED ITEM***\n"
       delete_item.each do |key,value|
         # maybe to a key translate here for human consumption
-        item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)}\n" unless value.blank?
+        item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank?
       end
       item_text << "====================================\n"
     end
@@ -179,15 +179,17 @@ class ReservesController < ApplicationController
     {"title" => "Title: ",
      "ckey" => "CKey: ",
      "comment" => "Comment: ",
-     "loan_period" => "Loan period: ",
+     "loan_period" => "Circ rule: ",
      "copies" => "Copies: ",
      "purchase" => "Purchase this item? ",
      "personal" => "Is there a personal copy available? "}    
   end
   
-  def translate_value_for_email(value)
+  def translate_value_for_email(key, value)
     if value == "true"
       return "yes"
+    elsif key == "loan_period"
+      CourseReserves::Application.config.loan_periods.key(value)
     elsif value.blank?
       return "blank"
     else
