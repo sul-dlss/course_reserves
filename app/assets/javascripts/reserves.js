@@ -42,7 +42,7 @@ $(document).ready(function(){
   });
   
   // Term processing
-  $("#reserve_form select#term").click(function(){
+  $("#reserve_form select#term").focus(function(){
 	  $("#reserve_form input#future").attr("checked", "checked");
   });
 
