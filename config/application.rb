@@ -58,7 +58,7 @@ module CourseReserves
   end
 
 end
-
+CourseReserves::Application.config.current_term = "Spring 2012"
 CourseReserves::Application.config.reserve_libraries = { 
   "artlibrary@stanford.edu" => "Art Library",
   "falconerlibrary@stanford.edu, zeynepb@stanford.edu, cwelborn@stanford.edu" => "Biology Library",
