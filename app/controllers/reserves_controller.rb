@@ -107,15 +107,15 @@ class ReservesController < ApplicationController
   protected
   
   def send_course_reserve_request(reserve)
-    #send email here
+    ReserveMail.first_request(reserve).deliver
     reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
   end
   
   def send_updated_reserve_request(reserve)
     old_reserve = reserve.dup
     reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
-    email_body = process_diff(old_reserve,reserve)
-    #send email here
+    diff_text = process_diff(old_reserve,reserve)
+    ReserveMail.updated_request(reserve, diff_text).deliver
   end
   
   def process_diff(old_reserve,new_reserve)
