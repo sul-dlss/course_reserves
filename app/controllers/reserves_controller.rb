@@ -125,46 +125,74 @@ class ReservesController < ApplicationController
       total_reserves << new_item
       unless old_reserve.item_list[index] == new_item or old_reserve.item_list.include?(new_item)
         # we should assume this is the same item at that point.
-        if old_reserve.item_list[index] and old_reserve.item_list[index][:ckey] == new_item[:ckey] and old_reserve.item_list[index][:title] == new_item[:title]
+        if old_reserve.item_list[index] and old_reserve.item_list[index][:ckey] == new_item[:ckey] and !new_item[:ckey].blank? and old_reserve.item_list[index][:title] == new_item[:title]
           total_reserves << old_reserve.item_list[index]
-          item_text << "Changed item\n"
+          item_text << "***EDITED ITEM***\n"
           new_item.each do |key,value|
             if old_reserve.item_list[index][key] == value
               # maybe to a key translate here for human consumption
-              item_text << "#{key}: #{value}\n"
+              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)}\n" unless value.blank? and old_reserve.item_list[index][key].blank?
             else
-              item_text << "#{key}: #{value} (was: #{old_reserve.item_list[index][key]})\n"
+              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)} (was: #{translate_value_for_email(old_reserve.item_list[index][key])})\n"
             end
           end
+          item_text << "====================================\n"
         elsif !new_item[:ckey].blank? and !old_reserve.item_list.map{|old_r| old_r if old_r[:ckey] == new_item[:ckey]}.compact.blank?
           old_item = old_reserve.item_list.map{|old_r| old_r if old_r[:ckey] == new_item[:ckey]}.compact.first
           total_reserves << old_item
-          item_text << "Changed item\n"
+          item_text << "***EDITED ITEM***\n"
           new_item.each do |key,value|
             if old_item[key] == value
               # maybe to a key translate here for human consumption
-              item_text << "#{key}: #{value}\n"
+              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)}\n" unless value.blank? and old_item[key].blank?
             else
-              item_text << "#{key}: #{value} (was: #{old_item[key]})\n"
+              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)} (was: #{translate_value_for_email(old_item[key])})\n"
             end
           end
+          item_text << "====================================\n"
         else
-          item_text << "New item\n"
+          item_text << "***ADDED ITEM***\n"
           new_item.each do |key,value|
             # maybe to a key translate here for human consumption
-            item_text << "#{key}: #{value}\n"
+            item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)}\n" unless value.blank?
           end
+          item_text << "====================================\n"
         end
       end
     end
     (old_reserve.item_list - total_reserves).each do |delete_item|
-      item_text << "Deleted item\n"
+      item_text << "***DELETED ITEM***\n"
       delete_item.each do |key,value|
         # maybe to a key translate here for human consumption
-        item_text << "#{key}: #{value}\n"
+        item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(value)}\n" unless value.blank?
       end
+      item_text << "====================================\n"
     end
     item_text
+  end
+  
+  def translate_key_for_email(key)
+    return translations[key.to_s]
+  end
+  
+  def translations
+    {"title" => "Title: ",
+     "ckey" => "CKey: ",
+     "comment" => "Comment: ",
+     "loan_period" => "Loan period: ",
+     "copies" => "Copies: ",
+     "purchase" => "Purchase this item? ",
+     "personal" => "Is there a personal copy available? "}    
+  end
+  
+  def translate_value_for_email(value)
+    if value == "true"
+      return "yes"
+    elsif value.blank?
+      return "blank"
+    else
+      return value
+    end
   end
   
 end
