@@ -11,8 +11,8 @@ describe ReserveMail do
       email.subject.should  == "New Reserve Form: CID1-SID1 - Spring 2010"
       email.to.include?("test@example.com").should be_true
       body.should match(/CID1-SID1/)
-      body.should match(/Doe, John, Doe, Jon/)
-      body.should match(/jdoe, jondoe/)
+      body.should match(/Instructor Name\(s\): Doe, John, Doe, Jon/)
+      body.should match(/Instructor SUNet ID\(s\): jdoe, jondoe/)
       body.should match(/Reserve at: Green Library/)
       body.should match(/Contact Name: John Doe/)
       body.should match(/Contact Email: jdoe@example.com/)
@@ -39,8 +39,8 @@ describe ReserveMail do
       email.to.include?("test@example.com").should be_true
       body.should match(/CID1-SID1/)
       body.should match(/CID1-SID1/)
-      body.should match(/Doe, John, Doe, Jon/)
-      body.should match(/jdoe, jondoe/)
+      body.should match(/Instructor Name\(s\): Doe, John, Doe, Jon/)
+      body.should match(/Instructor SUNet ID\(s\): jdoe, jondoe/)
       body.should match(/Reserve at: Green Library/)
       body.should match(/Contact Name: John Doe/)
       body.should match(/Contact Email: jdoe@example.com/)
