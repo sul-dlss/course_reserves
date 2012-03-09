@@ -57,7 +57,7 @@ $(document).ready(function(){
   });
 
   // clone widget
-  $(".clone_widget a").each(function(){
+  $(".clone_widget .clone_dropdown").each(function(){
 	  $(this).click(function(){
 		  var next_select = $(this).parent(".clone_widget").next(".clone_select");
 		  if(next_select.filter(":visible").length == 0) {
