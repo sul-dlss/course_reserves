@@ -14,6 +14,7 @@ class Reserve < ActiveRecord::Base
   #validates :contact_email, :presence => true
 
   serialize :item_list, Array
+  serialize :sent_item_list, Array
   
   private
   

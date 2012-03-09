@@ -19,6 +19,7 @@ class CreateReserves < ActiveRecord::Migration
       t.boolean :has_been_sent
       t.boolean :disabled
       t.string :sent_date
+      t.text :sent_item_list
 
       t.timestamps
     end

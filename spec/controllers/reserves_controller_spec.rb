@@ -157,10 +157,8 @@ describe ReservesController do
   describe "protected methods" do
     describe "email diff" do
       it "should return new items added to the item list" do
-        old_item_list = mock("reserve")
-        new_item_list = mock("reserve2")
-        old_item_list.stub(:item_list).and_return([{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}])
-        new_item_list.stub(:item_list).and_return([{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"54321", :title=>"SecondTitle", :copies=>"1"}])
+        old_item_list = [{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}]
+        new_item_list = [{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"54321", :title=>"SecondTitle", :copies=>"1"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/ADDED ITEM/)
         diff_item_list.should match(/CKey: 54321/)
@@ -168,10 +166,8 @@ describe ReservesController do
         diff_item_list.should_not match(/DELETED ITEM/)
       end
       it "should return changed items from the item list" do
-        old_item_list = mock("reserve")
-        new_item_list = mock("reserve2")
-        old_item_list.stub(:item_list).and_return([{:ckey => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {:ckey => "54321", :title=>"SecondTitle", :copies=>"1"}])
-        new_item_list.stub(:item_list).and_return([{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey => "54321", :title=>"SecondTitle", :copies=>"2"}])
+        old_item_list = [{:ckey => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {:ckey => "54321", :title=>"SecondTitle", :copies=>"1"}]
+        new_item_list = [{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey => "54321", :title=>"SecondTitle", :copies=>"2"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/EDITED ITEM/)
         diff_item_list.should match(/CKey: 54321/)
@@ -180,10 +176,8 @@ describe ReservesController do
         diff_item_list.should_not match(/DELETED ITEM/)
       end
       it "should return items deleted from the item list" do
-        old_item_list = mock("reserve")
-        new_item_list = mock("reserve2")
-        old_item_list.stub(:item_list).and_return([{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"54321", :title=>"ToBeDeleted", :copies=>"1"}])
-        new_item_list.stub(:item_list).and_return([{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}])
+        old_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"54321", :title=>"ToBeDeleted", :copies=>"1"}]
+        new_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/DELETED ITEM/)
         diff_item_list.should match(/CKey: 54321/)
@@ -192,10 +186,8 @@ describe ReservesController do
         diff_item_list.should_not match(/EDITED ITEM/)
       end
       it "should get an item w/ the same ckey that is drastically out of the old order" do
-        old_item_list = mock("reserve")
-        new_item_list = mock("reserve2")
-        old_item_list.stub(:item_list).and_return([{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"23456", :title=>"SecondTitle", :copies=>"1"}, {:ckey=>"34567", :title=>"ThirdTitle", :copies=>"1"}])
-        new_item_list.stub(:item_list).and_return([{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"34567", :title=>"ThirdTitle", :copies=>"1"}, {:ckey=>"23456", :title=>"ChangedTitle", :copies=>"1"}, ])
+        old_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"23456", :title=>"SecondTitle", :copies=>"1"}, {:ckey=>"34567", :title=>"ThirdTitle", :copies=>"1"}]
+        new_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"34567", :title=>"ThirdTitle", :copies=>"1"}, {:ckey=>"23456", :title=>"ChangedTitle", :copies=>"1"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/EDITED ITEM/)
         diff_item_list.should match(/CKey: 23456/)
@@ -205,10 +197,8 @@ describe ReservesController do
       end
       
       it "should not return unchanged items from the item list" do
-        old_item_list = mock("reserve")
-        new_item_list = mock("reserve2")
-        old_item_list.stub(:item_list).and_return([{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}])
-        new_item_list.stub(:item_list).and_return([{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}])
+        old_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}]
+        new_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should be_blank
       end

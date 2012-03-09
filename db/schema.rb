@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20120222195147) do
     t.boolean  "has_been_sent"
     t.boolean  "disabled"
     t.string   "sent_date"
+    t.text     "sent_item_list"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
   end
