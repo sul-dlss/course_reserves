@@ -200,7 +200,14 @@ describe ReservesController do
       body["aaData"].each do |item|
         item.length.should == 3
       end
-      
+    end
+    it "should not return any courses if you are not a super user and you don't have any courses in the XML" do
+      get :all_courses_response
+      response.should be_success
+      body = JSON.parse(response.body)
+      body.keys.length.should == 1
+      body.has_key?("aaData").should be_true
+      body["aaData"].should be_blank
     end
   end
   
