@@ -56,6 +56,28 @@ $(document).ready(function(){
 	  $("#reserve_form input#future").attr("checked", "checked");
   });
 
+  // clone widget
+  $(".clone_widget a").each(function(){
+	  $(this).click(function(){
+		  var next_select = $(this).parent(".clone_widget").next(".clone_select");
+		  if(next_select.filter(":visible").length == 0) {
+			  $(".clone_select:visible").each(function(){
+				  $(this).toggle();
+			  });
+		    next_select.toggle('slow', function(){});
+		  }
+	  });
+	  $(this).click(function(){
+		  return false;
+	  });
+  });
+  // remove any visible select widgets when we click on the body
+  $("body#reserves-index").click(function(){
+	  $(".clone_select:visible").each(function(){
+		  $(this).toggle();
+	  });
+  });
+
   // jQuery dialog
   $("a.dialog").each(function() {
     var dialog_box = "empty";
