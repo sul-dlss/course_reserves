@@ -33,8 +33,8 @@
 		  <label for="libraries" class="required">Send request to</label>
 			<select id="libraries" name="reserve[library]">
 				<option>(select library)</option>
-				<% app_config.reserve_libraries.each do |email, library| %>
-					<option <%= "selected='selected'" if @reserve and @reserve.library == library -%> value="<%= library -%>"><%= library -%></option>
+				<% app_config.reserve_libraries.each do |code, library| %>
+					<option value="<%= code -%>" <%= "selected='selected'" if @reserve and @reserve.library == code -%> ><%= library -%></option>
 				<% end %>
 			</select>
 		</div>
@@ -51,7 +51,7 @@
   			<label for="term">quarter</label>
 			</div>
 		</div>
-		
+	
 	</div>
 
 	<fieldset id="list-management">				
