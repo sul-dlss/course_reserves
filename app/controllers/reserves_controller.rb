@@ -14,7 +14,12 @@ class ReservesController < ApplicationController
 
   def all_courses_response
     items = []
-    CourseReserves::Application.config.courses.all_courses.each do |course|
+    if CourseReserves::Application.config.super_sunets.include?(current_user)
+      courses = CourseReserves::Application.config.courses.all_courses
+    else
+      courses = CourseReserves::Application.config.courses.find_by_sunet(current_user)
+    end
+    courses.each do |course|
       cl = course[:cross_listings].blank? ? "" : "(#{course[:cross_listings]})"
       items << [course[:cid], "<a href='/reserves/new?comp_key=#{course[:comp_key]}'>#{course[:title]}</a> #{cl}", course[:instructors].map{|i| i[:name]}.compact.join(", ")]
     end
