@@ -299,7 +299,12 @@ input.num_copies {
 	display:block;
 	padding: 0 5px;
 }
-
+.clone_dropdown {
+	display: inline-block;
+	background: url("/assets/dropbutton.png") no-repeat;
+	width: 15px;
+	cursor: pointer;
+}
 // data table overrides
 #all_courses_length, #all_courses_filter, #all_courses_info, #all_courses_paginate {
 	margin: 5px 0;
