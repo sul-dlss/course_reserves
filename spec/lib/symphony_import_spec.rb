@@ -49,7 +49,7 @@ describe "SymphonyImport" do
       courses.has_key?("AMSTUD-114N-rgillam").should be_true
     end
   end
-  
+
   
   describe "adding twelve reserves records" do
     it "should take a file path and call the process_import_file method to add twelve records to the database" do
@@ -58,10 +58,15 @@ describe "SymphonyImport" do
       Reserve.all.length.should==12
       Reserve.find_by_cid("CLASSHIS-114").cid.should=='CLASSHIS-114'
       Reserve.find_by_cid("CLASSHIS-114")[:item_list].length.should==1
-      Reserve.find_by_cid("CLASSHIS-114")[:item_list][0][:ckey].should=='32837'
+      Reserve.find_by_cid("CLASSHIS-114")[:item_list][0]["ckey"].should=='32837'
       Reserve.find_by_cid("HISTORY-273G")[:item_list].length.should==4
-      Reserve.find_by_cid("HISTORY-273G")[:item_list][2][:ckey].should=='9247690'
+      Reserve.find_by_cid("HISTORY-273G")[:item_list][2]["ckey"].should=='9247690'
       Reserve.find_by_cid("EDUC-237X").sid.should=='01'
+      # Following to test sorting by title in item list
+      Reserve.find_by_cid("HISTORY-273G")[:item_list][3]["title"].should=~/^The golden age/
+      Reserve.find_by_cid("EDUC-237X").compound_key.should=='AFRICAAM-165E,EDUC-237X,ETHICSOC-165E,123,456'
+      Reserve.find_by_cid("EDUC-237X").cross_listings.should=='ETHICSOC-165E, AFRICAAM-165E'
+      Reserve.find_by_cid("GES-55Q")[:item_list].first["loan_period"].should=='3 days'
       #courses.each do |k,v|
       #  puts v.inspect
       #  puts '<br>===================<br>'
