@@ -5,7 +5,7 @@ class ReservesController < ApplicationController
   
   def index
     editor = Editor.find_by_sunetid(current_user)
-    @my_reserves = editor.nil? ? [] : editor.reserves
+    @my_reserves = editor.nil? ? [] : editor.reserves.order("updated_at DESC")
   end
   
   def all_courses
