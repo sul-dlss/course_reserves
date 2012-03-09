@@ -1,15 +1,13 @@
 class ReserveMail < ActionMailer::Base
   default from: "no-reply@reserves.stanford.edu"
   
-  def first_request(reserve)
-    address = CourseReserves::Application.config.email_mapping[reserve.library]
+  def first_request(reserve, address)
     @reserve = reserve
     @item_text = process_new_item_list(reserve)
     mail(:to => address, :subject => "New Reserve Form: #{reserve.cid}-#{reserve.sid} - #{reserve.term}")
   end
   
-  def updated_request(reserve, diff_text)
-    address = CourseReserves::Application.config.email_mapping[reserve.library]
+  def updated_request(reserve, address, diff_text)
     @reserve = reserve
     @diff_text = diff_text
     mail(:to => address, :subject => "Updated Reserve Form: #{reserve.cid}-#{reserve.sid} - #{reserve.term}")
