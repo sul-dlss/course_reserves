@@ -125,6 +125,42 @@ describe ReservesController do
     end
   end
   
+  describe "clone" do
+    it "should allow you to clone an item if you are an existing editor" do
+      controller.stub(:current_user).and_return("user_sunet")
+      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"))
+      r.save!
+      get :clone, :id => r[:id], :term => CourseReserves::Application.config.future_terms.first
+      response.should redirect_to(edit_reserve_path((r[:id] + 1).to_s))
+    end
+    it "should allow you to clone an item if you are an super user" do
+      # rwmantov is in the super_sunet list as of the writing of this test.
+      controller.stub(:current_user).and_return("rwmantov")
+      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"))
+      r.save!
+      get :clone, :id => r[:id], :term => CourseReserves::Application.config.future_terms.first
+      response.should redirect_to(edit_reserve_path((r[:id] + 1).to_s))
+    end
+    it "should transfer editor relationships to new object" do
+      controller.stub(:current_user).and_return("user_sunet")
+      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :term=> "Spring 2010", :instructor_sunet_ids => "user_sunet"))
+      r.save!
+      get :clone, :id => r[:id], :term => CourseReserves::Application.config.future_terms.first
+      response.should redirect_to(edit_reserve_path((r[:id] + 1).to_s))
+      cloned_reserve = Reserve.find((r[:id] + 1).to_s)
+      cloned_reserve.term.should == CourseReserves::Application.config.future_terms.first
+      cloned_reserve.editors.length.should == 1
+      cloned_reserve.editors.map{|e| e[:sunetid]}.should == ["user_sunet"]
+    end
+    it "should not allow you to clone an item that you are not an editor of" do
+      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"))
+      r.save!
+      get :clone, :id => r[:id], :term => CourseReserves::Application.config.future_terms.first
+      response.should redirect_to(root_path)
+      flash[:error].should == "You do not have permission to clone this course list."
+    end
+  end
+  
   describe "index" do
     it "should return reserves for a user when they have them" do
       r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid => "SID1", :instructor_sunet_ids => "user_sunet"}))

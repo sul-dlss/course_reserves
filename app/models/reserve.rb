@@ -1,6 +1,6 @@
 class Reserve < ActiveRecord::Base
   
-  before_update :process_sunet_ids 
+  before_save :process_sunet_ids
 
   has_and_belongs_to_many :editors
   
