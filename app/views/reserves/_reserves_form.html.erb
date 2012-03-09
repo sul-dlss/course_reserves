@@ -84,7 +84,7 @@
     		  <%= render :partial => "reserves_item", :locals => { :item => item, :index => index }-%>
     		<% end %>
     	<% end %>	
-    	<%- if @reserve and !@reserve.disabled -%>
+    	<%- if !@reserve or !@reserve.disabled -%>
       	<tr id="add_row" class="<%= cycle("odd","even") %>">
       		<td class="enumerator last-row"><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
       		<td colspan="4">
