@@ -7,6 +7,9 @@
 		<%- end -%>
 	<%- end -%>
 </div>
-<script type="text/javascript">
-  check_validations();
-</script>
+<%- # This will check validations on page load if the reserve hasn't been sent.  This is what allows us to keep sent items disabled when until the user changes something in the form.  -%>
+<%- unless @reserve.has_been_sent -%>
+  <script type="text/javascript">
+    check_validations();
+  </script>
+<%- end -%>
