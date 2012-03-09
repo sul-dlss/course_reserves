@@ -2,18 +2,14 @@ class ReserveMail < ActionMailer::Base
   default from: "no-reply@reserves.stanford.edu"
   
   def first_request(reserve)
-    libraries = CourseReserves::Application.config.reserve_libraries.dup
-    library = libraries.keep_if{|k,v| v == reserve.library}
-    address = libraries.key(library)
+    address = CourseReserves::Application.config.email_mapping[reserve.library]
     @reserve = reserve
     @item_text = process_new_item_list(reserve)
     mail(:to => address, :subject => "New Reserve Form: #{reserve.cid}-#{reserve.sid} - #{reserve.term}")
   end
   
   def updated_request(reserve, diff_text)
-    libraries = CourseReserves::Application.config.reserve_libraries.dup
-    library = libraries.keep_if{|k,v| v == reserve.library}
-    address = libraries.key(library)
+    address = CourseReserves::Application.config.email_mapping[reserve.library]
     @reserve = reserve
     @diff_text = diff_text
     mail(:to => address, :subject => "Updated Reserve Form: #{reserve.cid}-#{reserve.sid} - #{reserve.term}")
