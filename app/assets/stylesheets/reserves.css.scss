@@ -263,6 +263,32 @@ input.num_copies {
   text-decoration: none;
 }
 
+// clone widget
+.clone_term {
+	position: relative;
+}
+.clone_widget, .clone_select {
+	text-align: right;
+	margin-right: 10px;
+}
+.clone_widget a {
+	border: none;
+}
+.clone_select {
+	position: absolute;
+	right: 0;
+	background-color: $odd;
+	border: 1px solid #CCCCCC;
+}
+.clone_select a:hover {
+  background-color: $even;	
+}
+.clone_select a {
+	border: none;
+	display:block;
+	padding: 0 5px;
+}
+
 // data table overrides
 #all_courses_length, #all_courses_filter, #all_courses_info, #all_courses_paginate {
 	margin: 5px 0;
