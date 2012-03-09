@@ -107,7 +107,13 @@ class ReservesController < ApplicationController
   protected
   
   def send_course_reserve_request(reserve)
-    ReserveMail.first_request(reserve).deliver
+    if !request.env["HTTP_HOST"].nil? and request.env["HTTP_HOST"].include?("reserves") and !request.env["HTTP_HOST"].include?("-test")
+      address = CourseReserves::Application.config.email_mapping[reserve.library]
+    else
+      address = "jkeck@stanford.edu"
+    end
+    
+    ReserveMail.first_request(reserve, address).deliver
     reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
   end
   
@@ -115,7 +121,13 @@ class ReservesController < ApplicationController
     old_reserve = reserve.dup
     reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
     diff_text = process_diff(old_reserve,reserve)
-    ReserveMail.updated_request(reserve, diff_text).deliver
+    
+    if !request.env["HTTP_HOST"].nil? and request.env["HTTP_HOST"].include?("reserves") and !request.env["HTTP_HOST"].include?("-test")
+      address = CourseReserves::Application.config.email_mapping[reserve.library]
+    else
+      address = "jkeck@stanford.edu"
+    end
+    ReserveMail.updated_request(reserve, address, diff_text).deliver
   end
   
   def process_diff(old_reserve,new_reserve)
