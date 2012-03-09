@@ -176,7 +176,9 @@ describe ReservesController do
   end
   
   describe "all_courses" do
-    it "should return parsable JSON" do
+    it "should return parsable JSON of all courses for a super user" do
+      # rwmantov is in the super_sunet list as of the writing of this test.
+      controller.stub(:current_user).and_return("rwmantov")
       get :all_courses_response
       response.should be_success
       body = JSON.parse(response.body)
@@ -186,6 +188,19 @@ describe ReservesController do
       body["aaData"].each do |item|
         item.length.should == 3
       end
+    end
+    it "should return parsible JSON of the courese that you are an instructor for" do
+      controller.stub(:current_user).and_return("456")
+      get :all_courses_response
+      response.should be_success
+      body = JSON.parse(response.body)
+      body.keys.length.should == 1
+      body.has_key?("aaData").should be_true
+      body["aaData"].length.should == 2
+      body["aaData"].each do |item|
+        item.length.should == 3
+      end
+      
     end
   end
   
