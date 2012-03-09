@@ -15,7 +15,6 @@
   		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @course[:instructors].map{|i| i[:sunet] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%>" />
   		<input type="hidden" name="reserve[instructor_names]" value="<%= @course[:instructors].map{|i| i[:name] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%>" />
 		<%- else -%>
-		  <%= "<p>Request sent #{@reserve.sent_date}</p>".html_safe if @reserve and !@reserve.sent_date.nil? -%>
   		<h2>
   		  <%= @reserve.cid if (@reserve and @reserve.cid) -%>: <%= @reserve.desc if (@reserve and @reserve.desc) -%>
   		  <%= "(#{@reserve.cross_listings})" if @reserve and @reserve.cross_listings and !@reserve.cross_listings.blank? %>
@@ -41,18 +40,25 @@
 		<div class="section">
 			When should these items be reserved?
 			<div id="reserve-timing">
-  			<input type="radio" id="immediate" name="reserve[immediate]" value="true" <%= "checked='checked'" if !@reserve or @reserve.immediate != "false" %> <%= "disabled='disabled'" if @reserve and @reserve.has_been_sent %>/> <label for="immediate">immediately (<%= (@reserve and @reserve.has_been_sent) ? @reserve.term : app_config.current_term %>)</label><br/>
-  			<input type="radio" id="future" name="reserve[immediate]" value="false" <%= "checked='checked'" if @reserve and (@reserve.immediate == "false" or @reserve.term != CourseReserves::Application.config.current_term) %> <%= "disabled='disabled'" if @reserve and @reserve.has_been_sent %> />
-  			<label for="future">for beginning of </label>
-  			<select id="term" name="reserve[term]" <%= "disabled='disabled'" if @reserve and @reserve.has_been_sent %>>
-  			  <%- CourseReserves::Application.config.future_terms.each do |term| -%>
-  			    <option <%= "selected='selected'" if @reserve and @reserve.term == term %>><%= term %></option>
-  			  <%- end -%>
-  			</select> 
-  			<label for="term">quarter</label>
+			  <%- if @reserve and @reserve.has_been_sent -%>
+			    <%= @reserve.term %>
+			  <%- else -%>
+    			<input type="radio" id="immediate" name="reserve[immediate]" value="true" <%= "checked='checked'" if !@reserve or @reserve.immediate != "false" %> <%= "disabled='disabled'" if @reserve and @reserve.has_been_sent %>/> <label for="immediate">current quarter (<%= (@reserve and @reserve.has_been_sent) ? @reserve.term : app_config.current_term %>)</label><br/>
+    			<input type="radio" id="future" name="reserve[immediate]" value="false" <%= "checked='checked'" if @reserve and (@reserve.immediate == "false" or @reserve.term != CourseReserves::Application.config.current_term) %> <%= "disabled='disabled'" if @reserve and @reserve.has_been_sent %> />
+    			<label for="future">for beginning of </label>
+    			<select id="term" name="reserve[term]" <%= "disabled='disabled'" if @reserve and @reserve.has_been_sent %>>
+    			  <%- CourseReserves::Application.config.future_terms.each do |term| -%>
+    			    <option <%= "selected='selected'" if @reserve and @reserve.term == term %>><%= term %></option>
+    			  <%- end -%>
+    			</select> 
+    			<label for="term">quarter</label>
+  			<%- end -%>
 			</div>
 		</div>
-	
+	  <div class="section">
+	    <%= "<p class='sent_date'>Request sent #{@reserve.sent_date}</p>".html_safe if @reserve and !@reserve.sent_date.nil? -%>
+	    <%= render :partial => "clone_tool", :locals => {:course => @reserve, :label => "Clone this list for"} if @reserve %>
+	  </div>
 	</div>
 
 	<fieldset id="list-management">				

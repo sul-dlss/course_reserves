@@ -1,0 +1,8 @@
+<div class="clone_term">
+  <div class="clone_widget"><%= label %> <%= link_to("[ v ]", "") %></div>
+  <div class="clone_select" style="display:none;">
+    <%- CourseReserves::Application.config.future_terms.each do |term| -%>
+	    <div><%= link_to(term, clone_reserve_path(course[:id], :term=>term)) -%></div>
+    <%- end -%>
+  </div>
+</div>

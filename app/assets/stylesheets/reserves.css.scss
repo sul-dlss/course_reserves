@@ -105,6 +105,10 @@ h3 {
 #main-details .section {
 	margin: 10px 0;
 }
+p.sent_date {
+	color: $cardinal;
+	margin-bottom: 5px;
+}
 label.required:before
 { 
 	content:"* ";
@@ -270,6 +274,9 @@ input.num_copies {
 // clone widget
 .clone_term {
 	position: relative;
+}
+#reserve_form .clone_term {
+	float: left;
 }
 .clone_widget, .clone_select {
 	text-align: right;

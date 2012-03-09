@@ -72,7 +72,7 @@ $(document).ready(function(){
 	  });
   });
   // remove any visible select widgets when we click on the body
-  $("body#reserves-index").click(function(){
+  $("body").click(function(){
 	  $(".clone_select:visible").each(function(){
 		  $(this).toggle();
 	  });
