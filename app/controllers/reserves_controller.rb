@@ -99,6 +99,23 @@ class ReservesController < ApplicationController
     redirect_to({ :controller => 'reserves', :action => 'edit', :id => params[:id] }) 
   end
   
+  def clone
+    original_reserve = Reserve.find(params[:id])
+    if original_reserve.editors.map{|e| e[:sunetid]}.include?(current_user) or CourseReserves::Application.config.super_sunets.include?(current_user)
+      reserve = original_reserve.dup
+      reserve.has_been_sent = nil
+      reserve.disabled = nil
+      reserve.sent_date = nil
+      reserve.term = params[:term]
+      reserve.immediate = nil
+      reserve.save!
+      redirect_to(edit_reserve_path(reserve[:id]))
+    else
+      flash[:error] = "You do not have permission to clone this course list."
+      redirect_to(root_path)
+    end
+  end
+  
   def show
     @reserve = Reserve.find(params[:id])
   end
