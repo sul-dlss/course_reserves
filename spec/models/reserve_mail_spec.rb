@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ReserveMail do
   before(:all) do
-    @reserve_params = {:cid=>"CID1", :instructor_sunet_ids => "jdoe, jondoe", :instructor_names => "Doe, John, Doe, Jon", :desc => "MySuperCoolCourse", :sid => "SID1", :library => "Green Library", :term=>"Spring 2010", :contact_name => "John Doe", :contact_phone => "555-555-5555", :contact_email => "jdoe@example.com"}
+    @reserve_params = {:cid=>"CID1", :instructor_sunet_ids => "jdoe, jondoe", :instructor_names => "Doe, John, Doe, Jon", :desc => "MySuperCoolCourse", :sid => "SID1", :library => "GREEN-RESV", :term=>"Spring 2010", :contact_name => "John Doe", :contact_phone => "555-555-5555", :contact_email => "jdoe@example.com"}
   end
   describe "first_request" do
     it "should return the correct main info" do
