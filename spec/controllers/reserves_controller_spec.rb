@@ -219,7 +219,7 @@ describe ReservesController do
         new_item_list = [{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"54321", :title=>"SecondTitle", :copies=>"1"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/ADDED ITEM/)
-        diff_item_list.should match(/CKey: 54321/)
+        diff_item_list.should match(/CKey: 54321 : http:\/\/searchworks.stanford.edu\/view\/54321/)
         diff_item_list.should_not match(/EDITED ITEM/)
         diff_item_list.should_not match(/DELETED ITEM/)
       end
@@ -228,7 +228,7 @@ describe ReservesController do
         new_item_list = [{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey => "54321", :title=>"SecondTitle", :copies=>"2"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/EDITED ITEM/)
-        diff_item_list.should match(/CKey: 54321/)
+        diff_item_list.should match(/CKey: 54321 : http:\/\/searchworks.stanford.edu\/view\/54321/)
         diff_item_list.should match(/Copies: 2 \(was: 1\)/)
         diff_item_list.should_not match(/ADDED ITEM/)
         diff_item_list.should_not match(/DELETED ITEM/)
@@ -238,7 +238,7 @@ describe ReservesController do
         new_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/DELETED ITEM/)
-        diff_item_list.should match(/CKey: 54321/)
+        diff_item_list.should match(/CKey: 54321 : http:\/\/searchworks.stanford.edu\/view\/54321/)
         diff_item_list.should match(/Title: ToBeDeleted/)
         diff_item_list.should_not match(/ADDED ITEM/)
         diff_item_list.should_not match(/EDITED ITEM/)
@@ -248,7 +248,7 @@ describe ReservesController do
         new_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"34567", :title=>"ThirdTitle", :copies=>"1"}, {:ckey=>"23456", :title=>"ChangedTitle", :copies=>"1"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/EDITED ITEM/)
-        diff_item_list.should match(/CKey: 23456/)
+        diff_item_list.should match(/CKey: 23456 : http:\/\/searchworks.stanford.edu\/view\/23456/)
         diff_item_list.should match(/Title: ChangedTitle \(was: SecondTitle\)/)
         diff_item_list.should_not match(/ADDED ITEM/)
         diff_item_list.should_not match(/DELETED ITEM/)
