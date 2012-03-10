@@ -32,6 +32,9 @@ class ReservesController < ApplicationController
       editors = reserve.editors.map{|e| e[:sunetid] }.compact
       if CourseReserves::Application.config.super_sunets.include?(current_user) or editors.include?(current_user)
         redirect_to edit_reserve_path(reserve[:id]) and return
+      else
+        flash[:error] = "You are not the instructor for this course."
+        redirect_to root_path
       end
     else
       course = CourseReserves::Application.config.courses.find_by_compound_key(params[:comp_key]).first
