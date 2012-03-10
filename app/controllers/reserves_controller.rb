@@ -27,7 +27,7 @@ class ReservesController < ApplicationController
   end
   
   def new
-    reserve = Reserve.find_by_compound_key(params[:comp_key])
+    reserve = Reserve.where(:compound_key => params[:comp_key]).order("updated_at DESC").first
     unless reserve.nil?
       editors = reserve.editors.map{|e| e[:sunetid] }.compact
       if CourseReserves::Application.config.super_sunets.include?(current_user) or editors.include?(current_user)
@@ -96,6 +96,14 @@ class ReservesController < ApplicationController
   def update
     reserve = Reserve.find(params[:id])
     params[:reserve][:term] = CourseReserves::Application.config.current_term if params[:reserve][:immediate] == "true"
+    if params[:reserve][:term] != reserve.term
+      Reserve.find_all_by_compound_key(reserve.compound_key).each do |og_res|
+        if og_res[:id] != reserve[:id] and og_res.term == params[:reserve][:term]
+          flash[:error] = "Course reserve list already exists for this course and term. The term has not been saved."
+          params[:reserve][:term] = nil
+        end
+      end
+    end
     params[:reserve][:item_list] = [] unless params[:reserve].has_key?(:item_list)
     if params.has_key?(:send_request) and reserve.has_been_sent == true
       send_updated_reserve_request(reserve)
@@ -108,8 +116,15 @@ class ReservesController < ApplicationController
   end
   
   def clone
-    original_reserve = Reserve.find(params[:id])
-    if original_reserve.editors.map{|e| e[:sunetid]}.include?(current_user) or CourseReserves::Application.config.super_sunets.include?(current_user)
+    original_reserves = Reserve.find_all_by_compound_key(params[:id])
+    original_reserve = original_reserves.first
+    if original_reserves.map{|r| r.editors.map{|e| e[:sunetid]} }.compact.flatten.include?(current_user) or CourseReserves::Application.config.super_sunets.include?(current_user)
+      original_reserves.each do |og_res| 
+        if og_res.term == params[:term]
+          flash[:error] = "Course reserve list already exists for this course and term."
+          redirect_to edit_reserve_path(og_res[:id]) and return
+        end
+      end
       reserve = original_reserve.dup
       reserve.has_been_sent = nil
       reserve.disabled = nil
