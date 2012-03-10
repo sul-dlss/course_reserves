@@ -75,7 +75,7 @@ describe ReservesController do
       controller.stub(:current_user).and_return("cannot_edit")
       post :create, :reserve => @reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"})
       response.should redirect_to(root_path)
-      flash[:error].should == "You do not have permissions to create his course reserve list."
+      flash[:error].should == "You do not have permission to create this course reserve list."
     end
   end
   
@@ -103,7 +103,7 @@ describe ReservesController do
       r.save!
       get :edit, :id => r[:id]
       response.should redirect_to(root_path)
-      flash[:error].should == "You do not have permission to edit this course reserve."
+      flash[:error].should == "You do not have permission to edit this course reserve list."
     end
   end
   
@@ -123,7 +123,7 @@ describe ReservesController do
       r2.save!
       get :update, {:id => r2[:id], :reserve => {:cid => "CID1", :sid => "01", :term => "Spring 2012"}}
       response.should redirect_to(edit_reserve_path(r2[:id]))
-      Reserve.find(r2[:id]).term.should be_nil
+      Reserve.find(r2[:id]).term.should == "Summer 2012"
       flash[:error].should == "Course reserve list already exists for this course and term. The term has not been saved."
     end
     it "should save the configured current term when immediate is selected" do
@@ -175,7 +175,7 @@ describe ReservesController do
       r.save!
       get :clone, :id => r.compound_key, :term => CourseReserves::Application.config.future_terms.first
       response.should redirect_to(root_path)
-      flash[:error].should == "You do not have permission to clone this course list."
+      flash[:error].should == "You do not have permission to clone this course reserve list."
     end
   end
   
