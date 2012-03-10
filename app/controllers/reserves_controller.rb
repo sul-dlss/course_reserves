@@ -221,8 +221,10 @@ class ReservesController < ApplicationController
   def translate_value_for_email(key, value)
     if value == "true"
       return "yes"
-    elsif key == "loan_period"
-      CourseReserves::Application.config.loan_periods.key(value)
+    elsif key.to_s == "loan_period"
+      return CourseReserves::Application.config.loan_periods.key(value)
+    elsif key.to_s == "ckey"
+      return "#{value} : http://searchworks.stanford.edu/view/#{value}"
     elsif value.blank?
       return "blank"
     else
