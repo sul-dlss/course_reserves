@@ -308,6 +308,13 @@ input.num_copies {
 	width: 15px;
 	cursor: pointer;
 }
+// flash error
+.error {
+	color: #C00;
+	margin: 10px 0;
+  font-size: 1.2em;
+}
+
 // data table overrides
 #all_courses_length, #all_courses_filter, #all_courses_info, #all_courses_paginate {
 	margin: 5px 0;
