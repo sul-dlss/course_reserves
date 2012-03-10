@@ -132,7 +132,7 @@ class ReservesController < ApplicationController
     if !request.env["HTTP_HOST"].nil? and request.env["HTTP_HOST"].include?("reserves") and !request.env["HTTP_HOST"].include?("-test")
       address = CourseReserves::Application.config.email_mapping[reserve.library]
     else
-      address = "jkeck@stanford.edu"
+      address = "reserves-test@lists.stanford.edu"
     end
     
     ReserveMail.first_request(reserve, address).deliver
@@ -147,7 +147,7 @@ class ReservesController < ApplicationController
     if !request.env["HTTP_HOST"].nil? and request.env["HTTP_HOST"].include?("reserves") and !request.env["HTTP_HOST"].include?("-test")
       address = CourseReserves::Application.config.email_mapping[reserve.library]
     else
-      address = "jkeck@stanford.edu"
+      address = "reserves-test@lists.stanford.edu"
     end
     ReserveMail.updated_request(reserve, address, diff_text).deliver
   end
@@ -164,7 +164,6 @@ class ReservesController < ApplicationController
           item_text << "***EDITED ITEM***\n"
           new_item.each do |key,value|
             if old_reserve[index][key] == value
-              # maybe to a key translate here for human consumption
               item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank? and old_reserve[index][key].blank?
             else
               item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)} (was: #{translate_value_for_email(key, old_reserve[index][key])})\n"
@@ -177,7 +176,6 @@ class ReservesController < ApplicationController
           item_text << "***EDITED ITEM***\n"
           new_item.each do |key,value|
             if old_item[key] == value
-              # maybe to a key translate here for human consumption
               item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank? and old_item[key].blank?
             else
               item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)} (was: #{translate_value_for_email(key, old_item[key])})\n"
@@ -187,7 +185,6 @@ class ReservesController < ApplicationController
         else
           item_text << "***ADDED ITEM***\n"
           new_item.each do |key,value|
-            # maybe to a key translate here for human consumption
             item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank?
           end
           item_text << "====================================\n"
@@ -197,7 +194,6 @@ class ReservesController < ApplicationController
     (old_reserve - total_reserves).each do |delete_item|
       item_text << "***DELETED ITEM***\n"
       delete_item.each do |key,value|
-        # maybe to a key translate here for human consumption
         item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank?
       end
       item_text << "====================================\n"
