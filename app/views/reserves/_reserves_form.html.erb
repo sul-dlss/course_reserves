@@ -1,6 +1,9 @@
 <div id="course-details">
 	<div id="main-details">
 	  <h1>Course Reserves List Request</h1>
+	  <%- unless flash[:error].blank? -%>
+      <div class="error"><%=  flash[:error] %></div>
+    <%- end -%>
 	  <%- if params[:action] == "new" -%>
   		<h2>
   		  <%= @course[:cid] if (@course and @course.has_key?(:cid)) -%>: <%= @course[:title] if (@course and @course.has_key?(:title)) -%>

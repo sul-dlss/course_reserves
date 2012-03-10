@@ -12,6 +12,9 @@
   <p>Still have questions? Contact us at <%= link_to("greenreserves@stanford.edu", "mailto:greenreserves@stanford.edu") %> or (650) 723-1492.</p>
 </div>
 <%= link_to "Create a new reserve list", all_courses_path, :class => 'dialog active-button'  -%>
+<%- unless flash[:error].blank? -%>
+  <div class="error"><%=  flash[:error] %></div>
+<%- end -%>
 <div id="reserves-section">
   <% unless @my_reserves.blank? %>
     <h2>Modify an existing reserve list</h2>

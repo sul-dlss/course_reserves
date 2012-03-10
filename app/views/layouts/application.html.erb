@@ -16,9 +16,6 @@
           <%= current_user %> <span>(close browser to logout)</span>
         </span>
       </header>
-      <%- unless flash[:error].blank? -%>
-        <div class="error"><%=  flash[:error] %></div>
-      <%- end -%>
       <%= yield %>
     </div>
   </div>
