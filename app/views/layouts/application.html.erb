@@ -13,7 +13,7 @@
       <header id="header">
         <%= link_to(image_tag("sul.png"), root_url, :class=>"img-link") %>
         <span id="links">
-          <%= current_user %> | <%= link_to("logout", "") %>
+          <%= current_user %> <span>(close browser to logout)</span>
         </span>
       </header>
       <%- unless flash[:error].blank? -%>
