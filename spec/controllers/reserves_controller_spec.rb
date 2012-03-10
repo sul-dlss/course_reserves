@@ -116,6 +116,16 @@ describe ReservesController do
       response.should redirect_to(edit_reserve_path(r[:id]))
       Reserve.find(r[:id]).item_list.should be_blank
     end
+    it "should not allow you to update a reserve w/ a term that already has a record in the database" do
+      r1 = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term => "Spring 2012", :instructor_sunet_ids => "user_sunet"}))
+      r2 = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term => "Summer 2012", :instructor_sunet_ids => "user_sunet"}))
+      r1.save!
+      r2.save!
+      get :update, {:id => r2[:id], :reserve => {:cid => "CID1", :sid => "01", :term => "Spring 2012"}}
+      response.should redirect_to(edit_reserve_path(r2[:id]))
+      Reserve.find(r2[:id]).term.should be_nil
+      flash[:error].should == "Course reserve list already exists for this course and term. The term has not been saved."
+    end
     it "should save the configured current term when immediate is selected" do
       r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"}))
       r.save!
@@ -128,34 +138,42 @@ describe ReservesController do
   describe "clone" do
     it "should allow you to clone an item if you are an existing editor" do
       controller.stub(:current_user).and_return("user_sunet")
-      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :compound_key => "CID1,user_sunet", :sid => "01", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r[:id], :term => CourseReserves::Application.config.future_terms.first
+      get :clone, :id => r.compound_key, :term => CourseReserves::Application.config.future_terms.first
       response.should redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should allow you to clone an item if you are an super user" do
       # rwmantov is in the super_sunet list as of the writing of this test.
       controller.stub(:current_user).and_return("rwmantov")
-      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r[:id], :term => CourseReserves::Application.config.future_terms.first
+      get :clone, :id => r.compound_key, :term => CourseReserves::Application.config.future_terms.first
       response.should redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should transfer editor relationships to new object" do
       controller.stub(:current_user).and_return("user_sunet")
-      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :term=> "Spring 2010", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term=> "Spring 2010", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r[:id], :term => CourseReserves::Application.config.future_terms.first
+      get :clone, :id => r.compound_key, :term => CourseReserves::Application.config.future_terms.first
       response.should redirect_to(edit_reserve_path((r[:id] + 1).to_s))
       cloned_reserve = Reserve.find((r[:id] + 1).to_s)
       cloned_reserve.term.should == CourseReserves::Application.config.future_terms.first
       cloned_reserve.editors.length.should == 1
       cloned_reserve.editors.map{|e| e[:sunetid]}.should == ["user_sunet"]
     end
-    it "should not allow you to clone an item that you are not an editor of" do
-      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"))
+    it "should redirect you to an existing course if you try to clone a course w/ the same term" do
+      controller.stub(:current_user).and_return("user_sunet")
+      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :term=> "Spring 2010", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r[:id], :term => CourseReserves::Application.config.future_terms.first
+      get :clone, :id => r.compound_key, :term => "Spring 2010"
+      response.should redirect_to(edit_reserve_path(r[:id]))
+      flash[:error].should == "Course reserve list already exists for this course and term."
+    end
+    it "should not allow you to clone an item that you are not an editor of" do
+      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
+      r.save!
+      get :clone, :id => r.compound_key, :term => CourseReserves::Application.config.future_terms.first
       response.should redirect_to(root_path)
       flash[:error].should == "You do not have permission to clone this course list."
     end
