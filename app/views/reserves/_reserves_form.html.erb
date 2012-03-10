@@ -47,7 +47,7 @@
     			<input type="radio" id="future" name="reserve[immediate]" value="false" <%= "checked='checked'" if @reserve and (@reserve.immediate == "false" or @reserve.term != CourseReserves::Application.config.current_term) %> <%= "disabled='disabled'" if @reserve and @reserve.has_been_sent %> />
     			<label for="future">for beginning of </label>
     			<select id="term" name="reserve[term]" <%= "disabled='disabled'" if @reserve and @reserve.has_been_sent %>>
-    			  <%- CourseReserves::Application.config.future_terms.each do |term| -%>
+    			  <%- app_config.future_terms.each do |term| -%>
     			    <option <%= "selected='selected'" if @reserve and @reserve.term == term %>><%= term %></option>
     			  <%- end -%>
     			</select> 
