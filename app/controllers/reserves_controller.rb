@@ -79,7 +79,7 @@ class ReservesController < ApplicationController
       send_course_reserve_request(@reserve) if params.has_key?(:send_request)
       redirect_to({ :controller => 'reserves', :action => 'edit', :id => @reserve[:id] }) 
     else
-      flash[:error] = "You do not have permissions to create his course reserve list."
+      flash[:error] = "You do not have permission to create this course reserve list."
       redirect_to(root_path)
     end
   end
@@ -87,7 +87,7 @@ class ReservesController < ApplicationController
   def edit    
     reserve = Reserve.find(params[:id])
     if !CourseReserves::Application.config.super_sunets.include?(current_user) and !reserve.editors.map{|e| e[:sunetid] }.compact.include?(current_user)
-      flash[:error] = "You do not have permission to edit this course reserve."
+      flash[:error] = "You do not have permission to edit this course reserve list."
       redirect_to(root_path)
     end
     @reserve = reserve
@@ -95,12 +95,13 @@ class ReservesController < ApplicationController
   
   def update
     reserve = Reserve.find(params[:id])
+    original_term = reserve.term
     params[:reserve][:term] = CourseReserves::Application.config.current_term if params[:reserve][:immediate] == "true"
     if params[:reserve][:term] != reserve.term
       Reserve.find_all_by_compound_key(reserve.compound_key).each do |og_res|
         if og_res[:id] != reserve[:id] and og_res.term == params[:reserve][:term]
           flash[:error] = "Course reserve list already exists for this course and term. The term has not been saved."
-          params[:reserve][:term] = nil
+          params[:reserve][:term] = original_term
         end
       end
     end
@@ -134,7 +135,7 @@ class ReservesController < ApplicationController
       reserve.save!
       redirect_to(edit_reserve_path(reserve[:id]))
     else
-      flash[:error] = "You do not have permission to clone this course list."
+      flash[:error] = "You do not have permission to clone this course reserve list."
       redirect_to(root_path)
     end
   end
