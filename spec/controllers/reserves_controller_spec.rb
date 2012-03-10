@@ -253,6 +253,16 @@ describe ReservesController do
         diff_item_list.should_not match(/ADDED ITEM/)
         diff_item_list.should_not match(/DELETED ITEM/)
       end
+      it "should hadnel custom items w/ the same comment as the same items" do
+        old_item_list = [{:ckey=>"", :title=>"", :comment=>"This is Item1", :copies=>"4", :loan_period=>"2 hours"}, {:ckey=>"", :title=>"", :comment=>"This is Item2", :copies=>"1", :loan_period=>"4 hours"}]
+        new_item_list = [{:ckey=>"", :title=>"", :comment=>"This is Item1", :copies=>"4", :loan_period=>"4 hours"}, {:ckey=>"", :title=>"", :comment=>"This is Item2", :copies=>"2", :loan_period=>"4 hours"}]
+        diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
+        diff_item_list.should match(/EDITED ITEM/)
+        diff_item_list.should match(/Circ rule: 4HWF-RES \(was: 2HWF-RES\)/)
+        diff_item_list.should match(/Copies: 2 \(was: 1\)/)
+        diff_item_list.should_not match(/ADDED ITEM/)
+        diff_item_list.should_not match(/DELETED ITEM/)
+      end
       
       it "should not return unchanged items from the item list" do
         old_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}]

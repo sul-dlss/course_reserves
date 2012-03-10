@@ -160,21 +160,9 @@ class ReservesController < ApplicationController
     item_text = ""
     new_reserve.each_with_index do |new_item, index|
       total_reserves << new_item
-      unless old_reserve[index] == new_item or old_reserve.include?(new_item)
-        # we should assume this is the same item at that point.
-        if old_reserve[index] and old_reserve[index][:ckey] == new_item[:ckey] and !new_item[:ckey].blank? and old_reserve[index][:title] == new_item[:title]
-          total_reserves << old_reserve[index]
-          item_text << "***EDITED ITEM***\n"
-          new_item.each do |key,value|
-            if old_reserve[index][key] == value
-              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank? and old_reserve[index][key].blank?
-            else
-              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)} (was: #{translate_value_for_email(key, old_reserve[index][key])})\n"
-            end
-          end
-          item_text << "====================================\n"
-        elsif !new_item[:ckey].blank? and !old_reserve.map{|old_r| old_r if old_r[:ckey] == new_item[:ckey]}.compact.blank?
-          old_item = old_reserve.map{|old_r| old_r if old_r[:ckey] == new_item[:ckey]}.compact.first
+      unless old_reserve.include?(new_item)
+        old_item = old_reserve.map{|item| item if (item[:ckey].blank? and item[:comment] == new_item[:comment]) or (!item[:ckey].blank? and item[:ckey] == new_item[:ckey])}.compact.first
+        unless old_item.blank?
           total_reserves << old_item
           item_text << "***EDITED ITEM***\n"
           new_item.each do |key,value|
@@ -184,7 +172,7 @@ class ReservesController < ApplicationController
               item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)} (was: #{translate_value_for_email(key, old_item[key])})\n"
             end
           end
-          item_text << "====================================\n"
+          item_text << "====================================\n"          
         else
           item_text << "***ADDED ITEM***\n"
           new_item.each do |key,value|
@@ -192,7 +180,7 @@ class ReservesController < ApplicationController
           end
           item_text << "====================================\n"
         end
-      end
+      end  
     end
     (old_reserve - total_reserves).each do |delete_item|
       item_text << "***DELETED ITEM***\n"
