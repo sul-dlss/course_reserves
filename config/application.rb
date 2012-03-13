@@ -72,7 +72,7 @@ CourseReserves::Application.config.reserve_libraries = {
   "HOP-RESV" => "Marine Biology Library",
   "LAW-RESV" => "Law Library",
   "MATH-RESV" => "Math Library",
-  "MEDIA-RESV" => "Media Microtext Library",
+  "MEDIA-RESV" => "Media Microtext",
   "MUSIC-RESV" => "Music Library"
 }
 CourseReserves::Application.config.email_mapping = { 
