@@ -256,10 +256,12 @@ input.num_copies {
   text-decoration: none;
 }
 .active-button:hover {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#9D3225', endColorstr='#510E06');
 	background: -webkit-gradient(linear, left top, left bottom, from(#9D3225), to(#510E06));
 	background: -moz-linear-gradient(center top , #9D3225, #510E06) repeat scroll 0 0 transparent;
 }
 .disabled-button {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#CCCCCC', endColorstr='#DDDDDD');
 	background: -webkit-gradient(linear, left top, left bottom, from(#CCCCCC), to(#DDDDDD));
 	background: -moz-linear-gradient(center top , #CCCCCC, #DDDDDD) repeat scroll 0 0 transparent;
   border: 1px solid #999999;
