@@ -86,7 +86,7 @@ CourseReserves::Application.config.email_mapping = {
   "GREEN-RESV" => "greenreserves@stanford.edu",
   "HOP-RESV" => "hms-library@mailman.stanford.edu",
   "LAW-RESV" => "crowncirc@lists.stanford.edu",
-  "MATH-RESV" => "mathstatlib@stanford.edu, zeynepb@stanford.edu, jshen@stanford.edu",
+  "MATH-RESV" => "mathstatlibrary@stanford.edu, zeynepb@stanford.edu, jshen@stanford.edu",
   "MEDIA-RESV" => "mediamtxt@lists.stanford.edu",
   "MUSIC-RESV" => "muslibcirc@stanford.edu"
 }
