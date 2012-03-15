@@ -111,6 +111,7 @@ h3 {
 p.sent_date {
 	color: $cardinal;
 	margin-bottom: 5px;
+	font-size: 1.2em;
 }
 label.required:before
 { 
@@ -233,6 +234,7 @@ input.num_copies {
 }
 .add-comment {
 	float:right;
+	font-size: .9em;
 }
 .ui-icon-gripsmall-diagonal-se {
 	float:right;
@@ -264,10 +266,10 @@ input.num_copies {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9D3225', endColorstr='#510E06',GradientType=0 );
 }
 .disabled-button {
-	background: #CCCCCC;
-	background: -webkit-gradient(linear, left top, left bottom, from(#CCCCCC), to(#DDDDDD));
-	background: -moz-linear-gradient(center top , #CCCCCC, #DDDDDD) repeat scroll 0 0 transparent;
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#CCCCCC', endColorstr='#DDDDDD',GradientType=0 );
+	background: #666666;
+	background: -webkit-gradient(linear, left top, left bottom, from(#666666), to(#CCCCCC));
+	background: -moz-linear-gradient(center top , #666666, #CCCCCC) repeat scroll 0 0 transparent;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#666666', endColorstr='#CCCCCC',GradientType=0 );
   border: 1px solid #999999;
   border-radius: 3px 3px 3px 3px;
   color: #FFFFFF;
@@ -318,7 +320,11 @@ input.num_copies {
 .error {
 	color: #C00;
 	margin: 10px 0;
-  font-size: 1.2em;
+	font-size: 1.2em;
+	padding: 15px;
+	border: 1px solid #C00;
+	-webkit-border-radius: 3px;
+	background-color: #FFE;
 }
 
 // data table overrides
