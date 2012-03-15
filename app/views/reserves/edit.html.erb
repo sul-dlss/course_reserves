@@ -3,7 +3,13 @@
 	<%= form_for @reserve, :url => { :action => 'update'}, :html => {:id=>"reserve_form"} do |f| -%>
 		<%= render :partial => "reserves_form", :locals => {:f => f} -%>
 		<%- unless @reserve.disabled -%>
-  		<input type="submit" id="save" value="Save" class="active-button"> <input type="submit" name="send_request" value="Send request" class="disabled-button" id="send" disabled="true"> <%= link_to "Cancel [discard changes]" -%>	
+  		<input type="submit" id="save" value="Save" class="active-button">
+  		<%- if @reserve.has_been_sent -%>
+  		  <input type="submit" name="send_request" value="Sent <%= @reserve.sent_date %>" class="disabled-button" id="send" disabled="true"> 	
+  		<%- else -%>
+    	  <input type="submit" name="send_request" value="Send request" class="disabled-button" id="send" disabled="true"> 	
+    	<%- end -%>
+    	<%= link_to "Cancel [discard changes]" -%>
 		<%- end -%>
 	<%- end -%>
 </div>

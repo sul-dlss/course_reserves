@@ -130,6 +130,7 @@ function check_validations(){
 	  $("input#send").removeAttr("disabled");
 	  $("input#send").addClass("active-button");
 	  $("input#send").removeClass("disabled-button");
+		$("input#send").val("Send request");
   }
 }
 
