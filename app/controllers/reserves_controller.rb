@@ -160,7 +160,7 @@ class ReservesController < ApplicationController
   
   def send_updated_reserve_request(reserve)
     old_reserve = reserve.dup
-    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_item_list => reserve.item_list, :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
+    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_item_list => params[:reserve][:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
     diff_text = process_diff(old_reserve.sent_item_list, reserve.item_list)
     
     if !request.env["HTTP_HOST"].nil? and request.env["HTTP_HOST"].include?("reserves") and !request.env["HTTP_HOST"].include?("-test")
