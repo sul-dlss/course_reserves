@@ -3,7 +3,7 @@
 	<%= form_for @reserve, :url => { :action => 'update'}, :html => {:id=>"reserve_form"} do |f| -%>
 		<%= render :partial => "reserves_form", :locals => {:f => f} -%>
 		<%- unless @reserve.disabled -%>
-  		<input type="submit" id="save" value="Save" class="active-button">
+  		<input type="submit" id="save" value="Save draft" class="active-button">
   		<%- if @reserve.has_been_sent -%>
   		  <input type="submit" name="send_request" value="Sent <%= @reserve.sent_date %>" class="disabled-button" id="send" disabled="true"> 	
   		<%- else -%>
@@ -14,8 +14,6 @@
 	<%- end -%>
 </div>
 <%- # This will check validations on page load if the reserve hasn't been sent.  This is what allows us to keep sent items disabled when until the user changes something in the form.  -%>
-<%- puts @reserve.item_list.inspect
-puts @reserve.sent_item_list.inspect -%>
 <%- if !@reserve.has_been_sent or (@reserve.has_been_sent and @reserve.item_list != @reserve.sent_item_list) -%>
   <script type="text/javascript">
     check_validations();
