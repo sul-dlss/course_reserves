@@ -133,6 +133,14 @@ describe ReservesController do
       response.should redirect_to(edit_reserve_path(r[:id]))
       Reserve.find(r[:id]).term.should == CourseReserves::Application.config.current_term
     end
+    it "should properly assign the sent_item_list" do
+      res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}]}
+      r = Reserve.create(@reserve_params.merge(res))
+      r.save!
+      r.sent_item_list.should be_blank
+      get :update, {:id=>r[:id], :send_request=>"true", :reserve=>res}
+      Reserve.find(r[:id]).sent_item_list.should == [{"ckey"=>"12345"}]
+    end
   end
   
   describe "clone" do
