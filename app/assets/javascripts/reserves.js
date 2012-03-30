@@ -47,7 +47,7 @@ $(document).ready(function(){
 	});
 
   // form change hook
-  $("#reserve_form input, #reserve_form textarea, #reserve_form select").live("change", function(){
+  $("#reserve_form input:not(#sw_url), #reserve_form textarea, #reserve_form select").live("change", function(){
     check_validations();
   });
   
