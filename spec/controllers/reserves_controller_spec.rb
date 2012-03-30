@@ -248,8 +248,8 @@ describe ReservesController do
   describe "protected methods" do
     describe "email diff" do
       it "should return new items added to the item list" do
-        old_item_list = [{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}]
-        new_item_list = [{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"54321", :title=>"SecondTitle", :copies=>"1"}]
+        old_item_list = [{"ckey" => "12345", "title"=>"FirstTitle", "copies"=>"4"}]
+        new_item_list = [{"ckey" => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey"=>"54321", "title"=>"SecondTitle", "copies"=>"1"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/ADDED ITEM/)
         diff_item_list.should match(/CKey: 54321 : http:\/\/searchworks.stanford.edu\/view\/54321/)
@@ -257,8 +257,8 @@ describe ReservesController do
         diff_item_list.should_not match(/DELETED ITEM/)
       end
       it "should return changed items from the item list" do
-        old_item_list = [{:ckey => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {:ckey => "54321", :title=>"SecondTitle", :copies=>"1"}]
-        new_item_list = [{:ckey => "12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey => "54321", :title=>"SecondTitle", :copies=>"2"}]
+        old_item_list = [{"ckey" => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey" => "54321", "title"=>"SecondTitle", "copies"=>"1"}]
+        new_item_list = [{"ckey" => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey" => "54321", "title"=>"SecondTitle", "copies"=>"2"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/EDITED ITEM/)
         diff_item_list.should match(/CKey: 54321 : http:\/\/searchworks.stanford.edu\/view\/54321/)
@@ -267,8 +267,8 @@ describe ReservesController do
         diff_item_list.should_not match(/DELETED ITEM/)
       end
       it "should return items deleted from the item list" do
-        old_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"54321", :title=>"ToBeDeleted", :copies=>"1"}]
-        new_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}]
+        old_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey"=>"54321", "title"=>"ToBeDeleted", "copies"=>"1"}]
+        new_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/DELETED ITEM/)
         diff_item_list.should match(/CKey: 54321 : http:\/\/searchworks.stanford.edu\/view\/54321/)
@@ -277,8 +277,8 @@ describe ReservesController do
         diff_item_list.should_not match(/EDITED ITEM/)
       end
       it "should get an item w/ the same ckey that is drastically out of the old order" do
-        old_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"23456", :title=>"SecondTitle", :copies=>"1"}, {:ckey=>"34567", :title=>"ThirdTitle", :copies=>"1"}]
-        new_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}, {:ckey=>"34567", :title=>"ThirdTitle", :copies=>"1"}, {:ckey=>"23456", :title=>"ChangedTitle", :copies=>"1"}]
+        old_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey"=>"23456", "title"=>"SecondTitle", "copies"=>"1"}, {"ckey"=>"34567", "title"=>"ThirdTitle", "copies"=>"1"}]
+        new_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey"=>"34567", "title"=>"ThirdTitle", "copies"=>"1"}, {"ckey"=>"23456", "title"=>"ChangedTitle", "copies"=>"1"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/EDITED ITEM/)
         diff_item_list.should match(/CKey: 23456 : http:\/\/searchworks.stanford.edu\/view\/23456/)
@@ -287,8 +287,8 @@ describe ReservesController do
         diff_item_list.should_not match(/DELETED ITEM/)
       end
       it "should hadnel custom items w/ the same comment as the same items" do
-        old_item_list = [{:ckey=>"", :title=>"", :comment=>"This is Item1", :copies=>"4", :loan_period=>"2 hours"}, {:ckey=>"", :title=>"", :comment=>"This is Item2", :copies=>"1", :loan_period=>"4 hours"}]
-        new_item_list = [{:ckey=>"", :title=>"", :comment=>"This is Item1", :copies=>"4", :loan_period=>"4 hours"}, {:ckey=>"", :title=>"", :comment=>"This is Item2", :copies=>"2", :loan_period=>"4 hours"}]
+        old_item_list = [{"ckey"=>"", "title"=>"", "comment"=>"This is Item1", "copies"=>"4", "loan_period"=>"2 hours"}, {"ckey"=>"", "title"=>"", "comment"=>"This is Item2", "copies"=>"1", "loan_period"=>"4 hours"}]
+        new_item_list = [{"ckey"=>"", "title"=>"", "comment"=>"This is Item1", "copies"=>"4", "loan_period"=>"4 hours"}, {"ckey"=>"", "title"=>"", "comment"=>"This is Item2", "copies"=>"2", "loan_period"=>"4 hours"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should match(/EDITED ITEM/)
         diff_item_list.should match(/Circ rule: 4HWF-RES \(was: 2HWF-RES\)/)
@@ -298,8 +298,8 @@ describe ReservesController do
       end
       
       it "should not return unchanged items from the item list" do
-        old_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}]
-        new_item_list = [{:ckey=>"12345", :title=>"FirstTitle", :copies=>"4"}]
+        old_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}]
+        new_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         diff_item_list.should be_blank
       end
