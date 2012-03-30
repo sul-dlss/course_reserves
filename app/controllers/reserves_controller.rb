@@ -177,7 +177,7 @@ class ReservesController < ApplicationController
     new_reserve.each_with_index do |new_item, index|
       total_reserves << new_item
       unless old_reserve.include?(new_item)
-        old_item = old_reserve.map{|item| item if (item[:ckey].blank? and item[:comment] == new_item[:comment]) or (!item[:ckey].blank? and item[:ckey] == new_item[:ckey])}.compact.first
+        old_item = old_reserve.map{|item| item if (item["ckey"].blank? and item["comment"] == new_item["comment"]) or (!item["ckey"].blank? and item["ckey"] == new_item["ckey"])}.compact.first        
         unless old_item.blank?
           total_reserves << old_item
           item_text << "***EDITED ITEM***\n"
