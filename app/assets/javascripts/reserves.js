@@ -5,7 +5,9 @@ $(document).ready(function(){
 	$(".add-sw-item").click(function(){
 		if($("#sw_url").attr("value") != ""){
 			$("body").css("cursor", "progress");
-		  $(this).attr("href", $(this).attr("href") + "&url=" + $("#sw_url").attr("value"));	
+			$(this).removeClass("active-button");
+		  $(this).addClass("disabled-button");
+		  $(this).attr("href", $(this).attr("href") + "&url=" + $("#sw_url").attr("value"));
 		}else{
 			return false;
 		}

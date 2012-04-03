@@ -281,6 +281,15 @@ input.num_copies {
   padding: 4px 8px 5px;
   text-decoration: none;
 }
+a.disabled-button {
+	border-bottom: 1px solid #999999;
+	border-radius: 3px 3px 3px 3px;
+}
+a.disabled-button:hover {
+	color: #FFFFFF;
+	border-bottom: 1px solid #999999;
+	border-radius: 3px 3px 3px 3px;
+}
 
 // clone widget
 .clone_term {
