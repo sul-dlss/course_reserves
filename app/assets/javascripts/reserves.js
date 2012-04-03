@@ -14,6 +14,7 @@ $(document).ready(function(){
 				return false;
 			}else{
 				$("body").css("cursor", "progress");
+				$(this).css("cursor", "progress");
 				$(this).removeClass("active-button");
 			  $(this).addClass("disabled-button");
 			  $(this).attr("href", $(this).attr("href") + "&url=" + $("#sw_url").attr("value"));
