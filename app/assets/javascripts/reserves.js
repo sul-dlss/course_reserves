@@ -4,10 +4,20 @@ $(document).ready(function(){
 	// Add item from SW
 	$(".add-sw-item").click(function(){
 		if($("#sw_url").attr("value") != ""){
-			$("body").css("cursor", "progress");
-			$(this).removeClass("active-button");
-		  $(this).addClass("disabled-button");
-		  $(this).attr("href", $(this).attr("href") + "&url=" + $("#sw_url").attr("value"));
+			var already_exists = false;
+			$("a").each(function(){
+				if($(this).attr("href") == $("#sw_url").attr("value") || $(this).attr("href") == "http://searchworks.stanford.edu/view/" + $("#sw_url").attr("value")){
+					already_exists = true;
+				}
+			});
+			if(already_exists){
+				return false;
+			}else{
+				$("body").css("cursor", "progress");
+				$(this).removeClass("active-button");
+			  $(this).addClass("disabled-button");
+			  $(this).attr("href", $(this).attr("href") + "&url=" + $("#sw_url").attr("value"));
+	    }
 		}else{
 			return false;
 		}
