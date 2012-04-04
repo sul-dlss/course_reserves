@@ -4,9 +4,4 @@ show_changed($("#item_list_table"));
 check_validations();
 check_loan_period();
 $("#sw_url").val("");
-<%- if params[:item].has_key?(:ckey) and !params[:item][:ckey].blank? -%>
-  $("a.add-sw-item").removeClass("disabled-button");
-  $("a.add-sw-item").addClass("active-button");
-<%- end -%>
-$("body").css("cursor", "auto");
-$("a.add-sw-item").css("cursor", "pointer");
+clean_up_loading();

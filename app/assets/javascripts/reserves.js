@@ -175,3 +175,10 @@ function check_loan_period(){
 		}
 	});
 }
+
+function clean_up_loading() {
+	$("body").css("cursor", "auto");
+	$("a.add-sw-item").css("cursor", "pointer");
+	$("a.add-sw-item").removeClass("disabled-button");
+  $("a.add-sw-item").addClass("active-button");
+}
