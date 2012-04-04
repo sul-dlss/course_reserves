@@ -63,7 +63,7 @@ class ReservesController < ApplicationController
           doc = Nokogiri::XML(Net::HTTP.get(URI.parse(url)))
           title = doc.xpath("//full_title").text
           format = doc.xpath("//formats/format").map{|x| x.text }
-          render :text => "alert('This does not appear to be a valid item in SearchWorks')" and return if title.blank?
+          render :text => "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();" and return if title.blank?
           params[:item] = {:title => doc.xpath("//full_title").text, :ckey => ckey }
           params[:item].merge!(:loan_period=>"4 hours", :media=>"true") if format.include?("Video")
         end
