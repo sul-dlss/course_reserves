@@ -81,7 +81,7 @@ CourseReserves::Application.config.email_mapping = {
   "CHEM-RESV" => "swainlibrary@stanford.edu",
   "EARTH-RESV" => "brannerlibrary@stanford.edu",
   "EAS-RESV" => "eastasialibrary@stanford.edu",
-  "EDU-RESV" => "cubberley@stanford.edu, kells@stanford.edu",
+  "EDU-RESV" => "cubberley@stanford.edu, kells@stanford.edu, eshleton@stanford.edu",
   "ENG-RESV" => "englibrary@stanford.edu",
   "GREEN-RESV" => "greenreserves@stanford.edu",
   "HOP-RESV" => "hms-library@mailman.stanford.edu",
@@ -97,4 +97,4 @@ CourseReserves::Application.config.loan_periods = {
   "2DWF-RES"   => "2 days",
   "3DWF-RES"   => "3 days"
 }
-CourseReserves::Application.config.super_sunets = %w[seestone jleggett laszloj mwh hoangl mholloma cherylc1 ssaini rruelas hmalcolm leiferik suziek dgaghan alvarezj cdescanz rwmantov quiambao daisun jjamison asharma4 bclaus rchaelv mnack ifadakar tcruzada linday zeynepb jshen rwedl cwelborn skota jwible dkohrs vpearse kells eshelton kkerns bbousman rpowers raymondh jlmcbrid nlorimer jlavigne jvine jkeck dlrueda tcramer rns makeller ctierney mchris pernell rachaelv carlinot sgendel jshaikh nrz evwayne plomio rsamberg gwilson adelgado sstone2 kwinzer wilsosa cannie albah smoss bcalhoun ldrews sisien kkuehl yunqi teasland vizvary guofenjw cnaranch tbukina tut lwchen rtamares annemj rporter syliang lindapc rcviado pjsull10 ppb mnewman graceb winklerh helenj cfosselm mcmillan]
+CourseReserves::Application.config.super_sunets = %w[seestone jleggett laszloj mwh hoangl mholloma cherylc1 ssaini rruelas hmalcolm leiferik suziek dgaghan alvarezj cdescanz rwmantov quiambao daisun jjamison asharma4 bclaus rchaelv mnack ifadakar tcruzada linday zeynepb jshen rwedl cwelborn skota jwible dkohrs vpearse kells eshelton kkerns bbousman rpowers raymondh jlmcbrid nlorimer jlavigne jvine jkeck dlrueda tcramer rns makeller ctierney mchris pernell rachaelv carlinot sgendel jshaikh nrz evwayne plomio rsamberg gwilson adelgado sstone2 kwinzer wilsosa cannie albah smoss bcalhoun ldrews sisien kkuehl yunqi teasland vizvary guofenjw cnaranch tbukina tut lwchen rtamares annemj rporter syliang lindapc rcviado pjsull10 ppb mnewman graceb winklerh helenj cfosselm mcmillan ygyang sakura]
