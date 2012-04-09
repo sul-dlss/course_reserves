@@ -13,4 +13,17 @@ describe ApplicationHelper do
       item_in_searchworks?({:comment=>"hello", :copies=>"3", :loan_period => "1 day"}).should be_false
     end
   end
+  
+  describe "terms" do
+    describe "current_term" do
+      it "should do something" do
+        current_term.should == ""
+      end
+    end
+    describe "future terms" do
+      it "does something" do
+        future_terms.should == ""
+      end
+    end
+  end
 end
