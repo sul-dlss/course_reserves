@@ -13,18 +13,17 @@ module ApplicationHelper
   end
   
   def current_term
-    now = Time.now
-    month = now.month
-    year = now.year
-    "#{season(now)} #{year}"
+    "#{season(Time.now)} #{Time.now.year}"
   end
   
-  def future_terms
-    ix = seasons.index(season(Time.now))
+  def future_terms(term = season(Time.now))
+    ix = seasons.index(term)
     if seasons[ix + 1] and seasons[ix + 2]
-      future = [seasons[ix + 1], seasons[id + 2]]
+      future = [seasons[ix + 1], seasons[ix + 2]]
     elsif seasons[ix + 1] and seasons[ix + 2].nil?
-      future = [seasons.first, seasons.last]
+      future = [seasons.last, seasons.first]
+    elsif ix == (seasons.length - 1)
+      future = [seasons[0], seasons[1]]
     end
   end
   
