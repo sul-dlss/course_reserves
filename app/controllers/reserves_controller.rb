@@ -21,7 +21,7 @@ class ReservesController < ApplicationController
     end
     courses.each do |course|
       cl = course[:cross_listings].blank? ? "" : "(#{course[:cross_listings]})"
-      items << [course[:cid], "<a href='/reserves/new?comp_key=#{course[:comp_key]}'>#{course[:title]}</a> #{cl}", course[:instructors].map{|i| i[:name]}.compact.join(", ")]
+      items << [course[:cid], "<a href='/reserves/new?comp_key=#{course[:comp_key].gsub("&","%26")}'>#{course[:title]}</a> #{cl}", course[:instructors].map{|i| i[:name]}.compact.join(", ")]
     end
     render :json => {"aaData" => items}.to_json, :layout => false
   end
