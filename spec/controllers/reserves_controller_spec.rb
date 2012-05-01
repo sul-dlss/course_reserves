@@ -1,6 +1,7 @@
 require 'spec_helper'
-
+require 'terms'
 describe ReservesController do
+  include Terms
   before(:each) do
     @reserve_params = {:library => "Green", :immediate=>"true", :contact_name => "John Doe", :contact_phone=>"(555)555-5555", :contact_email=>"jdoe@example.com"}
   end
@@ -68,7 +69,7 @@ describe ReservesController do
       controller.stub(:current_user).and_return("user_sunet")
       post :create, :reserve => @reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"})
       r = assigns[:reserve]
-      r.term.should == CourseReserves::Application.config.current_term
+      r.term.should == current_term
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
     it "should redirecto the home page if the user does not have access to create this reserve list" do
@@ -131,7 +132,7 @@ describe ReservesController do
       r.save!
       get :update, {:id=>r[:id], :reserve => @reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"})}
       response.should redirect_to(edit_reserve_path(r[:id]))
-      Reserve.find(r[:id]).term.should == CourseReserves::Application.config.current_term
+      Reserve.find(r[:id]).term.should == current_term
     end
     it "should properly assign the sent_item_list for unsent items" do
       res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}]}
@@ -155,7 +156,7 @@ describe ReservesController do
       controller.stub(:current_user).and_return("user_sunet")
       r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :compound_key => "CID1,user_sunet", :sid => "01", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r.compound_key, :term => CourseReserves::Application.config.future_terms.first
+      get :clone, :id => r.compound_key, :term => future_terms.first
       response.should redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should allow you to clone an item if you are an super user" do
@@ -163,17 +164,17 @@ describe ReservesController do
       controller.stub(:current_user).and_return("rwmantov")
       r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r.compound_key, :term => CourseReserves::Application.config.future_terms.first
+      get :clone, :id => r.compound_key, :term => future_terms.first
       response.should redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should transfer editor relationships to new object" do
       controller.stub(:current_user).and_return("user_sunet")
       r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term=> "Spring 2010", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r.compound_key, :term => CourseReserves::Application.config.future_terms.first
+      get :clone, :id => r.compound_key, :term => future_terms.first
       response.should redirect_to(edit_reserve_path((r[:id] + 1).to_s))
       cloned_reserve = Reserve.find((r[:id] + 1).to_s)
-      cloned_reserve.term.should == CourseReserves::Application.config.future_terms.first
+      cloned_reserve.term.should == future_terms.first
       cloned_reserve.editors.length.should == 1
       cloned_reserve.editors.map{|e| e[:sunetid]}.should == ["user_sunet"]
     end
@@ -188,7 +189,7 @@ describe ReservesController do
     it "should not allow you to clone an item that you are not an editor of" do
       r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r.compound_key, :term => CourseReserves::Application.config.future_terms.first
+      get :clone, :id => r.compound_key, :term => future_terms.first
       response.should redirect_to(root_path)
       flash[:error].should == "You do not have permission to clone this course reserve list."
     end
