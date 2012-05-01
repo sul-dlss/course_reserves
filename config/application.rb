@@ -58,8 +58,6 @@ module CourseReserves
   end
 
 end
-CourseReserves::Application.config.current_term = "Spring 2012"
-CourseReserves::Application.config.future_terms = ["Summer 2012", "Fall 2012"]
 CourseReserves::Application.config.reserve_libraries = { 
   "ART-RESV" => "Art Library",
   "BIO-RESV" => "Biology Library",

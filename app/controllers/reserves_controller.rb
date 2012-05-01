@@ -1,8 +1,8 @@
 require 'net/http'
 require 'nokogiri'
-
+require 'terms'
 class ReservesController < ApplicationController
-  
+  include Terms
   def index
     editor = Editor.find_by_sunetid(current_user)
     @my_reserves = editor.nil? ? [] : editor.reserves.order("updated_at DESC")
@@ -73,7 +73,7 @@ class ReservesController < ApplicationController
   
   def create
     if CourseReserves::Application.config.super_sunets.include?(current_user) or params[:reserve][:instructor_sunet_ids].split(",").map{|sunet| sunet.strip }.include?(current_user)
-      params[:reserve][:term] = CourseReserves::Application.config.current_term if params[:reserve][:immediate] == "true"
+      params[:reserve][:term] = current_term if params[:reserve][:immediate] == "true"
       @reserve = Reserve.create(params[:reserve])
       @reserve.save! 
       send_course_reserve_request(@reserve) if params.has_key?(:send_request)
@@ -96,7 +96,7 @@ class ReservesController < ApplicationController
   def update
     reserve = Reserve.find(params[:id])
     original_term = reserve.term
-    params[:reserve][:term] = CourseReserves::Application.config.current_term if params[:reserve][:immediate] == "true"
+    params[:reserve][:term] = current_term if params[:reserve][:immediate] == "true"
     if params[:reserve][:term] != reserve.term
       Reserve.find_all_by_compound_key(reserve.compound_key).each do |og_res|
         if og_res[:id] != reserve[:id] and og_res.term == params[:reserve][:term]
