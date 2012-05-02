@@ -17,7 +17,9 @@ module Terms
       current_term = CourseReserves::Application.config.terms.collect{|t| t if t[:term] == term}.compact.first
       current_term_index = CourseReserves::Application.config.terms.index(current_term)
     end
-    return [CourseReserves::Application.config.terms[current_term_index+1][:term], CourseReserves::Application.config.terms[current_term_index+2][:term]]
+    terms = [CourseReserves::Application.config.terms[current_term_index+1][:term]]
+    terms << CourseReserves::Application.config.terms[current_term_index+2][:term] if CourseReserves::Application.config.terms[current_term_index+2]
+    return terms
   end
   
   def process_term_for_cw(term)
