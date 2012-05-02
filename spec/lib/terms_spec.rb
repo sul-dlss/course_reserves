@@ -38,5 +38,8 @@ describe "Terms" do
       ft.include?("Fall 2016").should be_true
       ft.include?("Winter 2017").should be_true
     end
+    it "should return 1 term when we are at the end of the list" do
+      future_terms("Spring 2020").should == ["Summer 2020"]
+    end
   end
 end
