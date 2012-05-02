@@ -11,7 +11,12 @@ task :fetch_xml do |t|
     http.use_ssl = true
     request = Net::HTTP::Get.new(cw_url.request_uri)
     response = http.request(request)
-    unless response.code == 200
+    if response.code == "200"
+      file_name = url[/public\/(.*)$/,1]
+      File.open("#{Rails.root}/lib/course_work_xml/#{file_name}", "w+") do |f|
+        f.write(response.body)
+      end
+    else
       # send warning email here
     end
   end
