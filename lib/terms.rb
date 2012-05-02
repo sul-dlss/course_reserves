@@ -20,4 +20,8 @@ module Terms
     return [CourseReserves::Application.config.terms[current_term_index+1][:term], CourseReserves::Application.config.terms[current_term_index+2][:term]]
   end
   
+  def process_term_for_cw(term)
+    term.gsub("Spring 20", "Sp").gsub("Summer 20", "Su").gsub("Winter 20", "W").gsub("Fall 20", "F")
+  end
+  
 end
