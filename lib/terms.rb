@@ -23,7 +23,7 @@ module Terms
   end
   
   def process_term_for_cw(term)
-    term.gsub("Spring 20", "Sp").gsub("Summer 20", "Su").gsub("Winter 20", "W").gsub("Fall 20", "F")
+    term.gsub(/Spring \d{2}/, "Sp").gsub(/Summer \d{2}/, "Su").gsub(/Winter \d{2}/, "W").gsub(/Fall \d{2}/, "F")
   end
   
 end
