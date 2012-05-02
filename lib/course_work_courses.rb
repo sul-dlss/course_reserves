@@ -58,11 +58,15 @@ class CourseWorkCourses
   
   def load_xml_from_coursework
     if Rails.env.test?
-      [Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))]
+      return [Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))]
     else
       current = process_term_for_cw(current_term)
       next_term = process_term_for_cw(future_terms.first)
-      [Nokogiri::XML(File.open("#{Rails.root}/lib/course_work_xml/courseXML_#{current}.xml", 'r')), Nokogiri::XML(File.open("#{Rails.root}/lib/course_work_xml/courseXML_#{next_term}.xml", 'r'))]
+      xml = []
+      ["#{Rails.root}/lib/course_work_xml/courseXML_#{current}.xml", "#{Rails.root}/lib/course_work_xml/courseXML_#{next_term}.xml"].each do |url|
+        xml << Nokogiri::XML(File.open(url, 'r')) if File.exists?(url)
+      end
+      return xml
     end
   end
   
