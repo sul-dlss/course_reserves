@@ -19,3 +19,6 @@ coverage
 
 # Ignoring vendorized gems
 /vendor/bundle
+
+# Ignoring CourseWork XML
+/lib/course_work_xml/*.xml
