@@ -42,4 +42,15 @@ describe "Terms" do
       future_terms("Spring 2020").should == ["Summer 2020"]
     end
   end
+  describe "processing terms for CourseWork file names" do
+    it "should handle various terms" do
+      process_term_for_cw("Spring 2012").should == "Sp12"
+      process_term_for_cw("Winter 2013").should == "W13"
+      process_term_for_cw("Summer 2020").should == "Su20"
+      process_term_for_cw("Fall 2012").should == "F12"
+    end
+    it "shuld handle all years into the future" do
+      process_term_for_cw("Spring 3945").should == "Sp45"
+    end
+  end
 end
