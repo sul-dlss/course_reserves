@@ -2,9 +2,10 @@ require "terms"
 require 'net/http'
 include Terms
 desc "rake task to fetch XML from CourseWork"
-task :fetch_xml do |t|
+task :fetch_xml => :environment do
   term1 = process_term_for_cw(current_term)
   term2 = process_term_for_cw(future_terms.first)
+  errors = ""
   [coursework_url(term1),coursework_url(term2)].each do |url|
     cw_url = URI.parse(url)
     http = Net::HTTP.new(cw_url.host, cw_url.port)
@@ -17,10 +18,10 @@ task :fetch_xml do |t|
         f.write(response.body)
       end
     else
-      # send warning email here
+      errors << "#{url} returned #{response.code}\n"
     end
   end
-
+  Report.msg(:to=>"searchworks-ops@lists.stanford.edu", :subject => "Problem downloading XML file(s) from CourseWork", :message => errors).deliver unless errors.blank?
 end
 
 def coursework_url(term)
