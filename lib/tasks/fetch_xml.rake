@@ -15,7 +15,7 @@ task :fetch_xml => :environment do
     response = http.request(request)
     if response.code == "200"
       file_name = url[/public\/(.*)$/,1]
-      File.open("#{Rails.root}/lib/course_work_xml/#{file_name}", "w+") do |f|
+      File.open("#{Rails.root}/lib/course_work_xml/#{file_name}", "w") do |f|
         f.write(response.body)
       end
       updated = true
