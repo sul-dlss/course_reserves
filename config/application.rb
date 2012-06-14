@@ -75,7 +75,7 @@ CourseReserves::Application.config.reserve_libraries = {
 }
 CourseReserves::Application.config.email_mapping = { 
   "ART-RESV" => "artlibrary@stanford.edu",
-  "BIO-RESV" => "falconerlibrary@stanford.edu, zeynepb@stanford.edu, cwelborn@stanford.edu",
+  "BIO-RESV" => "falconerlibrary@stanford.edu, zeynepb@stanford.edu, cwelborn@stanford.edu, jshen@stanford.edu",
   "CHEM-RESV" => "swainlibrary@stanford.edu",
   "EARTH-RESV" => "brannerlibrary@stanford.edu",
   "EAS-RESV" => "eastasialibrary@stanford.edu",
