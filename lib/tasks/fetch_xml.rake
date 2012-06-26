@@ -23,7 +23,7 @@ task :fetch_xml => :environment do
       errors << "#{url} returned #{response.code}\n"
     end
   end
-  Report.msg(:to=>"searchworks-ops@lists.stanford.edu", :subject => "Problem downloading XML file(s) from CourseWork", :message => errors).deliver unless errors.blank?
+  Report.msg(:to=>"searchworks-reports@lists.stanford.edu", :subject => "Problem downloading XML file(s) from CourseWork", :message => errors).deliver unless errors.blank?
   %x[touch tmp/restart.txt] if updated
 end
 
