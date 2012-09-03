@@ -154,8 +154,8 @@ class ReservesController < ApplicationController
       address = "reserves-test@lists.stanford.edu"
     end
     
-    ReserveMail.first_request(reserve, address, current_user).deliver
     reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_item_list => params[:reserve][:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
+    ReserveMail.first_request(reserve, address, current_user).deliver
   end
   
   def send_updated_reserve_request(reserve)
