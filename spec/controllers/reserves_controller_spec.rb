@@ -245,6 +245,22 @@ describe ReservesController do
     end
   end
   
+  describe "email sending contoller methods" do
+    describe "send_course_reserve_request" do
+      it "should use the most updates reserve information to determine the TO address for emails" do
+        controller.params[:reserve] = {}
+        r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet", :library=>"ENG-RESV"}))
+        r.save!
+        mail = controller.send(:send_course_reserve_request, r)
+        mail.to.should == ["englibrary@stanford.edu", "reserves-test@lists.stanford.edu"]
+        controller.params[:reserve] = {:library=>"GREEN-RESV"}
+        mail = controller.send(:send_course_reserve_request, r)
+        mail.to.should == ["greenreserves@stanford.edu", "reserves-test@lists.stanford.edu"]
+        r.library.should == "GREEN-RESV"
+      end
+
+    end
+  end
   
   describe "protected methods" do
     describe "email diff" do
