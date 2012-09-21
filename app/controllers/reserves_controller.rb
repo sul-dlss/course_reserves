@@ -148,13 +148,16 @@ class ReservesController < ApplicationController
   protected
   
   def send_course_reserve_request(reserve)
+    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_item_list => params[:reserve][:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
+    
     if !request.env["HTTP_HOST"].nil? and request.env["HTTP_HOST"].include?("reserves") and !request.env["HTTP_HOST"].include?("-test")
       address = "#{CourseReserves::Application.config.email_mapping[reserve.library]}, course-reserves-allforms@lists.stanford.edu"
+    elsif Rails.env.test?
+      address = "#{CourseReserves::Application.config.email_mapping[reserve.library]}, reserves-test@lists.stanford.edu"
     else
       address = "reserves-test@lists.stanford.edu"
     end
     
-    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_item_list => params[:reserve][:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
     ReserveMail.first_request(reserve, address, current_user).deliver
   end
   
