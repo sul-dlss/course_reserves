@@ -70,7 +70,7 @@ CourseReserves::Application.config.reserve_libraries = {
   "HOP-RESV" => "Marine Biology Library",
   "LAW-RESV" => "Law Library",
   "MATH-RESV" => "Math Library",
-  "MEDIA-RESV" => "Media Microtext",
+  "MEDIA-RESV" => "Media & Microtext (Green)",
   "MUSIC-RESV" => "Music Library"
 }
 CourseReserves::Application.config.email_mapping = { 
@@ -85,7 +85,7 @@ CourseReserves::Application.config.email_mapping = {
   "HOP-RESV" => "hms-library@mailman.stanford.edu",
   "LAW-RESV" => "crowncirc@lists.stanford.edu",
   "MATH-RESV" => "mathstatlibrary@stanford.edu, zeynepb@stanford.edu, jshen@stanford.edu",
-  "MEDIA-RESV" => "mediamtxt@lists.stanford.edu",
+  "MEDIA-RESV" => "mediamicro@stanford.edu",
   "MUSIC-RESV" => "muslibcirc@stanford.edu"
 }
 CourseReserves::Application.config.loan_periods = {
@@ -141,4 +141,4 @@ CourseReserves::Application.config.terms = [
   {:term => "Summer 2020", :quarter => "Summer", :end_date => Date.new(2020, 8, 15)}
 ]
 
-CourseReserves::Application.config.super_sunets = %w[seestone jleggett laszloj mwh hoangl mholloma cherylc1 ssaini rruelas hmalcolm leiferik suziek dgaghan alvarezj cdescanz rwmantov quiambao daisun jjamison asharma4 bclaus rchaelv mnack ifadakar tcruzada linday zeynepb jshen rwedl cwelborn skota jwible dkohrs vpearse kells eshelton kkerns bbousman rpowers raymondh jlmcbrid nlorimer jlavigne jvine jkeck dlrueda tcramer rns makeller ctierney mchris pernell rachaelv carlinot sgendel jshaikh nrz evwayne plomio rsamberg gwilson adelgado sstone2 kwinzer wilsosa cannie albah smoss bcalhoun ldrews sisien kkuehl yunqi teasland vizvary guofenjw cnaranch tbukina tut lwchen rtamares annemj rporter syliang lindapc rcviado pjsull10 ppb mnewman graceb winklerh helenj cfosselm mcmillan ygyang sakura chelton1 cstlouis]
+CourseReserves::Application.config.super_sunets = %w[seestone jleggett laszloj mwh hoangl mholloma cherylc1 ssaini rruelas hmalcolm leiferik suziek dgaghan alvarezj cdescanz rwmantov quiambao daisun jjamison asharma4 bclaus rchaelv mnack ifadakar tcruzada linday zeynepb jshen rwedl cwelborn skota jwible dkohrs vpearse kells eshelton kkerns bbousman rpowers raymondh jlmcbrid nlorimer jlavigne jvine jkeck dlrueda tcramer rns makeller ctierney mchris pernell rachaelv carlinot sgendel jshaikh nrz evwayne plomio rsamberg gwilson adelgado sstone2 kwinzer wilsosa cannie albah smoss bcalhoun ldrews sisien kkuehl yunqi teasland vizvary guofenjw cnaranch tbukina tut lwchen rtamares annemj rporter syliang lindapc rcviado pjsull10 ppb mnewman graceb winklerh helenj cfosselm mcmillan ygyang sakura chelton1 cstlouis ssladwic]
