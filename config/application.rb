@@ -61,6 +61,7 @@ end
 CourseReserves::Application.config.reserve_libraries = { 
   "ART-RESV" => "Art Library",
   "BIO-RESV" => "Biology Library",
+  "BUS-RESV" => "Business Library",
   "CHEM-RESV" => "Chemistry Library",
   "EARTH-RESV" => "Earth Sciences Library",
   "EAS-RESV" => "East Asia Library",
@@ -75,7 +76,8 @@ CourseReserves::Application.config.reserve_libraries = {
 }
 CourseReserves::Application.config.email_mapping = { 
   "ART-RESV" => "artlibrary@stanford.edu",
-  "BIO-RESV" => "falconerlibrary@stanford.edu, zeynepb@stanford.edu, cwelborn@stanford.edu, jshen@stanford.edu",
+  "BIO-RESV" => "falconerlibrary@stanford.edu, zeynepb@stanford.edu, jshen@stanford.edu",
+  "BUS-RESV" => "gsb_library-i-desk@stanford.edu",
   "CHEM-RESV" => "swainlibrary@stanford.edu",
   "EARTH-RESV" => "brannerlibrary@stanford.edu",
   "EAS-RESV" => "eastasialibrary@stanford.edu",
@@ -141,4 +143,4 @@ CourseReserves::Application.config.terms = [
   {:term => "Summer 2020", :quarter => "Summer", :end_date => Date.new(2020, 8, 15)}
 ]
 
-CourseReserves::Application.config.super_sunets = %w[seestone jleggett laszloj mwh hoangl mholloma cherylc1 ssaini rruelas hmalcolm leiferik suziek dgaghan alvarezj cdescanz rwmantov quiambao daisun jjamison asharma4 bclaus rchaelv mnack ifadakar tcruzada linday zeynepb jshen rwedl cwelborn skota jwible dkohrs vpearse kells eshelton kkerns bbousman rpowers raymondh jlmcbrid nlorimer jlavigne jvine jkeck dlrueda tcramer rns makeller ctierney mchris pernell rachaelv carlinot sgendel jshaikh nrz evwayne plomio rsamberg gwilson adelgado sstone2 kwinzer wilsosa cannie albah smoss bcalhoun ldrews sisien kkuehl yunqi teasland vizvary guofenjw cnaranch tbukina tut lwchen rtamares annemj rporter syliang lindapc rcviado pjsull10 ppb mnewman graceb winklerh helenj cfosselm mcmillan ygyang sakura chelton1 cstlouis ssladwic dlacedra alvarezj]
+CourseReserves::Application.config.super_sunets = %w[seestone jleggett laszloj mwh hoangl mholloma cherylc1 ssaini rruelas hmalcolm leiferik suziek dgaghan alvarezj cdescanz rwmantov quiambao daisun jjamison asharma4 bclaus rchaelv mnack ifadakar tcruzada linday zeynepb jshen rwedl cwelborn skota jwible dkohrs vpearse kells eshelton kkerns bbousman rpowers raymondh jlmcbrid nlorimer jlavigne jvine jkeck dlrueda tcramer rns makeller ctierney mchris pernell rachaelv carlinot sgendel jshaikh nrz evwayne plomio rsamberg gwilson adelgado sstone2 kwinzer wilsosa cannie albah smoss bcalhoun ldrews sisien kkuehl yunqi teasland vizvary guofenjw cnaranch tbukina tut lwchen rtamares annemj rporter syliang lindapc rcviado pjsull10 ppb mnewman graceb winklerh helenj cfosselm mcmillan ygyang sakura chelton1 cstlouis ssladwic dlacedra alvarezj simmonsk xenafan jheller2 lflatmo]
