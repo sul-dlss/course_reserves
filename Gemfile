@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.1'
+gem 'rails', '3.2.14'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -24,7 +24,8 @@ gem 'jquery-rails'
 
 
 group :test do
-  gem 'cucumber-rails'
+  gem 'capybara', '1.1.2'
+  gem 'cucumber-rails', '1.2.1'
   gem 'rspec-rails'
   gem 'simplecov', :require => false
   gem 'database_cleaner'
