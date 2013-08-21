@@ -3,10 +3,10 @@ $(document).ready(function(){
 	
 	// Add item from SW
 	$(".add-sw-item").click(function(){
-		if($("#sw_url").attr("value") != ""){
+		if($("#sw_url").val() != ""){
 			var already_exists = false;
 			$("a").each(function(){
-				if($(this).attr("href") == $("#sw_url").attr("value") || $(this).attr("href") == "http://searchworks.stanford.edu/view/" + $("#sw_url").attr("value")){
+				if($(this).attr("href") == $("#sw_url").val() || $(this).attr("href") == "http://searchworks.stanford.edu/view/" + $("#sw_url").val()){
 					already_exists = true;
 				}
 			});
@@ -17,7 +17,7 @@ $(document).ready(function(){
 				$(this).css("cursor", "progress");
 				$(this).removeClass("active-button");
 			  $(this).addClass("disabled-button");
-			  $(this).attr("href", $(this).attr("href") + "&url=" + $("#sw_url").attr("value"));
+			  $(this).attr("href", $(this).attr("href") + "&url=" + $("#sw_url").val());
 	    }
 		}else{
 			return false;
@@ -39,7 +39,7 @@ $(document).ready(function(){
 	});
 	
 	// Add comment links
-	$(".add-comment a").live("click", function(){
+	$(".add-comment a").on("click", function(){
 		if($(this).text() == "Add comment"){
 		  $(this).text("Remove comment");	
 		}else{
@@ -51,7 +51,7 @@ $(document).ready(function(){
 	});
 	
 	// Delete item links
-	$(".delete").live("click", function(){
+	$(".delete").on("click", function(){
 		$(this).parents("tr").remove();
 		update_item_list_numbers_and_classes();
 		show_changed($("#item_list_table"));
@@ -60,7 +60,7 @@ $(document).ready(function(){
 	});
 
   // form change hook
-  $("#reserve_form input:not(#sw_url), #reserve_form textarea, #reserve_form select").live("change", function(){
+  $("#reserve_form input:not(#sw_url), #reserve_form textarea, #reserve_form select").on("change", function(){
     check_validations();
   });
   
@@ -125,7 +125,7 @@ $(document).ready(function(){
   
   
   // enforce loan period on library change
-  $("select#libraries").live("change", function(){
+  $("select#libraries").on("change", function(){
   	  check_loan_period();
   });
   // enforce loan period on page load
