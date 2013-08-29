@@ -92,6 +92,7 @@ CourseReserves::Application.config.email_mapping = {
 }
 CourseReserves::Application.config.loan_periods = {
   "2HWF-RES"   => "2 hours",
+  "3HWF-RES"   => "3 hours",
   "4HWF-RES"   => "4 hours",
   "1DNDWF-RES" => "1 day",
   "2DWF-RES"   => "2 days",
