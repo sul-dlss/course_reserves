@@ -34,6 +34,7 @@
   				<tr class="<%= cycle("odd", "even") -%>">
   					<td><%= course.term -%></td>
   					<td><%= course.cid -%></td>
+            <%- # TODO: Create some sort of model method for the title of the course so we can fall back if there is no #desc -%>
   					<td><%= link_to(course.desc, edit_reserve_path(course[:id])) -%></td>
   					<td><%= course.instructor_names %></td>
   					<td><%= (course.sent_date.blank? or course.sent_date.nil?) ? "Not sent" : "Sent #{course.sent_date}" %></td>
