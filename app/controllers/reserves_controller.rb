@@ -191,13 +191,13 @@ class ReservesController < ApplicationController
               item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)} (was: #{translate_value_for_email(key, old_item[key])})\n"
             end
           end
-          item_text << "====================================\n"          
+          item_text << "------------------------------------\n"
         else
           item_text << "***ADDED ITEM***\n"
           new_item.each do |key,value|
             item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank?
           end
-          item_text << "====================================\n"
+          item_text << "------------------------------------\n"
         end
       end  
     end
@@ -206,7 +206,7 @@ class ReservesController < ApplicationController
       delete_item.each do |key,value|
         item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank?
       end
-      item_text << "====================================\n"
+      item_text << "------------------------------------\n"
     end
     item_text
   end
