@@ -10,7 +10,6 @@ task :fetch_xml => :environment do
   [coursework_url(term1),coursework_url(term2)].each do |url|
     cw_url = URI.parse(url)
     http = Net::HTTP.new(cw_url.host, cw_url.port)
-    http.use_ssl = true
     request = Net::HTTP::Get.new(cw_url.request_uri)
     response = http.request(request)
     if response.code == "200"
@@ -28,5 +27,5 @@ task :fetch_xml => :environment do
 end
 
 def coursework_url(term)
-  "https://coursework.stanford.edu/access/content/public/courseXML_#{term}.xml"
+  "http://coursework.stanford.edu/access/content/public/courseXML_#{term}.xml"
 end
