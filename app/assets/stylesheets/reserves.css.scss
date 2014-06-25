@@ -31,7 +31,7 @@ $data-header: #DDDDDD;
 }
 
 body {
-	background: url("/assets/body.png") repeat scroll 0 0 transparent;
+	background: image-url("body.png") repeat scroll 0 0 transparent;
 	font-family: Lucida Grande,Verdana,Arial,sans-serif;
 	font-size: 75%;
 	line-height: 1.5em;
@@ -55,13 +55,13 @@ a.active-button:hover {
   color: #FFFFFF;	
 }
 #wrapper {
-	background: url("/assets/wrapper.png") repeat-x scroll 0 0 transparent;
+	background: image-url("wrapper.png") repeat-x scroll 0 0 transparent;
 	text-align: center;
 	padding-top: 15px;
 }
 
 #container {
-	background: url("/assets/top-container.png") repeat-x scroll 0 0 #FFFFFF;
+	background: image-url("top-container.png") repeat-x scroll 0 0 #FFFFFF;
   border-radius: 3px 3px 3px 3px;
   border-top: 1px solid #FFFFFF;
 	margin: 0 auto;
@@ -321,7 +321,7 @@ a.disabled-button:hover {
 }
 .clone_dropdown {
 	display: inline-block;
-	background: url("/assets/dropbutton.png") no-repeat;
+	background: image-url("dropbutton.png") no-repeat;
 	width: 15px;
 	cursor: pointer;
 }
