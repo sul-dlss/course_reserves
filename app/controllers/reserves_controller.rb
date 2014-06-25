@@ -14,7 +14,7 @@ class ReservesController < ApplicationController
 
   def all_courses_response
     items = []
-    if CourseReserves::Application.config.super_sunets.include?(current_user)
+    if superuser?
       courses = CourseReserves::Application.config.courses.all_courses
     else
       courses = CourseReserves::Application.config.courses.find_by_sunet(current_user)
@@ -30,7 +30,7 @@ class ReservesController < ApplicationController
     reserve = Reserve.where(:compound_key => params[:comp_key]).order("updated_at DESC").first
     unless reserve.nil?
       editors = reserve.editors.map{|e| e[:sunetid] }.compact
-      if CourseReserves::Application.config.super_sunets.include?(current_user) or editors.include?(current_user)
+      if superuser? or editors.include?(current_user)
         redirect_to edit_reserve_path(reserve[:id]) and return
       else
         flash[:error] = "You are not the instructor for this course."
@@ -40,7 +40,7 @@ class ReservesController < ApplicationController
       course = CourseReserves::Application.config.courses.find_by_compound_key(params[:comp_key]).first
       unless course.blank?
         instructors = course[:instructors].map{|i| i[:sunet] }.compact.uniq
-        if !instructors.include?(current_user) and !CourseReserves::Application.config.super_sunets.include?(current_user)
+        if !instructors.include?(current_user) and !superuser?
           flash[:error] = "You are not the instructor for this course."
           redirect_to root_path
         end
@@ -72,7 +72,7 @@ class ReservesController < ApplicationController
   end
   
   def create
-    if CourseReserves::Application.config.super_sunets.include?(current_user) or params[:reserve][:instructor_sunet_ids].split(",").map{|sunet| sunet.strip }.include?(current_user)
+    if superuser? or params[:reserve][:instructor_sunet_ids].split(",").map{|sunet| sunet.strip }.include?(current_user)
       params[:reserve][:term] = current_term if params[:reserve][:immediate] == "true"
       @reserve = Reserve.create(params[:reserve])
       @reserve.save! 
@@ -86,7 +86,7 @@ class ReservesController < ApplicationController
   
   def edit    
     reserve = Reserve.find(params[:id])
-    if !CourseReserves::Application.config.super_sunets.include?(current_user) and !reserve.editors.map{|e| e[:sunetid] }.compact.include?(current_user)
+    if !superuser? and !reserve.editors.map{|e| e[:sunetid] }.compact.include?(current_user)
       flash[:error] = "You do not have permission to edit this course reserve list."
       redirect_to(root_path)
     end
@@ -119,7 +119,7 @@ class ReservesController < ApplicationController
   def clone
     original_reserves = Reserve.find_all_by_compound_key(params[:id])
     original_reserve = original_reserves.first
-    if original_reserves.map{|r| r.editors.map{|e| e[:sunetid]} }.compact.flatten.include?(current_user) or CourseReserves::Application.config.super_sunets.include?(current_user)
+    if original_reserves.map{|r| r.editors.map{|e| e[:sunetid]} }.compact.flatten.include?(current_user) or superuser?
       original_reserves.each do |og_res| 
         if og_res.term == params[:term]
           flash[:error] = "Course reserve list already exists for this course and term."
