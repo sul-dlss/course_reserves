@@ -27,7 +27,7 @@ set :deploy_to, '/home/reserves/course_reserves'
 set :linked_files, %w{config/database.yml config/secrets.yml config/initializers/environment_specific_settings.rb}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{bin log lib/course_work_xml tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
