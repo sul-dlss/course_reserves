@@ -147,31 +147,26 @@ class ReservesController < ApplicationController
   
   protected
   
+  def reserve_mail_address reserve
+    if CourseReserves::Application.config.respond_to?(:hardcoded_email_address) and CourseReserves::Application.config.hardcoded_email_address
+      CourseReserves::Application.config.hardcoded_email_address
+    else
+      "#{CourseReserves::Application.config.email_mapping[reserve.library]}, course-reserves-allforms@lists.stanford.edu"
+    end
+  end
+  
   def send_course_reserve_request(reserve)
     reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_item_list => params[:reserve][:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
     
-    if !request.env["HTTP_HOST"].nil? and request.env["HTTP_HOST"].include?("reserves") and !request.env["HTTP_HOST"].include?("-test")
-      address = "#{CourseReserves::Application.config.email_mapping[reserve.library]}, course-reserves-allforms@lists.stanford.edu"
-    elsif Rails.env.test?
-      address = "#{CourseReserves::Application.config.email_mapping[reserve.library]}, reserves-test@lists.stanford.edu"
-    else
-      address = "reserves-test@lists.stanford.edu"
-    end
-    
-    ReserveMail.first_request(reserve, address, current_user).deliver
+    ReserveMail.first_request(reserve, reserve_mail_address(reserve), current_user).deliver
   end
   
   def send_updated_reserve_request(reserve)
     old_reserve = reserve.dup
     reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_item_list => params[:reserve][:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
     diff_text = process_diff(old_reserve.sent_item_list, reserve.item_list)
-    
-    if !request.env["HTTP_HOST"].nil? and request.env["HTTP_HOST"].include?("reserves") and !request.env["HTTP_HOST"].include?("-test")
-      address = "#{CourseReserves::Application.config.email_mapping[reserve.library]}, course-reserves-allforms@lists.stanford.edu"
-    else
-      address = "reserves-test@lists.stanford.edu"
-    end
-    ReserveMail.updated_request(reserve, address, diff_text, current_user).deliver
+
+    ReserveMail.updated_request(reserve, reserve_mail_address(reserve), diff_text, current_user).deliver
   end
   
   def process_diff(old_reserve,new_reserve)
