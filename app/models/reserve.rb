@@ -24,7 +24,7 @@ class Reserve < ActiveRecord::Base
     
     unless self.instructor_sunet_ids.blank?
       self.instructor_sunet_ids.split(/,/).map{|i| i.strip}.each do |s|
-        ed = Editor.find_or_create_by_sunetid(s)
+        ed = Editor.find_or_create_by sunetid: s
         ed.save!
         editors << ed
       end
@@ -32,7 +32,7 @@ class Reserve < ActiveRecord::Base
     
     unless self.editor_sunet_ids.blank?
       self.editor_sunet_ids.split(/,/).map{|i| i.strip}.each do |s|
-        ed = Editor.find_or_create_by_sunetid(s)
+        ed = Editor.find_or_create_by sunetid: s
         ed.save!
         editors << ed
       end

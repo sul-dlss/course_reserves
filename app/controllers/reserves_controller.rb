@@ -72,9 +72,9 @@ class ReservesController < ApplicationController
   end
   
   def create
-    if superuser? or params[:reserve][:instructor_sunet_ids].split(",").map{|sunet| sunet.strip }.include?(current_user)
-      params[:reserve][:term] = current_term if params[:reserve][:immediate] == "true"
-      @reserve = Reserve.create(params[:reserve])
+    if superuser? or reserve_params[:instructor_sunet_ids].split(",").map{|sunet| sunet.strip }.include?(current_user)
+      reserve_params[:term] = current_term if reserve_params[:immediate] == "true"
+      @reserve = Reserve.create(reserve_params)
       @reserve.save! 
       send_course_reserve_request(@reserve) if params.has_key?(:send_request)
       redirect_to({ :controller => 'reserves', :action => 'edit', :id => @reserve[:id] }) 
@@ -96,28 +96,28 @@ class ReservesController < ApplicationController
   def update
     reserve = Reserve.find(params[:id])
     original_term = reserve.term
-    params[:reserve][:term] = current_term if params[:reserve][:immediate] == "true"
-    if params[:reserve][:term] != reserve.term
-      Reserve.find_all_by_compound_key(reserve.compound_key).each do |og_res|
-        if og_res[:id] != reserve[:id] and og_res.term == params[:reserve][:term]
+    reserve_params[:term] = current_term if reserve_params[:immediate] == "true"
+    if reserve_params[:term] != reserve.term
+      Reserve.where(compound_key: reserve.compound_key).find_each do |og_res|
+        if og_res[:id] != reserve[:id] and og_res.term == reserve_params[:term]
           flash[:error] = "Course reserve list already exists for this course and term. The term has not been saved."
-          params[:reserve][:term] = original_term
+          reserve_params[:term] = original_term
         end
       end
     end
-    params[:reserve][:item_list] = [] unless params[:reserve].has_key?(:item_list)
+    reserve_params[:item_list] = [] unless reserve_params.has_key?(:item_list)
     if params.has_key?(:send_request) and reserve.has_been_sent == true
       send_updated_reserve_request(reserve)
     elsif params.has_key?(:send_request) and (reserve.has_been_sent == false or reserve.has_been_sent.nil?)
       send_course_reserve_request(reserve)
     else
-      reserve.update_attributes(params[:reserve])
+      reserve.update_attributes(reserve_params)
     end
     redirect_to({ :controller => 'reserves', :action => 'edit', :id => params[:id] }) 
   end
   
   def clone
-    original_reserves = Reserve.find_all_by_compound_key(params[:id])
+    original_reserves = Reserve.where(compound_key: params[:id])
     original_reserve = original_reserves.first
     if original_reserves.map{|r| r.editors.map{|e| e[:sunetid]} }.compact.flatten.include?(current_user) or superuser?
       original_reserves.each do |og_res| 
@@ -156,14 +156,14 @@ class ReservesController < ApplicationController
   end
   
   def send_course_reserve_request(reserve)
-    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_item_list => params[:reserve][:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
+    reserve.update_attributes(reserve_params.merge(:has_been_sent => true, :sent_item_list => reserve_params[:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
     
     ReserveMail.first_request(reserve, reserve_mail_address(reserve), current_user).deliver
   end
   
   def send_updated_reserve_request(reserve)
     old_reserve = reserve.dup
-    reserve.update_attributes(params[:reserve].merge(:has_been_sent => true, :sent_item_list => params[:reserve][:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
+    reserve.update_attributes(reserve_params.merge(:has_been_sent => true, :sent_item_list => reserve_params[:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
     diff_text = process_diff(old_reserve.sent_item_list, reserve.item_list)
 
     ReserveMail.updated_request(reserve, reserve_mail_address(reserve), diff_text, current_user).deliver
@@ -236,6 +236,10 @@ class ReservesController < ApplicationController
   
   def searchworks_ckey_url ckey
     "http://searchworks.stanford.edu/view/#{ckey}"
+  end
+  
+  def reserve_params
+    params.require(:reserve).permit!    
   end
   
 end
