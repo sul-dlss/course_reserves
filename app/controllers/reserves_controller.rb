@@ -59,7 +59,7 @@ class ReservesController < ApplicationController
         elsif params[:sw]=='true'
           params[:item] = {} 
           ckey = params[:url].strip[/(\d+)$/]
-          url = "http://searchworks.stanford.edu/view/#{ckey}.mobile?covers=false&availability=false"
+          url = searchworks_ckey_url("#{ckey}.mobile?covers=false&availability=false")
           doc = Nokogiri::XML(Net::HTTP.get(URI.parse(url)))
           title = doc.xpath("//full_title").text
           format = doc.xpath("//formats/format").map{|x| x.text }
@@ -231,12 +231,16 @@ class ReservesController < ApplicationController
     elsif key.to_s == "loan_period"
       return CourseReserves::Application.config.loan_periods.key(value)
     elsif key.to_s == "ckey"
-      return "#{value} : http://searchworks.stanford.edu/view/#{value}"
+      return "#{value} : #{searchworks_ckey_url(value)}"
     elsif value.blank?
       return "blank"
     else
       return value
     end
+  end
+  
+  def searchworks_ckey_url ckey
+    "http://searchworks.stanford.edu/view/#{ckey}"
   end
   
 end
