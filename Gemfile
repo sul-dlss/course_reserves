@@ -22,10 +22,18 @@ end
 
 gem 'jquery-rails'
 
+# to be run on machines w/ sqlite3
+group :development, :test do
+  gem "sqlite3"
+end
+
+group :development do
+  gem "letter_opener"
+end
 
 group :test do
-  gem 'capybara', '1.1.2'
-  gem 'cucumber-rails', '1.2.1'
+  gem 'poltergeist'
+  gem 'capybara', ">= 2.2.0"
   gem 'rspec-rails'
   gem 'simplecov', :require => false
   gem 'database_cleaner'
@@ -36,14 +44,6 @@ group :mysql do
   gem "mysql"
 end
 
-# to be run on machines w/ sqlite3
-group :sqlite do
-  gem "sqlite3"
-end
-
-group :development do
-  gem "letter_opener"
-end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
