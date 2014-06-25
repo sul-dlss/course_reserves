@@ -19,20 +19,19 @@ describe ReservesController do
       r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"}))
       r.save!
       # rwmantov is in the super_sunet list as of the writing of this test.
-      controller.stub(:current_user).and_return("rwmantov")
-      r.editors.map{|e| e[:sunetid] }.include?("rwmantov").should be_false
+      controller.stub(superuser?: true)
+      expect(r.editors.map{|e| e[:sunetid] }).to_not include("jdoe")
       get :new, {:comp_key => "CID1,user_sunet"}
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
     it "should let you create a new course if you are a super user" do
-      # rwmantov is in the super_sunet list as of the writing of this test.
-      controller.stub(:current_user).and_return("rwmantov")
+      controller.stub(superuser?: true)
       get :new, {:comp_key => "AFRICAAM-165E,EDUC-237X,ETHICSOC-165E,123,456"}
       response.should be_success  
       course = assigns(:course)
       course[:cid].should == "EDUC-237X"
       course[:title].should == "Residential Racial Segregation and the Education of African-American Youth"
-      course[:instructors].map{|i| i[:sunet] }.include?("456").should be_true
+      expect(course[:instructors].map{|i| i[:sunet] }).to include("456")
     end
     it "should let you create a new course if you are the professor" do
       controller.stub(:current_user).and_return("123")
@@ -40,7 +39,7 @@ describe ReservesController do
       response.should be_success
       course = assigns(:course)
       course[:cid].should == "AA-272C"
-      course[:instructors].map{|i| i[:sunet] }.include?("123").should be_true
+      expect(course[:instructors].map{|i| i[:sunet] }).to include("456")
     end
     it "should not let you create a course that you don't have permisisons to" do
       get :new, {:comp_key => "AA-272C,123,456"}
@@ -58,8 +57,7 @@ describe ReservesController do
       response.should redirect_to(edit_reserve_path(r[:id]))
     end
     it "should allow you to create an item if you are a super sunet" do
-      # rwmantov is in the super_sunet list as of the writing of this test.
-      controller.stub(:current_user).and_return("rwmantov")
+      controller.stub(superuser?: true)
       post :create, :reserve => @reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"})
       r = assigns(:reserve)
       r.cid.should == "EDUC-237X"
@@ -90,8 +88,7 @@ describe ReservesController do
       assigns(:reserve).should == r
     end
     it "should allow you to get to the edit screen if you are an super sunet" do
-      # rwmantov is in the super_sunet list as of the writing of this test.
-      controller.stub(:current_user).and_return("rwmantov")
+      controller.stub(superuser?: true)
       r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
       r.save!
       get :edit, :id => r[:id]
@@ -160,8 +157,7 @@ describe ReservesController do
       response.should redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should allow you to clone an item if you are an super user" do
-      # rwmantov is in the super_sunet list as of the writing of this test.
-      controller.stub(:current_user).and_return("rwmantov")
+      controller.stub(superuser?: true)
       r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
       r.save!
       get :clone, :id => r.compound_key, :term => future_terms.first
@@ -211,13 +207,12 @@ describe ReservesController do
   
   describe "all_courses" do
     it "should return parsable JSON of all courses for a super user" do
-      # rwmantov is in the super_sunet list as of the writing of this test.
-      controller.stub(:current_user).and_return("rwmantov")
+      controller.stub(superuser?: true)
       get :all_courses_response
       response.should be_success
       body = JSON.parse(response.body)
       body.keys.length.should == 1
-      body.has_key?("aaData").should be_true
+      expect(body).to have_key("aaData")
       body["aaData"].length.should == 7
       body["aaData"].each do |item|
         item.length.should == 3
@@ -229,7 +224,7 @@ describe ReservesController do
       response.should be_success
       body = JSON.parse(response.body)
       body.keys.length.should == 1
-      body.has_key?("aaData").should be_true
+      expect(body).to have_key("aaData")
       body["aaData"].length.should == 2
       body["aaData"].each do |item|
         item.length.should == 3
@@ -240,7 +235,7 @@ describe ReservesController do
       response.should be_success
       body = JSON.parse(response.body)
       body.keys.length.should == 1
-      body.has_key?("aaData").should be_true
+      expect(body).to have_key("aaData")
       body["aaData"].should be_blank
     end
   end
@@ -252,10 +247,10 @@ describe ReservesController do
         r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet", :library=>"ENG-RESV"}))
         r.save!
         mail = controller.send(:send_course_reserve_request, r)
-        mail.to.should == ["englibrary@stanford.edu", "reserves-test@lists.stanford.edu"]
+        mail.to.should == ["englibrary@stanford.edu", "course-reserves-allforms@lists.stanford.edu"]
         controller.params[:reserve] = {:library=>"GREEN-RESV"}
         mail = controller.send(:send_course_reserve_request, r)
-        mail.to.should == ["greenreserves@stanford.edu", "reserves-test@lists.stanford.edu"]
+        mail.to.should == ["greenreserves@stanford.edu", "course-reserves-allforms@lists.stanford.edu"]
         r.library.should == "GREEN-RESV"
       end
 

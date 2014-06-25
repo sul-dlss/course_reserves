@@ -34,7 +34,7 @@ describe "SymphonyImport" do
       fields_hash ={:reserve_desk=>"GREEN-RESV", :resctl_expire_date=>"20120323", :loan_period=>"2H", :course_id=>"AMSTUD-160", :course_name=>"Perspectives on American Identity", :term=>"WINTER", :instructor_lib_id=>"2555460971", :instructor_univ_id=>"01157452", :instructor_name=>"Gillam, Richard A", :instructor_sunet_id=>"rgillam", :item_title=>"White collar; the American middle classes."} 
       courses = @si_class.add_to_courses( courses, key, fields_hash )
       courses.length.should == 1
-      courses.has_key?("AMSTUD-160-rgillam").should be_true
+      expect(courses).to have_key("AMSTUD-160-rgillam")
     end
   end
   
@@ -45,8 +45,8 @@ describe "SymphonyImport" do
       fields_hash ={:reserve_desk=>"GREEN-RESV", :resctl_expire_date=>"20120323", :loan_period=>"2H", :course_id=>"AMSTUD-114N", :course_name=>"The American 1960s: Thought, Protest, and Culture", :term=>"WINTER", :instructor_lib_id=>"2555460971", :instructor_univ_id=>"01157452", :instructor_name=>"Gillam, Richard A", :instructor_sunet_id=>"rgillam", :item_title=>"Why we can't wait"} 
       courses = @si_class.add_to_courses( courses, key, fields_hash )
       courses.length.should == 2
-      courses.has_key?("AMSTUD-160-rgillam").should be_true
-      courses.has_key?("AMSTUD-114N-rgillam").should be_true
+      expect(courses).to have_key("AMSTUD-160-rgillam")
+      expect(courses).to have_key("AMSTUD-114N-rgillam")
     end
   end
 

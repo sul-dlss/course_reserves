@@ -8,7 +8,7 @@ describe "CourseWorkCourses" do
   describe "loading raw XML" do
     it "should be a Nokogiri XML Document" do
       @courses.raw_xml.each do |xml|
-        xml.is_a?(Nokogiri::XML::Document).should be_true
+        expect(xml).to be_a_kind_of(Nokogiri::XML::Document)
       end
     end
     it "should load XML when provided on object initialization" do
@@ -99,7 +99,7 @@ describe "CourseWorkCourses" do
         course.first[:title].should == "Residential Racial Segregation and the Education of African-American Youth"
         course.first[:cid].should == "EDUC-237X"
         course.first[:sid].should == "01"
-        course.first[:instructors].map{|i| i[:sunet] }.include?("123").should be_true
+        expect(course.first[:instructors].map{|i| i[:sunet] }).to include("123")
       end
       it "should return blank when the class id does not exist" do
         @courses.find_by_class_id_and_section_and_sunet("DOES-NOT-EXIST", "01", "123").should be_blank

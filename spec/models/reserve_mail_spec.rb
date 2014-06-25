@@ -9,7 +9,7 @@ describe ReserveMail do
       email = ReserveMail.first_request(Reserve.create(@reserve_params), "test@example.com", "jdoe")
       body = email.body.raw_source
       email.subject.should  == "New Reserve Form: CID1-SID1 - Spring 2010"
-      email.to.include?("test@example.com").should be_true
+      expect(email.to).to include("test@example.com")
       body.should match(/CID1-SID1/)
       body.should match(/Instructor Name\(s\): Doe, John, Doe, Jon/)
       body.should match(/Instructor SUNet ID\(s\): jdoe, jondoe/)
@@ -36,7 +36,7 @@ describe ReserveMail do
       email = ReserveMail.updated_request(Reserve.create(@reserve_params), "test@example.com", "DiffText", "jdoe")
       body = email.body.raw_source
       email.subject.should  == "Updated Reserve Form: CID1-SID1 - Spring 2010"
-      email.to.include?("test@example.com").should be_true
+      expect(email.to).to include("test@example.com")
       body.should match(/CID1-SID1/)
       body.should match(/CID1-SID1/)
       body.should match(/Instructor Name\(s\): Doe, John, Doe, Jon/)
