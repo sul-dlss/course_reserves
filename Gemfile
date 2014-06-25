@@ -41,6 +41,10 @@ group :sqlite do
   gem "sqlite3"
 end
 
+group :development do
+  gem "letter_opener"
+end
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
