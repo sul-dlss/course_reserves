@@ -1,8 +1,5 @@
-desc "rake task to run course reserves test suite" 
+require 'rspec/core/rake_task'
 
-task :ci do |t|
-  rm_rf "coverage"
-  puts %x[rspec]
-  Rake::Task["cucumber"].invoke
+RSpec::Core::RakeTask.new(:spec)
 
-end
+task :default => :spec
