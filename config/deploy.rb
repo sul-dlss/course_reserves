@@ -3,10 +3,16 @@ lock '3.2.1'
 
 set :rvm_ruby_version, '1.9.3-p448'      # Defaults to: 'default'
 set :application, 'course_reserves'
-set :repo_url, 'https://github.com/sul-dlss/course_reserves.git'
+set :repo_url, 'git@github.com:sul-dlss/course_reserves.git'
+
+set :ssh_options, {
+  keys: [Capistrano::OneTimeKey.temporary_ssh_private_key_path],
+  forward_agent: true,
+  auth_methods: %w(publickey password)
+}
 
 # Default branch is :master
-ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+#ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/home/reserves/course_reserves'
