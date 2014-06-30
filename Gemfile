@@ -19,6 +19,8 @@ gem 'coffee-rails', '~> 4.0.0'
 
 gem 'jquery-rails'
 
+gem 'whenever', "~> 0.9"
+
 # to be run on machines w/ sqlite3
 group :development, :test do
   gem "sqlite3"
