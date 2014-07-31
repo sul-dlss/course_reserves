@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   helper_method(:current_user)
 
   def superuser?
-    Rails.env.production? ? request.env["WEBAUTH_LDAPPRIVGROUP"].include?("sulair:course-resv-admins") : Rails.env.development?
+    Rails.env.production? ? request.env["WEBAUTH_LDAPPRIVGROUP"] && request.env["WEBAUTH_LDAPPRIVGROUP"].include?("sulair:course-resv-admins") : Rails.env.development?
   end
 
 end
