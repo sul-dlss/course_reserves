@@ -41,9 +41,10 @@ end
 # to be run on machines w/ mysql
 group :production do
   gem "mysql"
-  gem 'squash_ruby', require: 'squash/ruby'
-  gem 'squash_rails', require: 'squash/rails'
 end
+
+gem 'squash_ruby', require: 'squash/ruby'
+gem 'squash_rails', require: 'squash/rails'
 
 group :deployment do
   gem 'capistrano', '~> 3.0'
