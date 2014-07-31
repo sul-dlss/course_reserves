@@ -41,6 +41,8 @@ set :linked_dirs, %w{bin log lib/course_work_xml tmp/pids tmp/cache tmp/sockets 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+before 'deploy:publishing', 'squash:write_revision'
+
 namespace :deploy do
 
   desc 'Restart application'
