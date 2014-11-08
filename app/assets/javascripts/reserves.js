@@ -37,9 +37,9 @@ $(document).ready(function(){
 	$("#add_custom").click(function(){
 		$("body").css("cursor", "progress");
 	});
-	
+
 	// Add comment links
-	$(".add-comment a").on("click", function(){
+	$("body").on("click", ".add-comment", function(){
 		if($(this).text() == "Add comment"){
 		  $(this).text("Remove comment");	
 		}else{
@@ -47,11 +47,11 @@ $(document).ready(function(){
 		}
 		$(this).parents("td").children("textarea").toggle();
 		$(this).parents("td").children("textarea").val("");
-		return false;
+    return false;
 	});
 	
 	// Delete item links
-	$(".delete").on("click", function(){
+	$("body").on("click", ".delete", function(){
 		$(this).parents("tr").remove();
 		update_item_list_numbers_and_classes();
 		show_changed($("#item_list_table"));
