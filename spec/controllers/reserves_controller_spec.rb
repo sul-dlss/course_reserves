@@ -27,7 +27,7 @@ describe ReservesController do
     it "should let you create a new course if you are a super user" do
       allow(controller).to receive_messages(superuser?: true)
       get :new, {:comp_key => "AFRICAAM-165E,EDUC-237X,ETHICSOC-165E,123,456"}
-      expect(response).to be_success  
+      expect(response).to be_success
       course = assigns(:course)
       expect(course[:cid]).to eq("EDUC-237X")
       expect(course[:title]).to eq("Residential Racial Segregation and the Education of African-American Youth")
@@ -47,7 +47,7 @@ describe ReservesController do
       expect(flash[:error]).to eq("You are not the instructor for this course.")
     end
   end
-  
+
   describe "create" do
     it "should allow you to create an item if you are the instructor" do
       allow(controller).to receive(:current_user).and_return("user_sunet")
@@ -77,7 +77,7 @@ describe ReservesController do
       expect(flash[:error]).to eq("You do not have permission to create this course reserve list.")
     end
   end
-  
+
   describe "edit" do
     it "should allow you to get to the edit screen if you are an editor if the item" do
       allow(controller).to receive(:current_user).and_return("user_sunet")
@@ -104,7 +104,7 @@ describe ReservesController do
       expect(flash[:error]).to eq("You do not have permission to edit this course reserve list.")
     end
   end
-  
+
   describe "update" do
     it "should clear out the item_list if no item_list params is in the URL" do
       r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :item_list => [{:ckey => "item1"}]}))
@@ -147,7 +147,7 @@ describe ReservesController do
       expect(Reserve.find(r[:id]).sent_item_list).to eq([{"ckey"=>"12345"}, {"ckey"=>"54321"}])
     end
   end
-  
+
   describe "clone" do
     it "should allow you to clone an item if you are an existing editor" do
       allow(controller).to receive(:current_user).and_return("user_sunet")
@@ -190,7 +190,7 @@ describe ReservesController do
       expect(flash[:error]).to eq("You do not have permission to clone this course reserve list.")
     end
   end
-  
+
   describe "index" do
     it "should return reserves for a user when they have them" do
       r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid => "SID1", :instructor_sunet_ids => "user_sunet"}))
@@ -204,7 +204,7 @@ describe ReservesController do
       expect(my_reserves.first.sid).to eq("SID1")
     end
   end
-  
+
   describe "all_courses" do
     it "should return parsable JSON of all courses for a super user" do
       allow(controller).to receive_messages(superuser?: true)
@@ -239,7 +239,7 @@ describe ReservesController do
       expect(body["aaData"]).to be_blank
     end
   end
-  
+
   describe "email sending contoller methods" do
     describe "send_course_reserve_request" do
       it "should use the most updates reserve information to determine the TO address for emails" do
@@ -256,7 +256,7 @@ describe ReservesController do
 
     end
   end
-  
+
   describe "protected methods" do
     describe "email diff" do
       it "should return new items added to the item list" do
@@ -264,7 +264,7 @@ describe ReservesController do
         new_item_list = [{"ckey" => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey"=>"54321", "title"=>"SecondTitle", "copies"=>"1"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/ADDED ITEM/)
-        expect(diff_item_list).to match(/CKey: 54321 : http:\/\/searchworks.stanford.edu\/view\/54321/)
+        expect(diff_item_list).to match(/CKey: 54321 : https:\/\/searchworks.stanford.edu\/view\/54321/)
         expect(diff_item_list).not_to match(/EDITED ITEM/)
         expect(diff_item_list).not_to match(/DELETED ITEM/)
       end
@@ -273,7 +273,7 @@ describe ReservesController do
         new_item_list = [{"ckey" => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey" => "54321", "title"=>"SecondTitle", "copies"=>"2"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/EDITED ITEM/)
-        expect(diff_item_list).to match(/CKey: 54321 : http:\/\/searchworks.stanford.edu\/view\/54321/)
+        expect(diff_item_list).to match(/CKey: 54321 : https:\/\/searchworks.stanford.edu\/view\/54321/)
         expect(diff_item_list).to match(/Copies: 2 \(was: 1\)/)
         expect(diff_item_list).not_to match(/ADDED ITEM/)
         expect(diff_item_list).not_to match(/DELETED ITEM/)
@@ -283,7 +283,7 @@ describe ReservesController do
         new_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/DELETED ITEM/)
-        expect(diff_item_list).to match(/CKey: 54321 : http:\/\/searchworks.stanford.edu\/view\/54321/)
+        expect(diff_item_list).to match(/CKey: 54321 : https:\/\/searchworks.stanford.edu\/view\/54321/)
         expect(diff_item_list).to match(/Title: ToBeDeleted/)
         expect(diff_item_list).not_to match(/ADDED ITEM/)
         expect(diff_item_list).not_to match(/EDITED ITEM/)
@@ -293,7 +293,7 @@ describe ReservesController do
         new_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey"=>"34567", "title"=>"ThirdTitle", "copies"=>"1"}, {"ckey"=>"23456", "title"=>"ChangedTitle", "copies"=>"1"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/EDITED ITEM/)
-        expect(diff_item_list).to match(/CKey: 23456 : http:\/\/searchworks.stanford.edu\/view\/23456/)
+        expect(diff_item_list).to match(/CKey: 23456 : https:\/\/searchworks.stanford.edu\/view\/23456/)
         expect(diff_item_list).to match(/Title: ChangedTitle \(was: SecondTitle\)/)
         expect(diff_item_list).not_to match(/ADDED ITEM/)
         expect(diff_item_list).not_to match(/DELETED ITEM/)
@@ -308,7 +308,7 @@ describe ReservesController do
         expect(diff_item_list).not_to match(/ADDED ITEM/)
         expect(diff_item_list).not_to match(/DELETED ITEM/)
       end
-      
+
       it "should not return unchanged items from the item list" do
         old_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}]
         new_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}]
@@ -316,6 +316,6 @@ describe ReservesController do
         expect(diff_item_list).to be_blank
       end
     end
-    
+
   end
 end
