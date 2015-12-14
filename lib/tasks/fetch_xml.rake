@@ -15,7 +15,7 @@ task :fetch_xml => :environment do
     if response.code == "200"
       file_name = url[/public\/(.*)$/,1]
       File.open("#{Rails.root}/lib/course_work_xml/#{file_name}", "w") do |f|
-        f.write(response.body)
+        f.write(response.body.to_s.force_encoding('UTF-8'))
       end
       updated = true
     else
