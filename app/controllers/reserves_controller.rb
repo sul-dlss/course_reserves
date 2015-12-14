@@ -7,7 +7,7 @@ class ReservesController < ApplicationController
     editor = Editor.find_by_sunetid(current_user)
     @my_reserves = editor.nil? ? [] : editor.reserves.order("updated_at DESC")
   end
-  
+
   def all_courses
     render :layout => false if request.xhr?
   end
@@ -25,7 +25,7 @@ class ReservesController < ApplicationController
     end
     render :json => {"aaData" => items}.to_json, :layout => false
   end
-  
+
   def new
     reserve = Reserve.where(:compound_key => params[:comp_key]).order("updated_at DESC").first
     unless reserve.nil?
@@ -49,18 +49,18 @@ class ReservesController < ApplicationController
     end
   end
 
-  
+
   def add_item
     respond_to do |format|
       format.js do
         params[:index] = 0
         if params[:sw]=='false'
-          params[:item] = {}       
+          params[:item] = {}
         elsif params[:sw]=='true'
-          params[:item] = {} 
+          params[:item] = {}
           ckey = params[:url].strip[/(\d+)$/]
           url = searchworks_ckey_url("#{ckey}.mobile?covers=false&availability=false")
-          doc = Nokogiri::XML(Net::HTTP.get(URI.parse(url)))
+          doc = Nokogiri::XML(Faraday.get(url).body)
           title = doc.xpath("//full_title").text
           format = doc.xpath("//formats/format").map{|x| x.text }
           render :text => "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();" and return if title.blank?
@@ -70,21 +70,21 @@ class ReservesController < ApplicationController
       end
     end
   end
-  
+
   def create
     if superuser? or reserve_params[:instructor_sunet_ids].split(",").map{|sunet| sunet.strip }.include?(current_user)
       reserve_params[:term] = current_term if reserve_params[:immediate] == "true"
       @reserve = Reserve.create(reserve_params)
-      @reserve.save! 
+      @reserve.save!
       send_course_reserve_request(@reserve) if params.has_key?(:send_request)
-      redirect_to({ :controller => 'reserves', :action => 'edit', :id => @reserve[:id] }) 
+      redirect_to({ :controller => 'reserves', :action => 'edit', :id => @reserve[:id] })
     else
       flash[:error] = "You do not have permission to create this course reserve list."
       redirect_to(root_path)
     end
   end
-  
-  def edit    
+
+  def edit
     reserve = Reserve.find(params[:id])
     if !superuser? and !reserve.editors.map{|e| e[:sunetid] }.compact.include?(current_user)
       flash[:error] = "You do not have permission to edit this course reserve list."
@@ -92,7 +92,7 @@ class ReservesController < ApplicationController
     end
     @reserve = reserve
   end
-  
+
   def update
     reserve = Reserve.find(params[:id])
     original_term = reserve.term
@@ -113,14 +113,14 @@ class ReservesController < ApplicationController
     else
       reserve.update_attributes(reserve_params)
     end
-    redirect_to({ :controller => 'reserves', :action => 'edit', :id => params[:id] }) 
+    redirect_to({ :controller => 'reserves', :action => 'edit', :id => params[:id] })
   end
-  
+
   def clone
     original_reserves = Reserve.where(compound_key: params[:id])
     original_reserve = original_reserves.first
     if original_reserves.map{|r| r.editors.map{|e| e[:sunetid]} }.compact.flatten.include?(current_user) or superuser?
-      original_reserves.each do |og_res| 
+      original_reserves.each do |og_res|
         if og_res.term == params[:term]
           flash[:error] = "Course reserve list already exists for this course and term."
           redirect_to edit_reserve_path(og_res[:id]) and return
@@ -139,14 +139,14 @@ class ReservesController < ApplicationController
       redirect_to(root_path)
     end
   end
-  
+
   def show
     @reserve = Reserve.find(params[:id])
   end
-  
-  
+
+
   protected
-  
+
   def reserve_mail_address reserve
     if CourseReserves::Application.config.respond_to?(:hardcoded_email_address) and CourseReserves::Application.config.hardcoded_email_address
       CourseReserves::Application.config.hardcoded_email_address
@@ -154,13 +154,13 @@ class ReservesController < ApplicationController
       "#{CourseReserves::Application.config.email_mapping[reserve.library]}, course-reserves-allforms@lists.stanford.edu"
     end
   end
-  
+
   def send_course_reserve_request(reserve)
     reserve.update_attributes(reserve_params.merge(:has_been_sent => true, :sent_item_list => reserve_params[:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
-    
+
     ReserveMail.first_request(reserve, reserve_mail_address(reserve), current_user).deliver
   end
-  
+
   def send_updated_reserve_request(reserve)
     old_reserve = reserve.dup
     reserve.update_attributes(reserve_params.merge(:has_been_sent => true, :sent_item_list => reserve_params[:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
@@ -168,14 +168,14 @@ class ReservesController < ApplicationController
 
     ReserveMail.updated_request(reserve, reserve_mail_address(reserve), diff_text, current_user).deliver
   end
-  
+
   def process_diff(old_reserve,new_reserve)
     total_reserves = []
     item_text = ""
     new_reserve.each_with_index do |new_item, index|
       total_reserves << new_item
       unless old_reserve.include?(new_item)
-        old_item = old_reserve.map{|item| item if (item["ckey"].blank? and item["comment"] == new_item["comment"]) or (!item["ckey"].blank? and item["ckey"] == new_item["ckey"])}.compact.first        
+        old_item = old_reserve.map{|item| item if (item["ckey"].blank? and item["comment"] == new_item["comment"]) or (!item["ckey"].blank? and item["ckey"] == new_item["ckey"])}.compact.first
         unless old_item.blank?
           total_reserves << old_item
           item_text << "***EDITED ITEM***\n"
@@ -194,7 +194,7 @@ class ReservesController < ApplicationController
           end
           item_text << "------------------------------------\n"
         end
-      end  
+      end
     end
     (old_reserve - total_reserves).each do |delete_item|
       item_text << "***DELETED ITEM***\n"
@@ -205,11 +205,11 @@ class ReservesController < ApplicationController
     end
     item_text
   end
-  
+
   def translate_key_for_email(key)
     return translations[key.to_s]
   end
-  
+
   def translations
     {"title" => "Title: ",
      "ckey" => "CKey: ",
@@ -217,9 +217,9 @@ class ReservesController < ApplicationController
      "loan_period" => "Circ rule: ",
      "copies" => "Copies: ",
      "purchase" => "Purchase this item? ",
-     "personal" => "Is there a personal copy available? "}    
+     "personal" => "Is there a personal copy available? "}
   end
-  
+
   def translate_value_for_email(key, value)
     if value == "true"
       return "yes"
@@ -233,13 +233,13 @@ class ReservesController < ApplicationController
       return value
     end
   end
-  
+
   def searchworks_ckey_url ckey
-    "http://searchworks.stanford.edu/view/#{ckey}"
+    "https://searchworks.stanford.edu/view/#{ckey}"
   end
-  
+
   def reserve_params
-    params.require(:reserve).permit!    
+    params.require(:reserve).permit!
   end
-  
+
 end
