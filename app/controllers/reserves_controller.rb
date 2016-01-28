@@ -148,10 +148,10 @@ class ReservesController < ApplicationController
   protected
 
   def reserve_mail_address reserve
-    if CourseReserves::Application.config.respond_to?(:hardcoded_email_address) and CourseReserves::Application.config.hardcoded_email_address
-      CourseReserves::Application.config.hardcoded_email_address
+    if Settings.email.hardcoded_email_address
+      Settings.email.hardcoded_email_address
     else
-      "#{CourseReserves::Application.config.email_mapping[reserve.library]}, course-reserves-allforms@lists.stanford.edu"
+      "#{CourseReserves::Application.config.email_mapping[reserve.library]}, #{Settings.email.allforms}"
     end
   end
 
