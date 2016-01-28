@@ -57,6 +57,8 @@ group :deployment do
   gem 'dlss-capistrano', '~> 3.0'
 end
 
+gem 'config'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

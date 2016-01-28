@@ -19,10 +19,10 @@ task :fetch_xml => :environment do
       errors << "#{url} returned #{response.status}\n"
     end
   end
-  Report.msg(:to=>"searchworks-reports@lists.stanford.edu", :subject => "Problem downloading XML file(s) from CourseWork", :message => errors).deliver_now unless errors.blank?
+  Report.msg(:to=> Settings.email.reports, :subject => "Problem downloading XML file(s) from CourseWork", :message => errors).deliver_now unless errors.blank?
   %x[touch tmp/restart.txt] if updated
 end
 
 def coursework_url(term)
-  "https://bodoni.stanford.edu/coursereserves/courseXML_#{term}.xml"
+  Settings.courseworks.coursexml_url % { term: term }
 end

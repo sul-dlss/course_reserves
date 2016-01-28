@@ -78,7 +78,11 @@ GEM
       execjs
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.0)
+    config (1.0.0)
+      activesupport (>= 3.0)
+      deep_merge (~> 1.0.0)
     database_cleaner (1.5.1)
+    deep_merge (1.0.1)
     diff-lcs (1.2.5)
     dlss-capistrano (3.2.0)
       capistrano (~> 3.0)
@@ -225,6 +229,7 @@ DEPENDENCIES
   capistrano-rails
   capybara (>= 2.2.0)
   coffee-rails (~> 4.1.0)
+  config
   database_cleaner
   dlss-capistrano (~> 3.0)
   faraday

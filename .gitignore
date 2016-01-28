@@ -22,3 +22,6 @@ coverage
 
 # Ignoring CourseWork XML
 /lib/course_work_xml/*.xml
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml
