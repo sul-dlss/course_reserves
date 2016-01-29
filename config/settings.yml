@@ -19,3 +19,6 @@ email_mapping:
   "MEDIA-RESV": "mediamicro@stanford.edu"
   "MUSIC-RESV": "muslibcirc@stanford.edu"
   "SCI-RESV": "sciencelibrary@stanford.edu"
+
+workgroups:
+  superuser: sulair:course-resv-admins
