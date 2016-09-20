@@ -14,19 +14,19 @@ CourseReserves::Application.config.reserve_libraries = {
   "MEDIA-RESV" => "Media & Microtext (Green)",
   "MUSIC-RESV" => "Music Library"
 }
-CourseReserves::Application.config.email_mapping = { 
+CourseReserves::Application.config.email_mapping = {
   "ART-RESV" => "artlibrary@stanford.edu",
-  "BIO-RESV" => "falconerlibrary@stanford.edu, zeynepb@stanford.edu, jshen@stanford.edu",
+  "BIO-RESV" => "falconerlibrary@stanford.edu",
   "BUS-RESV" => "gsb_library-i-desk@stanford.edu",
   "CHEM-RESV" => "swainlibrary@stanford.edu",
   "EARTH-RESV" => "brannerlibrary@stanford.edu",
   "EAS-RESV" => "eastasialibrary@stanford.edu",
-  "EDU-RESV" => "cubberley@stanford.edu, kells@stanford.edu, eshelton@stanford.edu",
+  "EDU-RESV" => "cubberley@stanford.edu",
   "ENG-RESV" => "englibrary@stanford.edu",
   "GREEN-RESV" => "greenreserves@stanford.edu",
   "HOP-RESV" => "hms-library@mailman.stanford.edu",
   "LAW-RESV" => "crowncirc@lists.stanford.edu",
-  "MATH-RESV" => "mathstatlibrary@stanford.edu, zeynepb@stanford.edu, jshen@stanford.edu",
+  "MATH-RESV" => "mathstatlibrary@stanford.edu",
   "MEDIA-RESV" => "mediamicro@stanford.edu",
   "MUSIC-RESV" => "muslibcirc@stanford.edu"
 }
