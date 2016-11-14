@@ -13,7 +13,7 @@ task :fetch_xml => :environment do
     request = Net::HTTP::Get.new(cw_url.request_uri)
     response = http.request(request)
     if response.code == "200"
-      file_name = url[/public\/(.*)$/,1]
+      file_name = url[/coursereserves\/(.*)$/,1]
       File.open("#{Rails.root}/lib/course_work_xml/#{file_name}", "w") do |f|
         f.write(response.body.to_s.force_encoding('UTF-8'))
       end
@@ -27,5 +27,5 @@ task :fetch_xml => :environment do
 end
 
 def coursework_url(term)
-  "http://coursework.stanford.edu/access/content/public/courseXML_#{term}.xml"
+  "http://bodoni.stanford.edu/coursereserves/courseXML_#{term}.xml"
 end
