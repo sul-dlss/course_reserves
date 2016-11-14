@@ -1,6 +1,3 @@
-# config valid only for Capistrano 3.1
-lock '3.4.1'
-
 set :rvm_ruby_version, '1.9.3-p448'      # Defaults to: 'default'
 set :application, 'course_reserves'
 set :repo_url, 'git@github.com:sul-dlss/course_reserves.git'
