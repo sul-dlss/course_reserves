@@ -1,8 +1,6 @@
 CourseReserves::Application.config.reserve_libraries = {
   "ART-RESV" => "Art & Architecture (Bowes)",
-  "BIO-RESV" => "Biology (Falconer)",
   "BUS-RESV" => "Business",
-  "CHEM-RESV" => "Chemistry & ChemEng (Swain)",
   "EARTH-RESV" => "Earth Sciences (Branner)",
   "EAS-RESV" => "East Asia",
   "EDU-RESV" => "Education (Cubberley)",
@@ -10,16 +8,13 @@ CourseReserves::Application.config.reserve_libraries = {
   "GREEN-RESV" => "Green",
   "HOP-RESV" => "Marine Biology (Miller)",
   "LAW-RESV" => "Law (Crown)",
-  "MATH-RESV" => "Math & Statistics",
   "MEDIA-RESV" => "Media & Microtext Center",
   "MUSIC-RESV" => "Music"
   "SCI-RESV" => "Science (Li and Ma)"
 }
 CourseReserves::Application.config.email_mapping = {
   "ART-RESV" => "artlibrary@stanford.edu",
-  "BIO-RESV" => "falconerlibrary@stanford.edu",
   "BUS-RESV" => "gsb_library-i-desk@stanford.edu",
-  "CHEM-RESV" => "swainlibrary@stanford.edu",
   "EARTH-RESV" => "brannerlibrary@stanford.edu",
   "EAS-RESV" => "eastasialibrary@stanford.edu",
   "EDU-RESV" => "cubberley@stanford.edu",
@@ -27,7 +22,6 @@ CourseReserves::Application.config.email_mapping = {
   "GREEN-RESV" => "greenreserves@stanford.edu",
   "HOP-RESV" => "hms-library@mailman.stanford.edu",
   "LAW-RESV" => "crowncirc@lists.stanford.edu",
-  "MATH-RESV" => "mathstatlibrary@stanford.edu",
   "MEDIA-RESV" => "mediamicro@stanford.edu",
   "MUSIC-RESV" => "muslibcirc@stanford.edu"
 }
