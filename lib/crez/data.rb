@@ -9,7 +9,7 @@ CourseReserves::Application.config.reserve_libraries = {
   "HOP-RESV" => "Marine Biology Library (Miller)",
   "LAW-RESV" => "Law Library (Crown)",
   "MEDIA-RESV" => "Media & Microtext Center",
-  "MUSIC-RESV" => "Music Library"
+  "MUSIC-RESV" => "Music Library",
   "SCI-RESV" => "Science Library (Li and Ma)"
 }
 CourseReserves::Application.config.email_mapping = {
@@ -23,7 +23,8 @@ CourseReserves::Application.config.email_mapping = {
   "HOP-RESV" => "hms-library@mailman.stanford.edu",
   "LAW-RESV" => "crowncirc@lists.stanford.edu",
   "MEDIA-RESV" => "mediamicro@stanford.edu",
-  "MUSIC-RESV" => "muslibcirc@stanford.edu"
+  "MUSIC-RESV" => "muslibcirc@stanford.edu",
+  "SCI-RESV" => "swainlibrary@stanford.edu"
 }
 CourseReserves::Application.config.loan_periods = {
   "2HWF-RES"   => "2 hours",
