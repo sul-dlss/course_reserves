@@ -1,16 +1,16 @@
 CourseReserves::Application.config.reserve_libraries = {
-  "ART-RESV" => "Art & Architecture (Bowes)",
-  "BUS-RESV" => "Business",
-  "EARTH-RESV" => "Earth Sciences (Branner)",
-  "EAS-RESV" => "East Asia",
-  "EDU-RESV" => "Education (Cubberley)",
-  "ENG-RESV" => "Engineering (Terman)",
-  "GREEN-RESV" => "Green",
-  "HOP-RESV" => "Marine Biology (Miller)",
-  "LAW-RESV" => "Law (Crown)",
+  "ART-RESV" => "Art & Architecture Library (Bowes)",
+  "BUS-RESV" => "Business Library",
+  "EARTH-RESV" => "Earth Sciences Library (Branner)",
+  "EAS-RESV" => "East Asia Library",
+  "EDU-RESV" => "Education Library (Cubberley)",
+  "ENG-RESV" => "Engineering Library (Terman)",
+  "GREEN-RESV" => "Green Library",
+  "HOP-RESV" => "Marine Biology Library (Miller)",
+  "LAW-RESV" => "Law Library (Crown)",
   "MEDIA-RESV" => "Media & Microtext Center",
-  "MUSIC-RESV" => "Music"
-  "SCI-RESV" => "Science (Li and Ma)"
+  "MUSIC-RESV" => "Music Library"
+  "SCI-RESV" => "Science Library (Li and Ma)"
 }
 CourseReserves::Application.config.email_mapping = {
   "ART-RESV" => "artlibrary@stanford.edu",
