@@ -24,7 +24,7 @@ CourseReserves::Application.config.email_mapping = {
   "LAW-RESV" => "crowncirc@lists.stanford.edu",
   "MEDIA-RESV" => "mediamicro@stanford.edu",
   "MUSIC-RESV" => "muslibcirc@stanford.edu",
-  "SCI-RESV" => "swainlibrary@stanford.edu"
+  "SCI-RESV" => "sciencelibrary@stanford.edu"
 }
 CourseReserves::Application.config.loan_periods = {
   "2HWF-RES"   => "2 hours",
