@@ -36,7 +36,7 @@ end
 group :test do
   gem 'poltergeist'
   gem 'capybara', ">= 2.2.0"
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.5', '>= 3.5.2'
   gem 'simplecov', :require => false
   gem 'database_cleaner'
 end
