@@ -15,7 +15,7 @@ node {
   stage('Test') {
     sh '''#!/bin/bash -l
     rvm use 2.2.4@course_reserves
-    bundle exec rake
+    exit 1
     '''
   }
 }
