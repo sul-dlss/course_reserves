@@ -1,0 +1,13 @@
+rvm:
+  - '2.2.4'
+
+notifications:
+  email: false
+
+env:
+  global:
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+
+sudo: false
+language: ruby
+
