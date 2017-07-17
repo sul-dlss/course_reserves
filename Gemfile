@@ -24,6 +24,9 @@ gem 'jquery-rails'
 
 gem 'whenever', "~> 0.9"
 
+# Use honeybadger for exception reporting
+gem 'honeybadger'
+
 # to be run on machines w/ sqlite3
 group :development, :test do
   gem "sqlite3"
