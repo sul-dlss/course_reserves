@@ -27,5 +27,5 @@ task :fetch_xml => :environment do
 end
 
 def coursework_url(term)
-  "http://bodoni.stanford.edu/coursereserves/courseXML_#{term}.xml"
+  "https://bodoni.stanford.edu/coursereserves/courseXML_#{term}.xml"
 end
