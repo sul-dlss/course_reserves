@@ -24,6 +24,9 @@ gem 'jquery-rails'
 
 gem 'whenever', "~> 0.9"
 
+# Use honeybadger for exception reporting
+gem 'honeybadger'
+
 # to be run on machines w/ sqlite3
 group :development, :test do
   gem "sqlite3"
@@ -45,9 +48,6 @@ end
 group :production do
   gem "mysql2", '~> 0.3.20'
 end
-
-gem 'squash_ruby', require: 'squash/ruby'
-gem 'squash_rails', require: 'squash/rails'
 
 group :deployment do
   gem 'capistrano', '~> 3.0'
