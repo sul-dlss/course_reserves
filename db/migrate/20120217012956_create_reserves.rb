@@ -1,4 +1,4 @@
-class CreateReserves < ActiveRecord::Migration
+class CreateReserves < ActiveRecord::Migration[4.2]
   def up
     create_table :reserves do |t|
       t.string :cid
