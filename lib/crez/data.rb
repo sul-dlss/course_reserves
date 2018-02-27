@@ -12,20 +12,8 @@ CourseReserves::Application.config.reserve_libraries = {
   "MUSIC-RESV" => "Music Library",
   "SCI-RESV" => "Science Library (Li and Ma)"
 }
-CourseReserves::Application.config.email_mapping = {
-  "ART-RESV" => "artlibrary@stanford.edu",
-  "BUS-RESV" => "gsb_library-i-desk@stanford.edu",
-  "EARTH-RESV" => "brannerlibrary@stanford.edu",
-  "EAS-RESV" => "eastasialibrary@stanford.edu",
-  "EDU-RESV" => "cubberley@stanford.edu",
-  "ENG-RESV" => "englibrary@stanford.edu",
-  "GREEN-RESV" => "greenreserves@stanford.edu",
-  "HOP-RESV" => "hms-library@mailman.stanford.edu",
-  "LAW-RESV" => "crowncirc@lists.stanford.edu",
-  "MEDIA-RESV" => "mediamicro@stanford.edu",
-  "MUSIC-RESV" => "muslibcirc@stanford.edu",
-  "SCI-RESV" => "sciencelibrary@stanford.edu"
-}
+CourseReserves::Application.config.email_mapping = Settings.email_mapping.to_h.stringify_keys
+
 CourseReserves::Application.config.loan_periods = {
   "2HWF-RES"   => "2 hours",
   "3HWF-RES"   => "3 hours",

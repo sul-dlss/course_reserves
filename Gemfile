@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.16'
+gem 'rails', '4.2.10'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -11,18 +11,21 @@ gem 'nokogiri'
 gem 'faraday'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.2'
+gem 'sass-rails', '~> 5.0'
 
 # Use Uglifier as compressor for JavaScript assets
 # >= 2.7.2 due to vulnerability
 gem 'uglifier', '>= 2.7.2'
 
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
+gem 'coffee-rails', '~> 4.1.0'
 
 gem 'jquery-rails'
 
 gem 'whenever', "~> 0.9"
+
+# Use honeybadger for exception reporting
+gem 'honeybadger'
 
 # to be run on machines w/ sqlite3
 group :development, :test do
@@ -43,19 +46,18 @@ end
 
 # to be run on machines w/ mysql
 group :production do
-  gem "mysql"
+  gem "mysql2", '~> 0.3.20'
 end
-
-gem 'squash_ruby', require: 'squash/ruby'
-gem 'squash_rails', require: 'squash/rails'
 
 group :deployment do
   gem 'capistrano', '~> 3.0'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
-  gem 'capistrano-rvm'
-  gem 'dlss-capistrano'
+  gem 'capistrano-passenger'
+  gem 'dlss-capistrano', '~> 3.0'
 end
+
+gem 'config'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
