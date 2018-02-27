@@ -5,9 +5,9 @@
 		<%- unless @reserve.disabled -%>
   		<input type="submit" id="save" value="Save draft" class="active-button">
   		<%- if @reserve.has_been_sent -%>
-  		  <input type="submit" name="send_request" value="Sent <%= @reserve.sent_date %>" class="disabled-button" id="send" disabled="true"> 	
+  		  <input type="submit" name="send_request" value="Sent <%= @reserve.sent_date %>" class="disabled-button" id="send" disabled="true">
   		<%- else -%>
-    	  <input type="submit" name="send_request" value="Send request" class="disabled-button" id="send" disabled="true"> 	
+    	  <input type="submit" name="send_request" value="Save and SEND request" class="disabled-button" id="send" disabled="true"> 	
     	<%- end -%>
     	<%= link_to "Cancel [discard changes]" -%>
 		<%- end -%>
