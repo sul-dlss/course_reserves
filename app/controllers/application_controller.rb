@@ -2,8 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   def current_user
-    if env['REMOTE_USER']
-      env['REMOTE_USER']
+    if request.env['REMOTE_USER']
+      request.env['REMOTE_USER']
     elsif Rails.env.development? && ENV['REMOTE_USER']
       ENV['REMOTE_USER']
     end
@@ -15,8 +15,8 @@ class ApplicationController < ActionController::Base
   end
 
   def privgroups
-    if env['WEBAUTH_LDAPPRIVGROUP']
-      env['WEBAUTH_LDAPPRIVGROUP'].split('|')
+    if request.env['WEBAUTH_LDAPPRIVGROUP']
+      request.env['WEBAUTH_LDAPPRIVGROUP'].split('|')
     elsif Rails.env.development? && ENV['WEBAUTH_LDAPPRIVGROUP']
       ENV['WEBAUTH_LDAPPRIVGROUP'].split('|')
     else
