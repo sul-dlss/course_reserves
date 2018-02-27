@@ -1,5 +1,5 @@
 class ReserveMail < ActionMailer::Base
-  default from: "no-reply@reserves.stanford.edu"
+  default from: Settings.email.from
   
   def first_request(reserve, address, current_user)
     @reserve = reserve

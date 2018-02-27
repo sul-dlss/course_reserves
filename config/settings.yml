@@ -1,0 +1,24 @@
+courseworks:
+  coursexml_url: "https://bodoni.stanford.edu/coursereserves/courseXML_%{term}.xml"
+
+email:
+  from: "no-reply@reserves.stanford.edu"
+  reports: "searchworks-reports@lists.stanford.edu"
+  allforms: "course-reserves-allforms@lists.stanford.edu"
+
+email_mapping:
+  "ART-RESV": "artlibrary@stanford.edu"
+  "BUS-RESV": "gsb_library-i-desk@stanford.edu"
+  "EARTH-RESV": "brannerlibrary@stanford.edu"
+  "EAS-RESV": "eastasialibrary@stanford.edu"
+  "EDU-RESV": "cubberley@stanford.edu"
+  "ENG-RESV": "englibrary@stanford.edu"
+  "GREEN-RESV": "greenreserves@stanford.edu"
+  "HOP-RESV": "hms-library@mailman.stanford.edu"
+  "LAW-RESV": "crowncirc@lists.stanford.edu"
+  "MEDIA-RESV": "mediamicro@stanford.edu"
+  "MUSIC-RESV": "muslibcirc@stanford.edu"
+  "SCI-RESV": "sciencelibrary@stanford.edu"
+
+workgroups:
+  superuser: sulair:course-resv-admins

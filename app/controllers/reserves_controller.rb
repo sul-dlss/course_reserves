@@ -148,17 +148,17 @@ class ReservesController < ApplicationController
   protected
 
   def reserve_mail_address reserve
-    if CourseReserves::Application.config.respond_to?(:hardcoded_email_address) and CourseReserves::Application.config.hardcoded_email_address
-      CourseReserves::Application.config.hardcoded_email_address
+    if Settings.email.hardcoded_email_address
+      Settings.email.hardcoded_email_address
     else
-      "#{CourseReserves::Application.config.email_mapping[reserve.library]}, course-reserves-allforms@lists.stanford.edu"
+      "#{CourseReserves::Application.config.email_mapping[reserve.library]}, #{Settings.email.allforms}"
     end
   end
 
   def send_course_reserve_request(reserve)
     reserve.update_attributes(reserve_params.merge(:has_been_sent => true, :sent_item_list => reserve_params[:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
 
-    ReserveMail.first_request(reserve, reserve_mail_address(reserve), current_user).deliver
+    ReserveMail.first_request(reserve, reserve_mail_address(reserve), current_user).deliver_now
   end
 
   def send_updated_reserve_request(reserve)
@@ -166,7 +166,7 @@ class ReservesController < ApplicationController
     reserve.update_attributes(reserve_params.merge(:has_been_sent => true, :sent_item_list => reserve_params[:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
     diff_text = process_diff(old_reserve.sent_item_list, reserve.item_list)
 
-    ReserveMail.updated_request(reserve, reserve_mail_address(reserve), diff_text, current_user).deliver
+    ReserveMail.updated_request(reserve, reserve_mail_address(reserve), diff_text, current_user).deliver_now
   end
 
   def process_diff(old_reserve,new_reserve)

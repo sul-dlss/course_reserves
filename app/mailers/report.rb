@@ -1,5 +1,5 @@
 class Report < ActionMailer::Base
-  default from: "no-reply@reserves.stanford.edu"
+  default from: Settings.email.from
   
   def msg(opts={})
     @txt = opts[:message] || ""
