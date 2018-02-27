@@ -3,7 +3,7 @@
 	<td>
 		<% if item_in_searchworks?(item) %>
   		<p><%= item["title"] -%> </p>
-  		<p><%= link_to "http://searchworks.stanford.edu/view/#{item["ckey"]}", "http://searchworks.stanford.edu/view/#{item["ckey"]}" -%></p>
+  		<p><%= link_to "http://searchworks.stanford.edu/view/#{item["ckey"]}", "http://searchworks.stanford.edu/view/#{item["ckey"]}", rel: 'noopener', target: '_blank' -%></p>
   	<%- end -%>
   	<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
   	<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
