@@ -74,7 +74,7 @@ describe Reserve do
     it "should serialize the item list" do 
       reserve = Reserve.create( @reserve_params.merge({ :cid => 'test_cid', :item_list => [{ :title => 'My Title' }] }) )
       reserve.save!
-      expect(reserve[:item_list]).to eq([{ :title => 'My Title' }])
+      expect(reserve[:item_list].first[:title]).to eq('My Title')
     end 
     
     it "should throw an error for TypeMismatch when we serialize the item list with a hash" do 
