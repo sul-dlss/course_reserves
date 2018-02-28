@@ -1,10 +1,9 @@
 require "terms"
 require 'faraday'
-include Terms
 desc "rake task to fetch XML from CourseWork"
 task :fetch_xml => :environment do
-  term1 = process_term_for_cw(current_term)
-  term2 = process_term_for_cw(future_terms.first)
+  term1 = Terms.process_term_for_cw(Terms.current_term)
+  term2 = Terms.process_term_for_cw(Terms.future_terms.first)
   errors = ""
   updated = false
   [coursework_url(term1),coursework_url(term2)].each do |url|

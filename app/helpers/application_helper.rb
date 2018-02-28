@@ -1,6 +1,5 @@
 require 'terms'
 module ApplicationHelper
-  include Terms
   def item_in_searchworks?(item)
     if params[:sw] == "true" or ( item.has_key?("ckey") and !item["ckey"].blank? )
       true
@@ -13,4 +12,11 @@ module ApplicationHelper
     CourseReserves::Application.config
   end
   
+  def current_term
+    Terms.current_term
+  end
+
+  def future_terms(*args)
+    Terms.future_terms(*args)
+  end
 end
