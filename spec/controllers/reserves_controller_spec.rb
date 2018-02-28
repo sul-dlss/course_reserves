@@ -68,7 +68,7 @@ RSpec.describe ReservesController do
       allow(controller).to receive(:current_user).and_return("user_sunet")
       post :create, :params => { :reserve => reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"}) }
       r = assigns[:reserve]
-      expect(r.term).to eq(current_term)
+      expect(r.term).to eq(Terms.current_term)
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
     end
     it "should redirecto the home page if the user does not have access to create this reserve list" do
@@ -130,7 +130,7 @@ RSpec.describe ReservesController do
       r.save!
       get :update, :params => {:id=>r[:id], :reserve => reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"})}
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
-      expect(Reserve.find(r[:id]).term).to eq(current_term)
+      expect(Reserve.find(r[:id]).term).to eq(Terms.current_term)
     end
     it "should properly assign the sent_item_list for unsent items" do
       res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}]}
@@ -154,24 +154,24 @@ RSpec.describe ReservesController do
       allow(controller).to receive(:current_user).and_return("user_sunet")
       r = Reserve.create(reserve_params.merge(:cid=>"CID1", :compound_key => "CID1,user_sunet", :sid => "01", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :params => { :id => r.compound_key, :term => future_terms.first }
+      get :clone, :params => { :id => r.compound_key, :term => Terms.future_terms.first }
       expect(response).to redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should allow you to clone an item if you are an super user" do
       allow(controller).to receive_messages(superuser?: true)
       r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :params => { :id => r.compound_key, :term => future_terms.first }
+      get :clone, :params => { :id => r.compound_key, :term => Terms.future_terms.first }
       expect(response).to redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should transfer editor relationships to new object" do
       allow(controller).to receive(:current_user).and_return("user_sunet")
       r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term=> "Spring 2010", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :params => { :id => r.compound_key, :term => future_terms.first }
+      get :clone, :params => { :id => r.compound_key, :term => Terms.future_terms.first }
       expect(response).to redirect_to(edit_reserve_path((r[:id] + 1).to_s))
       cloned_reserve = Reserve.find((r[:id] + 1).to_s)
-      expect(cloned_reserve.term).to eq(future_terms.first)
+      expect(cloned_reserve.term).to eq(Terms.future_terms.first)
       expect(cloned_reserve.editors.length).to eq(1)
       expect(cloned_reserve.editors.map{|e| e[:sunetid]}).to eq(["user_sunet"])
     end
@@ -186,7 +186,7 @@ RSpec.describe ReservesController do
     it "should not allow you to clone an item that you are not an editor of" do
       r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :params => { :id => r.compound_key, :term => future_terms.first }
+      get :clone, :params => { :id => r.compound_key, :term => Terms.future_terms.first }
       expect(response).to redirect_to(root_path)
       expect(flash[:error]).to eq("You do not have permission to clone this course reserve list.")
     end

@@ -1,7 +1,6 @@
 require 'nokogiri'
 require 'terms'
 class CourseWorkCourses
-  include Terms
   def initialize(xml=nil)
     if xml
       @raw_xml = [Nokogiri::XML(xml)]
@@ -60,8 +59,8 @@ class CourseWorkCourses
     if Rails.env.test?
       return [Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))]
     else
-      current = process_term_for_cw(current_term)
-      next_term = process_term_for_cw(future_terms.first)
+      current = Terms.process_term_for_cw(Terms.current_term)
+      next_term = Terms.process_term_for_cw(Terms.future_terms.first)
       xml = []
       ["#{Rails.root}/lib/course_work_xml/courseXML_#{current}.xml", "#{Rails.root}/lib/course_work_xml/courseXML_#{next_term}.xml"].each do |url|
         xml << Nokogiri::XML(File.open(url, 'r')) if File.exists?(url)
