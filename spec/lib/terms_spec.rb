@@ -2,19 +2,19 @@ require 'spec_helper'
 require 'terms'
 
 RSpec.describe Terms do
-  subject(:terms) { (Class.new do; include Terms; end).new }
+  subject(:terms) { Terms }
 
   describe "current_term_hash" do
     it "should return the appropriate term in the middle of a term" do
-      term = terms.current_term_hash(Date.new(2017, 7, 10))
+      term = terms.send(:current_term_hash, Date.new(2017, 7, 10))
       expect(term[:term]).to eq("Summer 2017")
     end
     it "should return the appropriate term on the last day of the quarter" do
-      term = terms.current_term_hash(Date.new(2018, 3, 23))
+      term = terms.send(:current_term_hash, Date.new(2018, 3, 23))
       expect(term[:term]).to eq("Winter 2018")
     end
     it "should return the appropriate term on the first day of the quarter" do
-      term = terms.current_term_hash(Date.new(2018, 3, 24))
+      term = terms.send(:current_term_hash, Date.new(2018, 3, 24))
       expect(term[:term]).to eq("Spring 2018")
     end
   end
