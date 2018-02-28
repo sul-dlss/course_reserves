@@ -1,33 +1,34 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'terms'
-describe ReservesController do
+
+RSpec.describe ReservesController do
   include Terms
-  before(:each) do
-    @reserve_params = {:library => "Green", :immediate=>"true", :contact_name => "John Doe", :contact_phone=>"(555)555-5555", :contact_email=>"jdoe@example.com"}
+  let(:reserve_params) do
+    {:library => "Green", :immediate=>"true", :contact_name => "John Doe", :contact_phone=>"(555)555-5555", :contact_email=>"jdoe@example.com"}
   end
-  describe "new" do
+  describe "GET new" do
     it "should redirect to an existing course list if it exists and the current user is an editor" do
-      r1 = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "02", :compound_key => "CID1,another_sunet" , :instructor_sunet_ids => "another_sunet", :term => "Winter 2012"}))
+      r1 = Reserve.create(reserve_params.merge({:cid => "CID1", :sid => "02", :compound_key => "CID1,another_sunet" , :instructor_sunet_ids => "another_sunet", :term => "Winter 2012"}))
       r1.save!
-      r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"}))
+      r = Reserve.create(reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"}))
       r.save!
       allow(controller).to receive(:current_user).and_return("user_sunet")
-      get :new, {:comp_key => "CID1,user_sunet"}
+      get :new, :params => {:comp_key => "CID1,user_sunet"}
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
     end
     it "should redirect to an existing course list if it exists and the current user is a super user" do
-      r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"}))
+      r = Reserve.create(reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"}))
       r.save!
       # rwmantov is in the super_sunet list as of the writing of this test.
       allow(controller).to receive_messages(superuser?: true)
       expect(r.editors.map{|e| e[:sunetid] }).to_not include("jdoe")
-      get :new, {:comp_key => "CID1,user_sunet"}
+      get :new, :params => {:comp_key => "CID1,user_sunet"}
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
     end
     it "should let you create a new course if you are a super user" do
       allow(controller).to receive_messages(superuser?: true)
-      get :new, {:comp_key => "AFRICAAM-165E,EDUC-237X,ETHICSOC-165E,123,456"}
-      expect(response).to be_success
+      get :new, :params => {:comp_key => "AFRICAAM-165E,EDUC-237X,ETHICSOC-165E,123,456"}
+      expect(response).to be_successful
       course = assigns(:course)
       expect(course[:cid]).to eq("EDUC-237X")
       expect(course[:title]).to eq("Residential Racial Segregation and the Education of African-American Youth")
@@ -35,139 +36,139 @@ describe ReservesController do
     end
     it "should let you create a new course if you are the professor" do
       allow(controller).to receive(:current_user).and_return("123")
-      get :new, {:comp_key => "AA-272C,123,456"}
-      expect(response).to be_success
+      get :new, :params => {:comp_key => "AA-272C,123,456"}
+      expect(response).to be_successful
       course = assigns(:course)
       expect(course[:cid]).to eq("AA-272C")
       expect(course[:instructors].map{|i| i[:sunet] }).to include("456")
     end
     it "should not let you create a course that you don't have permisisons to" do
-      get :new, {:comp_key => "AA-272C,123,456"}
+      get :new, :params => {:comp_key => "AA-272C,123,456"}
       expect(response).to redirect_to(root_path)
       expect(flash[:error]).to eq("You are not the instructor for this course.")
     end
   end
 
-  describe "create" do
+  describe "POST create" do
     it "should allow you to create an item if you are the instructor" do
       allow(controller).to receive(:current_user).and_return("user_sunet")
-      post :create, :reserve => @reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"})
+      post :create, :params => { :reserve => reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"}) }
       r = assigns(:reserve)
       expect(r.cid).to eq("EDUC-237X")
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
     end
     it "should allow you to create an item if you are a super sunet" do
       allow(controller).to receive_messages(superuser?: true)
-      post :create, :reserve => @reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"})
+      post :create, :params => { :reserve => reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"}) }
       r = assigns(:reserve)
       expect(r.cid).to eq("EDUC-237X")
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
     end
     it "should save the configured current term when immediate is selected" do
       allow(controller).to receive(:current_user).and_return("user_sunet")
-      post :create, :reserve => @reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"})
+      post :create, :params => { :reserve => reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"}) }
       r = assigns[:reserve]
       expect(r.term).to eq(current_term)
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
     end
     it "should redirecto the home page if the user does not have access to create this reserve list" do
       allow(controller).to receive(:current_user).and_return("cannot_edit")
-      post :create, :reserve => @reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"})
+      post :create, :params => { :reserve => reserve_params.merge({:cid => "EDUC-237X", :sid=>"02", :term => "Winter 2012", :instructor_sunet_ids => "prof_a, user_sunet"}) }
       expect(response).to redirect_to(root_path)
       expect(flash[:error]).to eq("You do not have permission to create this course reserve list.")
     end
   end
 
-  describe "edit" do
+  describe "GET edit" do
     it "should allow you to get to the edit screen if you are an editor if the item" do
       allow(controller).to receive(:current_user).and_return("user_sunet")
-      r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
+      r = Reserve.create(reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
       r.save!
-      get :edit, :id => r[:id]
-      expect(response).to be_success
+      get :edit, :params => { :id => r[:id] }
+      expect(response).to be_successful
       expect(assigns(:reserve)).to eq(r)
     end
     it "should allow you to get to the edit screen if you are an super sunet" do
       allow(controller).to receive_messages(superuser?: true)
-      r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
+      r = Reserve.create(reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
       r.save!
-      get :edit, :id => r[:id]
-      expect(response).to be_success
+      get :edit, :params => { :id => r[:id] }
+      expect(response).to be_successful
       expect(assigns(:reserve)).to eq(r)
     end
     it "should redirect if the user does not have permissions to edit the reserve" do
       allow(controller).to receive(:current_user).and_return("some_user")
-      r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
+      r = Reserve.create(reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
       r.save!
-      get :edit, :id => r[:id]
+      get :edit, :params => { :id => r[:id] }
       expect(response).to redirect_to(root_path)
       expect(flash[:error]).to eq("You do not have permission to edit this course reserve list.")
     end
   end
 
-  describe "update" do
+  describe "GET update" do
     it "should clear out the item_list if no item_list params is in the URL" do
-      r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :item_list => [{:ckey => "item1"}]}))
+      r = Reserve.create(reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :item_list => [{:ckey => "item1"}]}))
       r.save!
       expect(r.item_list.length).to eq(1)
-      get :update, {:id => r[:id], :reserve => {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"}}
+      get :update, :params => {:id => r[:id], :reserve => {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet"}}
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
       expect(Reserve.find(r[:id]).item_list).to be_blank
     end
     it "should not allow you to update a reserve w/ a term that already has a record in the database" do
-      r1 = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term => "Spring 2012", :instructor_sunet_ids => "user_sunet"}))
-      r2 = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term => "Summer 2012", :instructor_sunet_ids => "user_sunet"}))
+      r1 = Reserve.create(reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term => "Spring 2012", :instructor_sunet_ids => "user_sunet"}))
+      r2 = Reserve.create(reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term => "Summer 2012", :instructor_sunet_ids => "user_sunet"}))
       r1.save!
       r2.save!
-      get :update, {:id => r2[:id], :reserve => {:cid => "CID1", :sid => "01", :term => "Spring 2012"}}
+      get :update, :params => {:id => r2[:id], :reserve => {:cid => "CID1", :sid => "01", :term => "Spring 2012"}}
       expect(response).to redirect_to(edit_reserve_path(r2[:id]))
       expect(Reserve.find(r2[:id]).term).to eq("Summer 2012")
       expect(flash[:error]).to eq("Course reserve list already exists for this course and term. The term has not been saved.")
     end
     it "should save the configured current term when immediate is selected" do
-      r = Reserve.create(@reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"}))
+      r = Reserve.create(reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"}))
       r.save!
-      get :update, {:id=>r[:id], :reserve => @reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"})}
+      get :update, :params => {:id=>r[:id], :reserve => reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"})}
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
       expect(Reserve.find(r[:id]).term).to eq(current_term)
     end
     it "should properly assign the sent_item_list for unsent items" do
       res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}]}
-      r = Reserve.create(@reserve_params.merge(res))
+      r = Reserve.create(reserve_params.merge(res))
       r.save!
       expect(r.sent_item_list).to be_blank
-      get :update, {:id=>r[:id], :send_request=>"true", :reserve=>res}
+      get :update, :params => {:id=>r[:id], :send_request=>"true", :reserve=>res}
       expect(Reserve.find(r[:id]).sent_item_list).to eq([{"ckey"=>"12345"}])
     end
     it "should properly assign the sent_item-list for sent items" do
       res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}], :has_been_sent=>true, :sent_item_list=>[{"ckey"=>"12345"}]}
-      r = Reserve.create(@reserve_params.merge(res))
+      r = Reserve.create(reserve_params.merge(res))
       r.save!
-      get :update, {:id=>r[:id], :send_request=>"true", :reserve=>res.merge({:item_list=>[{"ckey"=>"12345"}, {"ckey"=>"54321"}]})}
+      get :update, :params => {:id=>r[:id], :send_request=>"true", :reserve=>res.merge({:item_list=>[{"ckey"=>"12345"}, {"ckey"=>"54321"}]})}
       expect(Reserve.find(r[:id]).sent_item_list).to eq([{"ckey"=>"12345"}, {"ckey"=>"54321"}])
     end
   end
 
-  describe "clone" do
+  describe "GET clone" do
     it "should allow you to clone an item if you are an existing editor" do
       allow(controller).to receive(:current_user).and_return("user_sunet")
-      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :compound_key => "CID1,user_sunet", :sid => "01", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :compound_key => "CID1,user_sunet", :sid => "01", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r.compound_key, :term => future_terms.first
+      get :clone, :params => { :id => r.compound_key, :term => future_terms.first }
       expect(response).to redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should allow you to clone an item if you are an super user" do
       allow(controller).to receive_messages(superuser?: true)
-      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r.compound_key, :term => future_terms.first
+      get :clone, :params => { :id => r.compound_key, :term => future_terms.first }
       expect(response).to redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should transfer editor relationships to new object" do
       allow(controller).to receive(:current_user).and_return("user_sunet")
-      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term=> "Spring 2010", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term=> "Spring 2010", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r.compound_key, :term => future_terms.first
+      get :clone, :params => { :id => r.compound_key, :term => future_terms.first }
       expect(response).to redirect_to(edit_reserve_path((r[:id] + 1).to_s))
       cloned_reserve = Reserve.find((r[:id] + 1).to_s)
       expect(cloned_reserve.term).to eq(future_terms.first)
@@ -176,28 +177,28 @@ describe ReservesController do
     end
     it "should redirect you to an existing course if you try to clone a course w/ the same term" do
       allow(controller).to receive(:current_user).and_return("user_sunet")
-      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :term=> "Spring 2010", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :term=> "Spring 2010", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r.compound_key, :term => "Spring 2010"
+      get :clone, :params => { :id => r.compound_key, :term => "Spring 2010" }
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
       expect(flash[:error]).to eq("Course reserve list already exists for this course and term.")
     end
     it "should not allow you to clone an item that you are not an editor of" do
-      r = Reserve.create(@reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
       r.save!
-      get :clone, :id => r.compound_key, :term => future_terms.first
+      get :clone, :params => { :id => r.compound_key, :term => future_terms.first }
       expect(response).to redirect_to(root_path)
       expect(flash[:error]).to eq("You do not have permission to clone this course reserve list.")
     end
   end
 
-  describe "index" do
+  describe "GET index" do
     it "should return reserves for a user when they have them" do
-      r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid => "SID1", :instructor_sunet_ids => "user_sunet"}))
+      r = Reserve.create(reserve_params.merge({:cid=>"CID1", :sid => "SID1", :instructor_sunet_ids => "user_sunet"}))
       r.save!
       allow(controller).to receive(:current_user).and_return("user_sunet")
       get :index
-      expect(response).to be_success
+      expect(response).to be_successful
       my_reserves = assigns(:my_reserves)
       expect(my_reserves.length).to eq(1)
       expect(my_reserves.first.cid).to eq("CID1")
@@ -205,11 +206,11 @@ describe ReservesController do
     end
   end
 
-  describe "all_courses" do
+  describe "GET all_courses" do
     it "should return parsable JSON of all courses for a super user" do
       allow(controller).to receive_messages(superuser?: true)
       get :all_courses_response
-      expect(response).to be_success
+      expect(response).to be_successful
       body = JSON.parse(response.body)
       expect(body.keys.length).to eq(1)
       expect(body).to have_key("aaData")
@@ -221,7 +222,7 @@ describe ReservesController do
     it "should return parsible JSON of the courese that you are an instructor for" do
       allow(controller).to receive(:current_user).and_return("456")
       get :all_courses_response
-      expect(response).to be_success
+      expect(response).to be_successful
       body = JSON.parse(response.body)
       expect(body.keys.length).to eq(1)
       expect(body).to have_key("aaData")
@@ -232,7 +233,7 @@ describe ReservesController do
     end
     it "should not return any courses if you are not a super user and you don't have any courses in the XML" do
       get :all_courses_response
-      expect(response).to be_success
+      expect(response).to be_successful
       body = JSON.parse(response.body)
       expect(body.keys.length).to eq(1)
       expect(body).to have_key("aaData")
@@ -244,7 +245,7 @@ describe ReservesController do
     describe "send_course_reserve_request" do
       it "should use the most updates reserve information to determine the TO address for emails" do
         allow(controller).to receive_messages :reserve_params => {}
-        r = Reserve.create(@reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet", :library=>"ENG-RESV"}))
+        r = Reserve.create(reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet", :library=>"ENG-RESV"}))
         r.save!
         mail = controller.send(:send_course_reserve_request, r)
         expect(mail.to).to eq(["englibrary@stanford.edu", "course-reserves-allforms@lists.stanford.edu"])
