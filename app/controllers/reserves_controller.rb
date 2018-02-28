@@ -2,7 +2,7 @@ require 'net/http'
 require 'nokogiri'
 require 'terms'
 class ReservesController < ApplicationController
-  load_and_authorize_resource except: [:new, :create, :clone]
+  load_and_authorize_resource except: [:new, :clone]
   skip_authorize_resource only: :index
   skip_load_resource only: :index
 
@@ -65,9 +65,6 @@ class ReservesController < ApplicationController
 
   # Raising our own CanCan::AccessDenied here because we also let courses be created by the SUNet IDs in the course XML
   def create
-    reserve_params[:term] = Terms.current_term if reserve_params[:immediate] == 'true'
-    @reserve = Reserve.new(reserve_params)
-    authorize! :create, @reserve
     @reserve.save!
 
     send_course_reserve_request(@reserve) if params.has_key?(:send_request)
@@ -79,13 +76,10 @@ class ReservesController < ApplicationController
   def update
     reserve = @reserve
     original_term = reserve.term
-    reserve_params[:term] = Terms.current_term if reserve_params[:immediate] == "true"
     if reserve_params[:term] != reserve.term
-      Reserve.where(compound_key: reserve.compound_key).find_each do |og_res|
-        if og_res[:id] != reserve[:id] and og_res.term == reserve_params[:term]
-          flash[:error] = "Course reserve list already exists for this course and term. The term has not been saved."
-          reserve_params[:term] = original_term
-        end
+      if Reserve.where(compound_key: reserve.compound_key, term: reserve_params[:term]).where.not(id: reserve.id).any?
+        flash[:error] = "Course reserve list already exists for this course and term. The term has not been saved."
+        reserve_params[:term] = original_term
       end
     end
     reserve_params[:item_list] = [] unless reserve_params.has_key?(:item_list)
@@ -114,7 +108,6 @@ class ReservesController < ApplicationController
     reserve.disabled = nil
     reserve.sent_date = nil
     reserve.term = params[:term]
-    reserve.immediate = nil
     reserve.save!
     redirect_to(edit_reserve_path(reserve[:id]))
   end
