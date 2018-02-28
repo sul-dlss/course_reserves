@@ -38,3 +38,6 @@ set :linked_dirs, %w{bin log config/settings lib/course_work_xml tmp/pids tmp/ca
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+# update shared_configs before restarting app
+before 'deploy:restart', 'shared_configs:update'
