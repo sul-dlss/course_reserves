@@ -33,6 +33,10 @@ class CourseWorkCourses
       cids.reject { |c| c == cid }.join(", ")
     end
   end
+  
+  def self.instance
+    @instance ||= CourseWorkCourses.new
+  end
 
   def initialize(xml=nil)
     if xml

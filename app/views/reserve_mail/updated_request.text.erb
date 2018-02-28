@@ -3,7 +3,7 @@
 Instructor Name(s): <%= @reserve.instructor_names %>
 Instructor SUNet ID(s): <%= @reserve.instructor_sunet_ids %>
 
-Reserve at: <%= CourseReserves::Application.config.reserve_libraries[@reserve.library] %>
+Reserve at: <%= Settings.reserve_libraries[@reserve.library] %>
 
 Contact Name: <%= @reserve.contact_name %>
 Contact Email: <%= @reserve.contact_email %>

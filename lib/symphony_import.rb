@@ -2,7 +2,7 @@ module SymphonyImport
   
   # Another test to show item_list from active db
   def show_item_list(cid, sid, term)
-    #course_result = CourseReserves::Application.config.courses.find_by_class_id_and_section(cid, sid)
+    #course_result = CourseWorkCourses.instance.find_by_class_id_and_section(cid, sid)
     course_result = Reserve.find_by_cid_and_sid_and_term(cid, sid, term)
     
     if ! course_result.nil?
@@ -26,7 +26,7 @@ module SymphonyImport
     # Go through each line, split on "|", search the XML, and print the number of entries in the array and the first SID
     entries.each do |cid|    
       #puts "cid and sunet is: #{cid} - #{sunet}"
-      course_from_xml = CourseReserves::Application.config.courses.find_by_class_id(cid)
+      course_from_xml = CourseWorkCourses.instance.find_by_class_id(cid)
       # puts course_from_xml.inspect
       if course_from_xml.blank?
         ins_ids = 'course not found'
@@ -87,7 +87,7 @@ module SymphonyImport
     entries.each do |e|
       cid, sunet = e.split(/\|/)
       #puts "cid and sunet is: #{cid} - #{sunet}"
-      course_from_xml = CourseReserves::Application.config.courses.find_by_class_id_and_sunet(cid, sunet)
+      course_from_xml = CourseWorkCourses.instance.find_by_class_id_and_sunet(cid, sunet)
       if course_from_xml.blank?
         sid = '01-set by method'
       else
@@ -139,7 +139,7 @@ module SymphonyImport
     fields_hash = Hash[*keys.zip(fields).flatten]
     fields_hash[:instructor_sunet_id].downcase!
     fields_hash[:loan_period] = loan_period(fields_hash[:loan_period])
-    course_from_xml = CourseReserves::Application.config.courses.find_by_class_id_and_sunet(fields_hash[:course_id], fields_hash[:instructor_sunet_id])
+    course_from_xml = CourseWorkCourses.instance.find_by_class_id_and_sunet(fields_hash[:course_id], fields_hash[:instructor_sunet_id])
     if course_from_xml.blank?
       fields_hash[:sid] = '01'
     else
