@@ -1,5 +1,9 @@
 module Terms
   class << self
+    def all
+      [current_term, future_terms].flatten
+    end
+
     def current_term
       current_term_hash[:term]
     end

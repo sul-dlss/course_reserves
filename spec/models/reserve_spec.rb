@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Reserve do
   let(:reserve_params) do
-    {:library => "Green", :immediate=>"true", :contact_name => "John Doe", :contact_phone=>"(555)555-5555", :contact_email=>"jdoe@example.com"}
+    {:library => "Green", :term=>Terms.current_term, :contact_name => "John Doe", :contact_phone=>"(555)555-5555", :contact_email=>"jdoe@example.com"}
   end
 
   describe '#course' do

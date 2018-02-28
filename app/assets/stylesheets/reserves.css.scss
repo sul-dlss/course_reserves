@@ -6,6 +6,10 @@ $odd: #F6F6F6;
 $even: #ECECEC;
 $data-header: #DDDDDD;
 
+label.disabled {
+	color: #888;
+}
+
 @mixin data-table {
 	thead {
 		background-color: $data-header;
