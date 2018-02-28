@@ -1,4 +1,4 @@
-class CreateEditorsReserves < ActiveRecord::Migration
+class CreateEditorsReserves < ActiveRecord::Migration[4.2]
   def up
     
     create_table :editors_reserves, :id => false do |t|

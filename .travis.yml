@@ -1,5 +1,5 @@
 rvm:
-  - '2.2.4'
+  - '2.5.0'
 
 notifications:
   email: false
@@ -10,4 +10,3 @@ env:
 
 sudo: false
 language: ruby
-

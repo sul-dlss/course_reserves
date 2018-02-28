@@ -1,12 +1,12 @@
 class Reserve < ActiveRecord::Base
-  
+
   before_save :process_sunet_ids
 
   has_and_belongs_to_many :editors
-  
+
   # taking immediate validation out for now.  Enforced in the UI.
   #validates :immediate, :presence => true
-  
+
   # maybe turn these validations on during initial import?
   #validates :library, :presence => true # need to make sure (select library) isn't selected
   #validates :contact_name, :presence => true
@@ -15,13 +15,13 @@ class Reserve < ActiveRecord::Base
 
   serialize :item_list, Array
   serialize :sent_item_list, Array
-  
+
   private
-  
+
   def process_sunet_ids
-    
+
     editors = []
-    
+
     unless self.instructor_sunet_ids.blank?
       self.instructor_sunet_ids.split(/,/).map{|i| i.strip}.each do |s|
         ed = Editor.find_or_create_by sunetid: s
@@ -29,7 +29,7 @@ class Reserve < ActiveRecord::Base
         editors << ed
       end
     end
-    
+
     unless self.editor_sunet_ids.blank?
       self.editor_sunet_ids.split(/,/).map{|i| i.strip}.each do |s|
         ed = Editor.find_or_create_by sunetid: s
@@ -39,8 +39,8 @@ class Reserve < ActiveRecord::Base
     end
 
     self.editors = editors unless editors.blank?
-    
+
   end
-  
+
 
 end
