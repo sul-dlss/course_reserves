@@ -17,4 +17,3 @@ module CourseReserves
     # the framework and any gems in your application.
   end
 end
-require 'crez/data'

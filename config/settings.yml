@@ -22,3 +22,132 @@ email_mapping:
 
 workgroups:
   superuser: sulair:course-resv-admins
+
+reserve_libraries:
+  "ART-RESV": "Art & Architecture Library (Bowes)"
+  "BUS-RESV": "Business Library"
+  "EARTH-RESV": "Earth Sciences Library (Branner)"
+  "EAS-RESV": "East Asia Library"
+  "EDU-RESV": "Education Library (Cubberley)"
+  "ENG-RESV": "Engineering Library (Terman)"
+  "GREEN-RESV": "Green Library"
+  "HOP-RESV": "Marine Biology Library (Miller)"
+  "LAW-RESV": "Law Library (Crown)"
+  "MEDIA-RESV": "Media & Microtext Center"
+  "MUSIC-RESV": "Music Library"
+  "SCI-RESV": "Science Library (Li and Ma)"
+
+loan_periods:
+  "2HWF-RES"  : "2 hours"
+  "3HWF-RES"  : "3 hours"
+  "4HWF-RES"  : "4 hours"
+  "1DNDWF-RES": "1 day"
+  "2DWF-RES"  : "2 days"
+  "3DWF-RES"  : "3 days"
+
+terms:
+- term: Winter 2012
+  quarter: Winter
+  end_date: 2012-03-23
+- term: Spring 2012
+  quarter: Spring
+  end_date: 2012-06-13
+- term: Summer 2012
+  quarter: Summer
+  end_date: 2012-08-18
+- term: Fall 2012
+  quarter: Fall
+  end_date: 2012-12-14
+- term: Winter 2013
+  uarter: Winter
+  end_date: 2013-03-22
+- term: Spring 2013
+  quarter: Spring
+  end_date: 2013-06-12
+- term: Summer 2013
+  quarter: Summer
+  end_date: 2013-08-17
+- term: Fall 2013
+  quarter: Fall
+  end_date: 2013-12-13
+- term: Winter 2014
+  quarter: Winter
+  end_date: 2014-03-21
+- term: Spring 2014
+  quarter: Spring
+  end_date: 2014-06-11
+- term: Summer 2014
+  quarter: Summer
+  end_date: 2014-08-16
+- term: Fall 2014
+  quarter: Fall
+  end_date: 2014-12-12
+- term: Winter 2015
+  quarter: Winter
+  end_date: 2015-03-20
+- term: Spring 2015
+  quarter: Spring
+  end_date: 2015-06-10
+- term: Summer 2015
+  quarter: Summer
+  end_date: 2015-08-15
+- term: Fall 2015
+  quarter: Fall
+  end_date: 2015-12-11
+- term: Winter 2016
+  quarter: Winter
+  end_date: 2016-03-18
+- term: Spring 2016
+  quarter: Spring
+  end_date: 2016-06-08
+- term: Summer 2016
+  quarter: Summer
+  end_date: 2016-08-13
+- term: Fall 2016
+  quarter: Fall
+  end_date: 2016-12-16
+- term: Winter 2017
+  quarter: Winter
+  end_date: 2017-03-24
+- term: Spring 2017
+  quarter: Spring
+  end_date: 2017-06-14
+- term: Summer 2017
+  quarter: Summer
+  end_date: 2017-08-19
+- term: Fall 2017
+  quarter: Fall
+  end_date: 2017-12-15
+- term: Winter 2018
+  quarter: Winter
+  end_date: 2018-03-23
+- term: Spring 2018
+  quarter: Spring
+  end_date: 2018-06-13
+- term: Summer 2018
+  quarter: Summer
+  end_date: 2018-08-18
+- term: Fall 2018
+  quarter: Fall
+  end_date: 2018-12-14
+- term: Winter 2019
+  quarter: Winter
+  end_date: 2019-03-22
+- term: Spring 2019
+  quarter: Spring
+  end_date: 2019-06-12
+- term: Summer 2019
+  quarter: Summer
+  end_date: 2019-08-17
+- term: Fall 2019
+  quarter: Fall
+  end_date: 2019-12-13
+- term: Winter 2020
+  quarter: Winter
+  end_date: 2020-03-20
+- term: Spring 2020
+  quarter: Spring
+  end_date: 2020-06-10
+- term: Summer 2020
+  quarter: Summer
+  end_date: 2020-08-15

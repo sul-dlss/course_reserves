@@ -6,14 +6,14 @@ module Terms
 
     def future_terms(term = nil)
       if term.nil?
-        current_term_index = CourseReserves::Application.config.terms.index(current_term_hash)
+        current_term_index = terms.index(current_term_hash)
       else
-        current_term = CourseReserves::Application.config.terms.collect{|t| t if t[:term] == term}.compact.first
-        current_term_index = CourseReserves::Application.config.terms.index(current_term)
+        current_term = terms.collect{|t| t if t[:term] == term}.compact.first
+        current_term_index = terms.index(current_term)
       end
-      terms = [CourseReserves::Application.config.terms[current_term_index+1][:term]]
-      terms << CourseReserves::Application.config.terms[current_term_index+2][:term] if CourseReserves::Application.config.terms[current_term_index+2]
-      return terms
+      future_terms = [terms[current_term_index+1][:term]]
+      future_terms << terms[current_term_index+2][:term] if terms[current_term_index+2]
+      return future_terms
     end
     
     def process_term_for_cw(term)
@@ -23,9 +23,13 @@ module Terms
     private
 
     def current_term_hash(date = Date::today)
-      CourseReserves::Application.config.terms.each_with_index do |term, ix|
-        return term if term[:end_date] >= date and CourseReserves::Application.config.terms[ix-1][:end_date] < date
+      terms.each_with_index do |term, ix|
+        return term if term[:end_date] >= date and terms[ix-1][:end_date] < date
       end
+    end
+    
+    def terms
+      Settings.terms
     end
   end
 end
