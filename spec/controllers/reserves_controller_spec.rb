@@ -28,7 +28,7 @@ RSpec.describe ReservesController do
     it "should let you create a new course if you are a super user" do
       allow(controller).to receive_messages(superuser?: true)
       get :new, :params => {:comp_key => "AFRICAAM-165E,EDUC-237X,ETHICSOC-165E,123,456"}
-      expect(response).to be_success
+      expect(response).to be_successful
       course = assigns(:course)
       expect(course[:cid]).to eq("EDUC-237X")
       expect(course[:title]).to eq("Residential Racial Segregation and the Education of African-American Youth")
@@ -37,7 +37,7 @@ RSpec.describe ReservesController do
     it "should let you create a new course if you are the professor" do
       allow(controller).to receive(:current_user).and_return("123")
       get :new, :params => {:comp_key => "AA-272C,123,456"}
-      expect(response).to be_success
+      expect(response).to be_successful
       course = assigns(:course)
       expect(course[:cid]).to eq("AA-272C")
       expect(course[:instructors].map{|i| i[:sunet] }).to include("456")
@@ -85,7 +85,7 @@ RSpec.describe ReservesController do
       r = Reserve.create(reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
       r.save!
       get :edit, :params => { :id => r[:id] }
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(assigns(:reserve)).to eq(r)
     end
     it "should allow you to get to the edit screen if you are an super sunet" do
@@ -93,7 +93,7 @@ RSpec.describe ReservesController do
       r = Reserve.create(reserve_params.merge({:cid=>"CID1", :sid=>"SID1", :instructor_sunet_ids=>"user_sunet"}))
       r.save!
       get :edit, :params => { :id => r[:id] }
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(assigns(:reserve)).to eq(r)
     end
     it "should redirect if the user does not have permissions to edit the reserve" do
@@ -198,7 +198,7 @@ RSpec.describe ReservesController do
       r.save!
       allow(controller).to receive(:current_user).and_return("user_sunet")
       get :index
-      expect(response).to be_success
+      expect(response).to be_successful
       my_reserves = assigns(:my_reserves)
       expect(my_reserves.length).to eq(1)
       expect(my_reserves.first.cid).to eq("CID1")
@@ -210,7 +210,7 @@ RSpec.describe ReservesController do
     it "should return parsable JSON of all courses for a super user" do
       allow(controller).to receive_messages(superuser?: true)
       get :all_courses_response
-      expect(response).to be_success
+      expect(response).to be_successful
       body = JSON.parse(response.body)
       expect(body.keys.length).to eq(1)
       expect(body).to have_key("aaData")
@@ -222,7 +222,7 @@ RSpec.describe ReservesController do
     it "should return parsible JSON of the courese that you are an instructor for" do
       allow(controller).to receive(:current_user).and_return("456")
       get :all_courses_response
-      expect(response).to be_success
+      expect(response).to be_successful
       body = JSON.parse(response.body)
       expect(body.keys.length).to eq(1)
       expect(body).to have_key("aaData")
@@ -233,7 +233,7 @@ RSpec.describe ReservesController do
     end
     it "should not return any courses if you are not a super user and you don't have any courses in the XML" do
       get :all_courses_response
-      expect(response).to be_success
+      expect(response).to be_successful
       body = JSON.parse(response.body)
       expect(body.keys.length).to eq(1)
       expect(body).to have_key("aaData")
