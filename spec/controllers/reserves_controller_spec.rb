@@ -34,17 +34,17 @@ RSpec.describe ReservesController do
       get :new, :params => {:comp_key => "AFRICAAM-165E,EDUC-237X,ETHICSOC-165E,123,456"}
       expect(response).to be_successful
       course = assigns(:course)
-      expect(course[:cid]).to eq("EDUC-237X")
-      expect(course[:title]).to eq("Residential Racial Segregation and the Education of African-American Youth")
-      expect(course[:instructors].map{|i| i[:sunet] }).to include("456")
+      expect(course.cid).to eq("EDUC-237X")
+      expect(course.title).to eq("Residential Racial Segregation and the Education of African-American Youth")
+      expect(course.instructors.map{|i| i[:sunet] }).to include("456")
     end
     it "should let you create a new course if you are the professor" do
       allow(controller).to receive(:current_user).and_return(user_456)
       get :new, :params => {:comp_key => "AA-272C,123,456"}
       expect(response).to be_successful
       course = assigns(:course)
-      expect(course[:cid]).to eq("AA-272C")
-      expect(course[:instructors].map{|i| i[:sunet] }).to include("456")
+      expect(course.cid).to eq("AA-272C")
+      expect(course.instructors.map{|i| i[:sunet] }).to include("456")
     end
     it "should not let you create a course that you don't have permisisons to" do
       expect do

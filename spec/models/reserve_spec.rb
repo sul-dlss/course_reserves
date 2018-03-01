@@ -7,7 +7,7 @@ RSpec.describe Reserve do
 
   describe '#course' do
     it 'fetches a course from the reserve compound_key' do
-      expect(Reserve.new(compound_key: 'AA-272C,123,456').course[:cid]).to eq 'AA-272C'
+      expect(Reserve.new(compound_key: 'AA-272C,123,456').course.cid).to eq 'AA-272C'
     end
   end
 
