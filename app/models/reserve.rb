@@ -16,6 +16,10 @@ class Reserve < ActiveRecord::Base
   serialize :item_list, Array
   serialize :sent_item_list, Array
 
+  def course
+    @course ||= CourseReserves::Application.config.courses.find_by_compound_key(compound_key).first
+  end
+
   private
 
   def process_sunet_ids

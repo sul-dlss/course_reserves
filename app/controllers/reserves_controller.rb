@@ -2,9 +2,18 @@ require 'net/http'
 require 'nokogiri'
 require 'terms'
 class ReservesController < ApplicationController
+  load_and_authorize_resource except: [:new, :create, :clone]
+  skip_authorize_resource only: :index
+  skip_load_resource only: :index
+
+  before_action :redirect_to_edit_when_reserve_exists, only: :new
+
   def index
-    editor = Editor.find_by_sunetid(current_user)
-    @my_reserves = editor.nil? ? [] : editor.reserves.order("updated_at DESC")
+    @reserves = if current_user.superuser?
+                  Reserve.includes(:editors).where(editors: { sunetid: current_user.sunetid })
+                else
+                  Reserve.accessible_by(current_ability)
+                end
   end
 
   def all_courses
@@ -13,10 +22,10 @@ class ReservesController < ApplicationController
 
   def all_courses_response
     items = []
-    if superuser?
+    if current_user.superuser?
       courses = CourseReserves::Application.config.courses.all_courses
     else
-      courses = CourseReserves::Application.config.courses.find_by_sunet(current_user)
+      courses = CourseReserves::Application.config.courses.find_by_sunet(current_user.sunetid)
     end
     courses.each do |course|
       cl = course[:cross_listings].blank? ? "" : "(#{course[:cross_listings]})"
@@ -25,27 +34,11 @@ class ReservesController < ApplicationController
     render :json => {"aaData" => items}.to_json, :layout => false
   end
 
+  # Raising our own CanCan::AccessDenied here because we also let courses be created by the SUNet IDs in the course XML
   def new
-    reserve = Reserve.where(:compound_key => params[:comp_key]).order("updated_at DESC").first
-    unless reserve.nil?
-      editors = reserve.editors.map{|e| e[:sunetid] }.compact
-      if superuser? or editors.include?(current_user)
-        redirect_to edit_reserve_path(reserve[:id]) and return
-      else
-        flash[:error] = "You are not the instructor for this course."
-        redirect_to root_path
-      end
-    else
-      course = CourseReserves::Application.config.courses.find_by_compound_key(params[:comp_key]).first
-      unless course.blank?
-        instructors = course[:instructors].map{|i| i[:sunet] }.compact.uniq
-        if !instructors.include?(current_user) and !superuser?
-          flash[:error] = "You are not the instructor for this course."
-          redirect_to root_path
-        end
-        @course = course
-      end
-    end
+    @course = course_for_compound_key(params[:comp_key])
+    raise RecordNotFound if @course.blank?
+    authorize! :create, Reserve.new(compound_key: params[:comp_key])
   end
 
 
@@ -70,30 +63,21 @@ class ReservesController < ApplicationController
     end
   end
 
+  # Raising our own CanCan::AccessDenied here because we also let courses be created by the SUNet IDs in the course XML
   def create
-    if superuser? or reserve_params[:instructor_sunet_ids].split(",").map{|sunet| sunet.strip }.include?(current_user)
-      reserve_params[:term] = Terms.current_term if reserve_params[:immediate] == "true"
-      @reserve = Reserve.create(reserve_params)
-      @reserve.save!
-      send_course_reserve_request(@reserve) if params.has_key?(:send_request)
-      redirect_to({ :controller => 'reserves', :action => 'edit', :id => @reserve[:id] })
-    else
-      flash[:error] = "You do not have permission to create this course reserve list."
-      redirect_to(root_path)
-    end
+    reserve_params[:term] = Terms.current_term if reserve_params[:immediate] == 'true'
+    @reserve = Reserve.new(reserve_params)
+    authorize! :create, @reserve
+    @reserve.save!
+
+    send_course_reserve_request(@reserve) if params.has_key?(:send_request)
+    redirect_to edit_reserve_path(@reserve[:id])
   end
 
-  def edit
-    reserve = Reserve.find(params[:id])
-    if !superuser? and !reserve.editors.map{|e| e[:sunetid] }.compact.include?(current_user)
-      flash[:error] = "You do not have permission to edit this course reserve list."
-      redirect_to(root_path)
-    end
-    @reserve = reserve
-  end
+  def edit; end
 
   def update
-    reserve = Reserve.find(params[:id])
+    reserve = @reserve
     original_term = reserve.term
     reserve_params[:term] = Terms.current_term if reserve_params[:immediate] == "true"
     if reserve_params[:term] != reserve.term
@@ -118,25 +102,21 @@ class ReservesController < ApplicationController
   def clone
     original_reserves = Reserve.where(compound_key: params[:id])
     original_reserve = original_reserves.first
-    if original_reserves.map{|r| r.editors.map{|e| e[:sunetid]} }.compact.flatten.include?(current_user) or superuser?
-      original_reserves.each do |og_res|
-        if og_res.term == params[:term]
-          flash[:error] = "Course reserve list already exists for this course and term."
-          redirect_to edit_reserve_path(og_res[:id]) and return
-        end
+    authorize! :clone, original_reserve
+    original_reserves.each do |og_res|
+      if og_res.term == params[:term]
+        flash[:error] = "Course reserve list already exists for this course and term."
+        redirect_to edit_reserve_path(og_res[:id]) and return
       end
-      reserve = original_reserve.dup
-      reserve.has_been_sent = nil
-      reserve.disabled = nil
-      reserve.sent_date = nil
-      reserve.term = params[:term]
-      reserve.immediate = nil
-      reserve.save!
-      redirect_to(edit_reserve_path(reserve[:id]))
-    else
-      flash[:error] = "You do not have permission to clone this course reserve list."
-      redirect_to(root_path)
     end
+    reserve = original_reserve.dup
+    reserve.has_been_sent = nil
+    reserve.disabled = nil
+    reserve.sent_date = nil
+    reserve.term = params[:term]
+    reserve.immediate = nil
+    reserve.save!
+    redirect_to(edit_reserve_path(reserve[:id]))
   end
 
   def show
@@ -145,6 +125,10 @@ class ReservesController < ApplicationController
 
 
   protected
+
+  def course_for_compound_key(cid)
+    CourseReserves::Application.config.courses.find_by_compound_key(cid).first
+  end
 
   def reserve_mail_address reserve
     if Settings.email.hardcoded_email_address
@@ -239,5 +223,12 @@ class ReservesController < ApplicationController
 
   def reserve_params
     params.require(:reserve).permit!
+  end
+
+  def redirect_to_edit_when_reserve_exists
+    reserve = Reserve.where(compound_key: params[:comp_key]).order("updated_at DESC").first
+    return true if reserve.blank?
+
+    redirect_to edit_reserve_path(reserve[:id])
   end
 end
