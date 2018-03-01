@@ -19,4 +19,9 @@ module ApplicationHelper
   def future_terms(*args)
     Terms.future_terms(*args)
   end
+  
+  def sortable_term_value(value)
+    term_data = CourseReserves::Application.config.terms.find { |t| t[:term] == value } || {}
+    term_data[:end_date]
+  end
 end
