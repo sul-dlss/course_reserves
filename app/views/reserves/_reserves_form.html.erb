@@ -31,15 +31,7 @@
   		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @reserve.instructor_sunet_ids if (@reserve and @reserve.instructor_sunet_ids) -%>" />
   		<input type="hidden" name="reserve[instructor_names]" value="<%= @reserve.instructor_names if (@reserve and @reserve.instructor_names) -%>" />
 		<%- end -%>
-		<div class="section">
-		  <label for="libraries" class="required">Send request to</label>
-			<select id="libraries" name="reserve[library]">
-				<option>(select library)</option>
-				<% app_config.reserve_libraries.each do |code, library| %>
-					<option value="<%= code -%>" <%= "selected='selected'" if @reserve and @reserve.library == code -%> ><%= library -%></option>
-				<% end %>
-			</select>
-		</div>
+
 		<div class="section">
 			When should these items be reserved?
 			<div id="reserve-timing">
@@ -58,6 +50,17 @@
   			<%- end -%>
 			</div>
 		</div>
+
+		<div class="section">
+		  <label for="libraries" class="required">Send request to</label>
+			<select id="libraries" name="reserve[library]">
+				<option>(select library)</option>
+				<% app_config.reserve_libraries.each do |code, library| %>
+					<option value="<%= code -%>" <%= "selected='selected'" if @reserve and @reserve.library == code -%> ><%= library -%></option>
+				<% end %>
+			</select>
+		</div>
+
 	  <div class="section">
 	    <%= "<p class='sent_date'>Request sent #{@reserve.sent_date}</p>".html_safe if @reserve and !@reserve.sent_date.nil? -%>
 	    <%= render :partial => "clone_tool", :locals => {:course => @reserve, :label => "Clone this list for"} if @reserve %>
