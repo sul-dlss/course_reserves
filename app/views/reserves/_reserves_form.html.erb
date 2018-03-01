@@ -55,7 +55,7 @@
 		  <label for="libraries" class="required">Send request to</label>
 			<select id="libraries" name="reserve[library]">
 				<option>(select library)</option>
-				<% app_config.reserve_libraries.each do |code, library| %>
+				<% Settings.reserve_libraries.each do |code, library| %>
 					<option value="<%= code -%>" <%= "selected='selected'" if @reserve and @reserve.library == code -%> ><%= library -%></option>
 				<% end %>
 			</select>
