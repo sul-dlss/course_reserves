@@ -2,7 +2,7 @@
 <div id="introduction">
   <p>Who can create and modify reserve lists:<br/>
      The instructor of record can create and modify course reserve lists.  If you are not the instructor of record, you must be authorized to edit the reserve list.  The instructor of record must create a new reserve list or modify an existing list, and add your SUNetID under "Who can edit this list?"</p>
-    
+
   <p>Processing time:<br/>
      To have materials ready for the first day of classes, please save and send your course reserve list at least one week before the beginning of classes.   When adding additional material to your reserve list, allow up to 7 days processing time before items are available for use.  Materials that must be purchased for your course may take up to 6 weeks before they can be made available.</p>
 
@@ -16,7 +16,7 @@
   <div class="error"><%=  flash[:error] %></div>
 <%- end -%>
 <div id="reserves-section">
-  <% unless @my_reserves.blank? %>
+  <% unless @reserves.blank? %>
     <h2>Modify an existing reserve list</h2>
   	<table id="my-reserves">
   		<thead>
@@ -30,7 +30,7 @@
   			</tr>
   		</thead>
   		<tbody>
-  			<% @my_reserves.each do |course| -%>
+  			<% @reserves.each do |course| -%>
   				<tr class="<%= cycle("odd", "even") -%>">
   					<td data-sort='<%= sortable_term_value(course.term) %>'><%= course.term -%></td>
   					<td><%= course.cid -%></td>
@@ -45,7 +45,7 @@
   			<% end %>
   		</tbody>
 
-	
+
   	</table>
     <script>
       new Tablesort(document.getElementById('my-reserves'));
