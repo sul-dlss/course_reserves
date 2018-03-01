@@ -143,9 +143,9 @@ module SymphonyImport
     if course_from_xml.blank?
       fields_hash[:sid] = '01'
     else
-      fields_hash[:sid] = course_from_xml.first[:sid]
-      fields_hash[:comp_key] = course_from_xml.first[:comp_key]
-      fields_hash[:cross_listings] = course_from_xml.first[:cross_listings]
+      fields_hash[:sid] = course_from_xml.first.sid
+      fields_hash[:comp_key] = course_from_xml.first.comp_key
+      fields_hash[:cross_listings] = course_from_xml.first.cross_listings
       #puts "course from xml" + course_from_xml.first.inspect
     end
     #puts "fieldsid is " + fields_hash[:sid].inspect
