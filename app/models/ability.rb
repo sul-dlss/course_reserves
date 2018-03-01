@@ -4,9 +4,7 @@ class Ability
   def initialize(user)
     can :manage, Reserve, editors: { sunetid: user.sunetid }
     can [:create, :clone], Reserve do |reserve|
-      reserve.course && reserve.course[:instructors].any? do |i|
-        i[:sunet] == user.sunetid
-      end
+      reserve.course && reserve.course.instructor_sunets.include?(user.sunetid)
     end
 
     return unless user.superuser?

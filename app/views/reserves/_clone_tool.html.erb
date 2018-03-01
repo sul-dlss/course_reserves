@@ -3,7 +3,7 @@
   <div class="clone_select" style="display:none;">
     <%- [current_term, future_terms].flatten.each do |term| -%>
       <%- unless term == course.term -%>
-  	    <div><%= link_to(term, clone_reserve_path(course[:compound_key], :term=>term)) -%></div>
+  	    <div><%= link_to(term, clone_reserve_path(course.compound_key, :term=>term)) -%></div>
 	    <%- end -%>
     <%- end -%>
   </div>

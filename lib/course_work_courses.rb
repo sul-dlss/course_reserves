@@ -1,6 +1,39 @@
 require 'nokogiri'
 require 'terms'
 class CourseWorkCourses
+  class Course
+    attr_reader :title, :term, :cid, :cids, :sid, :instructors
+
+    def initialize(title:, term:, cid:, cids:, sid:, instructors:)
+      @title = title
+      @term = term
+      @cid = cid
+      @cids = cids
+      @sid = sid
+      @instructors = instructors
+    end
+    
+    def key
+      "#{cid}-#{instructor_sunets.join("-")}"
+    end
+
+    def comp_key
+      "#{cids.sort.join(",")},#{instructor_sunets.join(",")}"
+    end
+
+    def instructor_sunets
+      instructors.map { |i| i[:sunet] }.compact.sort
+    end
+
+    def instructor_names
+      instructors.map { |i| i[:name] }.compact.sort
+    end
+
+    def cross_listings
+      cids.reject { |c| c == cid }.join(", ")
+    end
+  end
+
   def initialize(xml=nil)
     if xml
       @raw_xml = [Nokogiri::XML(xml)]
@@ -14,43 +47,46 @@ class CourseWorkCourses
   end
   
   def find_by_sunet(sunet)
-    self.all_courses.map do |course|
-      course if course[:instructors].map{|i| i[:sunet]}.include?(sunet)
-    end.compact
+    self.all_courses.select do |course|
+      course.instructor_sunets.include?(sunet)
+    end
   end
   
   def find_by_class_id(class_id)
-    self.all_courses.map do |course|
-      course if course[:cid] == class_id
-    end.compact
+    self.all_courses.select do |course|
+      course.cid == class_id
+    end
   end
   
   def find_by_compound_key(key)
-    self.all_courses.map do |course|
-      course if course[:comp_key] == key
-    end.compact
+    self.all_courses.select do |course|
+      course.comp_key == key
+    end
   end
   
   def find_by_class_id_and_section(class_id, section)
-    self.all_courses.map do |course|
-      course if course[:cid] == class_id and course[:sid] == section
-    end.compact
+    self.all_courses.select do |course|
+      course.cid == class_id && course.sid == section
+    end
   end
 
   def find_by_class_id_and_sunet(class_id, sunet)
-    self.all_courses.map do |course|
-      course if course[:cid] == class_id and course[:instructors].map{|i| i[:sunet]}.include?(sunet)
-    end.compact
+    self.all_courses.select do |course|
+      course.cid == class_id && course.instructor_sunets.include?(sunet)
+    end
   end
   
   def find_by_class_id_and_section_and_sunet(class_id, section, sunet)
-    self.all_courses.map do |course|
-      course if course[:cid] == class_id and course[:sid] == section and course[:instructors].map{|i| i[:sunet]}.include?(sunet)
-    end.compact
+    self.all_courses.select do |course|
+      course.cid == class_id && course.sid == section && course.instructor_sunets.include?(sunet)
+    end
   end
   
+  # TODO: We have tests that are highly sensitive to the order of the courses; this unfortunate
+  # logic preserves the bottom-most course from the xml. it's unclear whether this is incidental
+  # or a feature.
   def all_courses
-    @all_courses ||= process_all_courses_xml(self.raw_xml).values
+    @all_courses ||= process_all_courses_xml(self.raw_xml).to_a.reverse.uniq(&:key).reverse.to_a
   end
   
   private
@@ -70,18 +106,19 @@ class CourseWorkCourses
   end
   
   def process_all_courses_xml(xml_files)
-    courses = {}
+    return to_enum(:process_all_courses_xml, xml_files) unless block_given?
+
     xml_files.each do |xml|
-      xml.xpath("//courseclass").each do |course|
+      xml.xpath("//courseclass").each_with_index do |course, idx_course|
         course_title = course[:title]
         term = course[:term]
         cids = []
         course.xpath("./class").each do |cl|
           cids << cl[:id].gsub(/^\w{1,2}\d{2}-/, "")
         end
-        course.xpath("./class").each do |cl|
+        course.xpath("./class").each_with_index do |cl, idx_cl|
           class_id = cl[:id].gsub(/^\w{1,2}\d{2}-/, "")
-          cl.xpath("./section").each do |sec|
+          cl.xpath("./section").each_with_index do |sec, idx_sec|
             section_id = sec[:id]
             instructors = []
             sec.xpath("./instructors/instructor").each do |inst|
@@ -90,35 +127,21 @@ class CourseWorkCourses
               name = sunet if inst.text.blank?
               instructors << {:sunet => sunet, :name => name}
             end
+
             unless instructors.blank?
-              instructor_sunets = instructors.map{|i| i[:sunet]}.sort
-              key = "#{class_id}-#{instructor_sunets.join("-")}".to_sym
-              compound_key = "#{cids.sort.join(",")},#{instructor_sunets.join(",")}"
-              cross_listings = cids.map{|c| c unless c == class_id}.compact.join(", ")
-              # Not sure if we need this twice or can do a more complicated if logic
-              if courses.has_key?(key) and courses[key][:term] == term and section_id == "01"
-                courses[key] = {:title          => course_title,
-                                :term           => term,
-                                :comp_key       => compound_key,
-                                :cross_listings => cross_listings,
-                                :cid            => class_id,
-                                :sid            => section_id,
-                                :instructors    => instructors}                
-              else
-                courses[key] = {:title          => course_title,
-                                :term           => term,
-                                :comp_key       => compound_key,
-                                :cross_listings => cross_listings,
-                                :cid            => class_id,
-                                :sid            => section_id,
-                                :instructors    => instructors}
-              end
+              yield Course.new({
+                :title          => course_title,
+                :term           => term,
+                :cid            => class_id,
+                :cids           => cids,
+                :sid            => section_id,
+                :instructors    => instructors
+              })
             end
           end        
         end
       end
     end
-    return courses
   end
   
 end
