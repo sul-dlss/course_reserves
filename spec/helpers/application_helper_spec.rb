@@ -48,4 +48,9 @@ RSpec.describe ApplicationHelper do
       expect(helper.render_term_label('Winter 4321')).to eq 'Winter 4321 (current quarter)'
     end
   end
+  describe '#sortable_term_value' do
+    it 'returns the term\'s end date' do
+      expect(sortable_term_value('Spring 2018').to_s).to eq '2018-06-13'
+    end
+  end
 end
