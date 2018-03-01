@@ -8,10 +8,6 @@ module ApplicationHelper
     end
   end
 
-  def app_config
-    CourseReserves::Application.config
-  end
-
   def current_term
     Terms.current_term
   end
