@@ -19,4 +19,8 @@ module ApplicationHelper
   def future_terms(*args)
     Terms.future_terms(*args)
   end
+
+  def show_feedback_form?
+    Settings.email.feedback.present?
+  end
 end
