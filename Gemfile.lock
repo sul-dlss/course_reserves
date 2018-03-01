@@ -189,6 +189,7 @@ GEM
     nio4r (2.2.0)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
+    okcomputer (1.17.1)
     poltergeist (1.17.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -318,6 +319,7 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   mysql2 (~> 0.3.20)
   nokogiri
+  okcomputer
   poltergeist
   puma (~> 3.11)
   rails (~> 5.2.0.rc1)
