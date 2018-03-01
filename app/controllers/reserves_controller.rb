@@ -23,9 +23,9 @@ class ReservesController < ApplicationController
   def all_courses_response
     items = []
     if current_user.superuser?
-      courses = CourseReserves::Application.config.courses.all_courses
+      courses = CourseWorkCourses.instance.all_courses
     else
-      courses = CourseReserves::Application.config.courses.find_by_sunet(current_user.sunetid)
+      courses = CourseWorkCourses.instance.find_by_sunet(current_user.sunetid)
     end
     courses.each do |course|
       cl = course.cross_listings.blank? ? "" : "(#{course.cross_listings})"
@@ -40,7 +40,6 @@ class ReservesController < ApplicationController
     raise RecordNotFound if @course.blank?
     authorize! :create, Reserve.new(compound_key: params[:comp_key])
   end
-
 
   def add_item
     respond_to do |format|
@@ -127,14 +126,14 @@ class ReservesController < ApplicationController
   protected
 
   def course_for_compound_key(cid)
-    CourseReserves::Application.config.courses.find_by_compound_key(cid).first
+    CourseWorkCourses.instance.find_by_compound_key(cid).first
   end
 
   def reserve_mail_address reserve
     if Settings.email.hardcoded_email_address
       Settings.email.hardcoded_email_address
     else
-      "#{CourseReserves::Application.config.email_mapping[reserve.library]}, #{Settings.email.allforms}"
+      "#{Settings.email_mapping[reserve.library]}, #{Settings.email.allforms}"
     end
   end
 
@@ -207,7 +206,7 @@ class ReservesController < ApplicationController
     if value == "true"
       return "yes"
     elsif key.to_s == "loan_period"
-      return CourseReserves::Application.config.loan_periods.key(value)
+      return Settings.loan_periods.to_h.key(value)
     elsif key.to_s == "ckey"
       return "#{value} : #{searchworks_ckey_url(value)}"
     elsif value.blank?
