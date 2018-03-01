@@ -1,16 +1,28 @@
 <h1>Course Reserves</h1>
 <div id="introduction">
-  <p>Who can create and modify reserve lists:<br/>
-     The instructor of record can create and modify course reserve lists.  If you are not the instructor of record, you must be authorized to edit the reserve list.  The instructor of record must create a new reserve list or modify an existing list, and add your SUNetID under "Who can edit this list?"</p>
+  <h2>Authorization</h2>
+  <p>
+    The instructor of record can create and edit lists for their course, and can
+     authorize others to edit and copy their lists. To do this: Create a new
+     list or open an existing list. Add the SUNetID (lower case) of the new
+      editor under "Who can edit this list?" Click "Save draft".
+  </p>
 
-  <p>Processing time:<br/>
-     To have materials ready for the first day of classes, please save and send your course reserve list at least one week before the beginning of classes.   When adding additional material to your reserve list, allow up to 7 days processing time before items are available for use.  Materials that must be purchased for your course may take up to 6 weeks before they can be made available.</p>
+  <h2>Processing time</h2>
+  <p>
+    Please save and send your course reserve list
+    <strong style="font-weight: 700;">at least one week</strong> before the
+    beginning of classes. During the active term, allow up to 7 days
+    processing time. Materials that must be purchased for your course may
+    take up to 6 weeks.
+  </p>
 
-  <p>Instructor owned material:<br/>
-     Instructor-owned materials may be placed on reserve for student use.   Please include these materials on your reserve list and check "personal copy".</p>
-
-  <p>Still have questions? Contact us at <%= link_to("greenreserves@stanford.edu", "mailto:greenreserves@stanford.edu") %> or (650) 723-1492.</p>
+  <h2>Questions?</h2>
+  <p>
+    Contact us at <%= mail_to Settings.email.questions %> or (650) 723-1492.
+  </p>
 </div>
+
 <%= link_to "Create a new reserve list", all_courses_path, :class => 'dialog active-button'  -%>
 <%- unless flash[:error].blank? -%>
   <div class="error"><%=  flash[:error] %></div>
