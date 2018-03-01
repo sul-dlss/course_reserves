@@ -6,17 +6,17 @@
     <%- end -%>
 	  <%- if params[:action] == "new" -%>
   		<h2>
-  		  <%= @course[:cid] if (@course and @course.has_key?(:cid)) -%>: <%= @course[:title] if (@course and @course.has_key?(:title)) -%>
-  		  <%= "(#{@course[:cross_listings]})" if @course and @course.has_key?(:cross_listings) and !@course[:cross_listings].blank? %>
+  		  <%= @course.cid if @course -%>: <%= @course.title if @course -%>
+  		  <%= "(#{@course.cross_listings})" if @course and @course.cross_listings.present? %>
   		</h2>
-  		<input type="hidden" name="reserve[cid]" value="<%= @course[:cid] if (@course and @course.has_key?(:cid)) -%>" />
-  		<input type="hidden" name="reserve[desc]" value="<%= @course[:title] if (@course and @course.has_key?(:title)) -%>" />
-  		<input type="hidden" name="reserve[sid]" value="<%= @course[:sid] if (@course and @course.has_key?(:sid)) -%>" />
-  		<input type="hidden" name="reserve[compound_key]" value="<%= @course[:comp_key] if (@course and @course.has_key?(:comp_key)) -%>" />
-  		<input type="hidden" name="reserve[cross_listings]" value="<%= @course[:cross_listings] if (@course and @course.has_key?(:cross_listings)) -%>" />
-  		<div class="section"><span>Instructor:</span> <%= @course[:instructors].map{|i| i[:name] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%></div>
-  		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @course[:instructors].map{|i| i[:sunet] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%>" />
-  		<input type="hidden" name="reserve[instructor_names]" value="<%= @course[:instructors].map{|i| i[:name] }.compact.join(", ") if (@course and @course.has_key?(:instructors)) -%>" />
+  		<input type="hidden" name="reserve[cid]" value="<%= @course.cid if @course -%>" />
+  		<input type="hidden" name="reserve[desc]" value="<%= @course.title if @course -%>" />
+  		<input type="hidden" name="reserve[sid]" value="<%= @course.sid if @course -%>" />
+  		<input type="hidden" name="reserve[compound_key]" value="<%= @course.comp_key if @course -%>" />
+  		<input type="hidden" name="reserve[cross_listings]" value="<%= @course.cross_listings if @course -%>" />
+  		<div class="section"><span>Instructor:</span> <%= @course.instructor_names.join(', ') if @course -%></div>
+  		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @course.instructor_sunets.join(', ') if @course -%>" />
+  		<input type="hidden" name="reserve[instructor_names]" value="<%= @course.instructor_names.join(', ') if @course -%>" />
 		<%- else -%>
   		<h2>
   		  <%= @reserve.cid if (@reserve and @reserve.cid) -%>: <%= @reserve.desc if (@reserve and @reserve.desc) -%>
@@ -74,7 +74,7 @@
 		<label for="contact_phone">Phone</label> <input name="reserve[contact_phone]"  value="<%= @reserve.contact_phone if @reserve -%>" id="contact_phone" type="text"/><br/>
 		<label for="contact_email">Email</label> <input name="reserve[contact_email]" value="<%= @reserve.contact_email if @reserve -%>"  id="contact_email" type="text"/><br/>
 		<label for="editor_sunet_ids" id="editors-list">Who can edit this list?</label><br/>
-		<span class="form-label"><%= params[:action] == "new" ? @course[:instructors].map{|i| i[:sunet] }.compact.join(", ") : @reserve.instructor_sunet_ids %>,</span> <input name="reserve[editor_sunet_ids]" value="<%= @reserve.editor_sunet_ids if @reserve -%>" id="editor_sunet_ids" type="text"/><br/>
+		<span class="form-label"><%= params[:action] == "new" ? @course.instructor_sunets.join(", ") : @reserve.instructor_sunet_ids %>,</span> <input name="reserve[editor_sunet_ids]" value="<%= @reserve.editor_sunet_ids if @reserve -%>" id="editor_sunet_ids" type="text"/><br/>
 		<span class="help">(SUNet IDs, separated by commas)</span>					
 	</fieldset>
   <div style="clear:both;"></div>

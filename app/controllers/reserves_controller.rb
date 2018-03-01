@@ -28,8 +28,8 @@ class ReservesController < ApplicationController
       courses = CourseReserves::Application.config.courses.find_by_sunet(current_user.sunetid)
     end
     courses.each do |course|
-      cl = course[:cross_listings].blank? ? "" : "(#{course[:cross_listings]})"
-      items << [course[:cid], "<a href='/reserves/new?comp_key=#{course[:comp_key].gsub("&","%26")}'>#{course[:title]}</a> #{cl}", course[:instructors].map{|i| i[:name]}.compact.join(", ")]
+      cl = course.cross_listings.blank? ? "" : "(#{course.cross_listings})"
+      items << [course.cid, "<a href='/reserves/new?comp_key=#{course.comp_key.gsub("&","%26")}'>#{course.title}</a> #{cl}", course.instructor_names.join(", ")]
     end
     render :json => {"aaData" => items}.to_json, :layout => false
   end
