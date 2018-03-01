@@ -12,3 +12,7 @@
  *= require jquery-ui
  *= require_tree .
 */
+
+.logo img {
+  height: 30px;
+}
