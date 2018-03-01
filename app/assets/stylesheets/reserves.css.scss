@@ -1,15 +1,21 @@
+@charset "UTF-8";
+
 // Place all the styles related to the reserves controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-$cardinal: #990000; 
-$odd: #F6F6F6;
-$even: #ECECEC;
-$data-header: #DDDDDD;
+$cardinal: #8c1515; 
+$odd: #fbfbf9;
+$even: #f3f2f1;
+$data-header: #d0cdc8;
+
 
 @mixin data-table {
+	table {
+		border: 1px solid $data-header;
+	}
 	thead {
 		background-color: $data-header;
-		border-top: 1px solid #CCCCCC;
+		border-top: none;
 	}
 	th {
 		text-align: left;
@@ -22,28 +28,34 @@ $data-header: #DDDDDD;
 	}
 	tr.odd {
 		background-color: $odd;
-		border-bottom: 1px solid #CCCCCC;
+		border-bottom: 1px solid #dad7cb;
 	}
 	tr.even {
 		background-color: $even;
-		border-bottom: 1px solid #DDDDDD;
+		border-bottom: 1px solid #dad7cb;
 	}
 }
 
+
+table {border-collapse: collapse; width: 100%;}
+
+
 body {
-	background: image-url("body.png") repeat scroll 0 0 transparent;
-	font-family: Lucida Grande,Verdana,Arial,sans-serif;
-	font-size: 75%;
-	line-height: 1.5em;
+	background: none; 
+	font-family: 'Source Sans Pro', 'Arial Unicode MS', Helvetica, sans-serif;
+	font-size: 95%;
+	line-height: 1.6em;
+	background-color: #fbfbf9;
 }
-a {
-	color: #575246;
+a, .ui-widget-content a {
+	color: #006CB8;
 	text-decoration: none;
-	border-bottom: 1px dotted #84785A;
+	border-bottom: none; 
 }
-a:hover, a:active {
-	color: #6D1308;
-	border-bottom: 1px dotted #6D1308;
+a:hover, a:active, .ui-widget-content a:hover, .ui-widget-content a:active {
+	color: #00548f;
+	text-decoration: underline;
+	border-bottom: none;
 }
 a.img-link {
 	border-bottom: none;
@@ -52,92 +64,121 @@ a.add-sw-item {
 	margin-left: 10px;
 }
 a.active-button:hover {
-  color: #FFFFFF;	
+	color: #ffffff;	
 }
 #wrapper {
-	background: image-url("wrapper.png") repeat-x scroll 0 0 transparent;
+	background: none; 
 	text-align: center;
 	padding-top: 15px;
 }
 
 #container {
-	background: image-url("top-container.png") repeat-x scroll 0 0 #FFFFFF;
-  border-radius: 3px 3px 3px 3px;
-  border-top: 1px solid #FFFFFF;
+	background: none; 
+    border-radius: 0;
+    border-top: none;
 	margin: 0 auto;
-	padding: 10px 40px 40px;
-	width: 960px;
+	padding: 10px;
+	width: 98vw;
+	max-width: 1170px;
 	text-align: left;
-	background-color: #FFFFFF;
+	background-color: #fbfbf9;
 }
+
 #header {
 	margin-bottom: 20px;
+}
+#header img {
+	height: 35px;
 }
 #links {
 	float: right;
 }
 #header #links span {
-	color: #999999;
+	color: #4d4f53;
+}
+h1, h2, h3 {
+	font-weight: normal;
+	color: #544948;
 }
 h1 {
-	font-weight: bold;
-	font-size: 1.5em;
+	font-size: 2.3em;
 	margin-bottom: 20px;
+	white-space: nowrap;
 }
 h2 {
-	font-weight: bold;
-	font-size: 1.25em;
-	margin: 3px 0;
+	font-size: 1.6em;
+	margin: 10px 0;
 }
 h3 {
-	font-weight: bold;
-	font-size: 1.1em;
+	font-size: 1.3em;
+}
+#introduction {
+	border-left: 5px solid #b6b1a9;
+	margin-bottom: 40px;
+	max-width: 45em;
+	margin-left: 3px;
+	padding-left: 15px;
+}
+#introduction h2 {
+	font-size: 1.3em;
+	margin: 20px 0 0;
 }
 #introduction p {
-	margin-bottom: 20px;
+	margin: 5px 0 20px 0;
 }
-
 #course-details {
 	padding: 10px 0 10px;
 	margin-bottom: 10px;
 }
 #main-details {
 	float: left;
-	width: 62%;
+	max-width: 62%;
 }
 #main-details .section {
 	margin: 10px 0;
+	padding: 5px 0;
 }
 p.sent_date {
 	color: $cardinal;
 	margin-bottom: 5px;
 	font-size: 1.2em;
 }
-label.required:before
-{ 
-	content:"* ";
-	color: #cc0000;
+label.required:after { 
+	content: 'Required';
+	display: inline-block;
+	margin-left: 5px;
+	background-color: #f0ad4e;
+	padding: .2em .6em .3em;
+	font-size: 75%;
+	font-weight: bold;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 #list-management {
 	float: right;
 }
 fieldset#list-management {
-	padding: 20px;
-	background-color: $odd;
-	border: 1px solid #CCCCCC;
+	padding: 0 20px 20px;
+	background-color: $even;
+	border: 1px solid #d0cdc8;
+	margin-bottom: 10px;
 }
 fieldset#list-management label, fieldset#list-management span.form-label {
 	display: inline-block;
-	width: 55px;
-  text-align: right;
+	width: 4em;
+	text-align: right;
 }
 fieldset#list-management label#editors-list {
 	width: auto;
 }
 fieldset#list-management input {
 	width: 230px;
-	margin-bottom: 5px;
+	margin: 0 0 5px 5px;
 }
 fieldset#list-management p, fieldset#list-management label#editors-list {
 	margin: 15px 0 10px;
@@ -155,14 +196,23 @@ fieldset#list-management span.help {
 #reserve-timing {
 	margin-left: 20px;
 }
-input {
-	margin-left: 0;
+input, textarea, select {
+	font-family: 'Source Sans Pro', 'Arial Unicode MS', Helvetica, sans-serif;
+	font-size: .95rem;
+	padding: 5px;
+    border: 1px solid #b6b1a9;
 }
 #item_list_table {
 	@include data-table;
 	width: 100%;
 	margin-bottom: 20px;
 }
+#item_list_table p {
+	margin: 0 0 5px 0;
+}
+#item_list_table td p:first-child {
+	font-size: 1.2em;
+}fieldset#list-management
 #all_courses {
 	@include data-table;
 	width: 100%;
@@ -177,10 +227,10 @@ input {
 	padding-left: 5px;
 }
 #all_courses #course_id {
-	width: 100px;
+	width: 15%;
 }
 #all_courses #instructor {
-	width: 150px;
+	width: 35%;
 }
 #my-reserves {
 	@include data-table;
@@ -198,25 +248,34 @@ input {
 	width: 200px;
 }
 #my-reserves th#clone {
-	width: 150px;
+	width: auto;
 }
 #reserves-section {
 	margin-top: 30px;
 }
-#introduction {
-	margin-bottom: 10px;
-}
+
 th.number {
-	width: 30px;
+	width: 2em;
+}
+th.title {
+	width: 45%;
 }
 th.copies {
-	width: 200px;
+	width: 25%;
 }
 th.loan_period {
-	width: 125px;
+	width: 20%;
 }
 th.delete {
-	width: 80px;
+	width: 6em;
+}
+th.sorting_asc:before {
+	content: "\2193";
+	padding-right: 5px;
+}
+th.sorting_desc:before {
+	content: "\2191";
+	padding-right: 5px;
 }
 input.num_copies {
   width: 20px;
@@ -224,7 +283,7 @@ input.num_copies {
 #item_list_table td.enumerator {
 	padding-left: 15px;
 	font-size: 2em;
-	color: #999999;
+	color: #b6b1a9;
 }
 #item_list_table td.last-row {
 	color: $data-header;
@@ -233,8 +292,8 @@ input.num_copies {
 	width: 400px;
 }
 .add-comment {
-	float:right;
-	font-size: .9em;
+	float:left;
+	font-size: .95em;
 }
 .ui-icon-gripsmall-diagonal-se {
 	float:right;
@@ -244,75 +303,82 @@ input.num_copies {
 	border-right: 2px solid $cardinal;
 }
 .active-button {
-	background: #9D3225;
-	background: -webkit-gradient(linear, left top, left bottom, from(#9D3225), to(#7C1306));
-	background: -moz-linear-gradient(center top , #9D3225, #7C1306) repeat scroll 0 0 transparent;
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9D3225', endColorstr='#7C1306',GradientType=0 ); 
-  border: 1px solid #6D1308;
-  border-radius: 3px 3px 3px 3px;
-  color: #FFFFFF;
-  cursor: pointer;
-  display: inline;
-  height: 28px;
-  margin: 0 20px 0 0;
-  overflow: visible;
-  padding: 4px 8px 5px;
-  text-decoration: none;
+	background: #8c1515;
+	filter: none; 
+	border: 1px solid #820000;
+	border-radius: 3px 3px 3px 3px;
+	color: #FFFFFF;
+	cursor: pointer;
+	display: inline;
+	height: auto;
+	margin: 0 20px 0 0;
+	overflow: visible;
+	padding: 4px 8px 5px;
+	text-decoration: none;
 }
 .active-button:hover {
-  background: #9D3225;
-	background: -webkit-gradient(linear, left top, left bottom, from(#9D3225), to(#510E06));
-	background: -moz-linear-gradient(center top , #9D3225, #510E06) repeat scroll 0 0 transparent;
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9D3225', endColorstr='#510E06',GradientType=0 );
+	background: #690000;
+	filter: none;
 }
 .disabled-button {
-	background: #666666;
-	background: -webkit-gradient(linear, left top, left bottom, from(#666666), to(#CCCCCC));
-	background: -moz-linear-gradient(center top , #666666, #CCCCCC) repeat scroll 0 0 transparent;
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#666666', endColorstr='#CCCCCC',GradientType=0 );
-  border: 1px solid #999999;
-  border-radius: 3px 3px 3px 3px;
-  color: #FFFFFF;
-  cursor: pointer;
-  display: inline;
-  height: 28px;
-  margin: 0 20px 0 0;
-  overflow: visible;
-  padding: 4px 8px 5px;
-  text-decoration: none;
+	background: #5f574f;
+	filter: none;
+	border: 1px solid #544948;
+	border-radius: 3px 3px 3px 3px;
+	color: #FFFFFF;
+	cursor: pointer;
+	display: inline;
+	height: auto;
+	margin: 0 20px 0 0;
+	overflow: visible;
+	padding: 4px 8px 5px;
+	text-decoration: none;
 }
 a.disabled-button {
-	border-bottom: 1px solid #999999;
+	border-bottom: none;
 	border-radius: 3px 3px 3px 3px;
 }
 a.disabled-button:hover {
 	color: #FFFFFF;
-	border-bottom: 1px solid #999999;
+	border-bottom: none;
 	border-radius: 3px 3px 3px 3px;
 }
 
-// clone widget
+/* clone widget */
 .clone_term {
 	position: relative;
 }
 #reserve_form .clone_term {
+	border: none;
+	padding: 0;
+	width: auto;
 	float: left;
 }
 .clone_widget, .clone_select {
-	text-align: right;
+	text-align: left;
 	margin-right: 10px;
 }
 .clone_widget a {
 	border: none;
 }
 .clone_select {
+	background-color: #ffffff;
+	border: 1px solid #b6b1a9;
+	-webkit-box-shadow: 2px 2px 3px 0px rgba(182,177,169,0.75);
+	-moz-box-shadow: 2px 2px 3px 0px rgba(182,177,169,0.75);
+	box-shadow: 2px 2px 3px 0px rgba(182,177,169,0.75); /* 75% #b6b1a9; */
+	left: 0;
+	padding: 10px;
 	position: absolute;
-	right: 0;
-	background-color: $odd;
-	border: 1px solid #CCCCCC;
+	top: 1.5em;
+	width: auto;
+	z-index: 99;
+}
+.clone_select div a {
+	white-space: nowrap;
 }
 .clone_select a:hover {
-  background-color: $even;	
+	background-color: none;	
 }
 .clone_select a {
 	border: none;
@@ -320,23 +386,25 @@ a.disabled-button:hover {
 	padding: 0 5px;
 }
 .clone_dropdown {
-	display: inline-block;
 	background: image-url("dropbutton.png") no-repeat;
-	width: 15px;
-	cursor: pointer;
-}
-// flash error
-.error {
-	color: #C00;
-	margin: 10px 0;
-	font-size: 1.2em;
-	padding: 15px;
-	border: 1px solid #C00;
-	-webkit-border-radius: 3px;
-	background-color: #FFE;
+	display: inline-block;
+    width: 15px;
+    cursor: pointer;
+	vertical-align: -webkit-baseline-middle;
+	margin-left: 5px;
 }
 
-// data table overrides
+/* flash error */
+.error {
+	background-color:#fcf8e3;
+	border: 1px solid #faebcc;
+	border-radius: 4px;	
+	color:#B1040E;
+	font-size: 1em;
+	margin: 10px 0;
+	padding: 15px;
+}
+
 #all_courses_length, #all_courses_filter, #all_courses_info, #all_courses_paginate {
 	margin: 5px 0;
 	width: 48%;
