@@ -39,12 +39,12 @@ reserve_libraries:
   "SCI-RESV": "Science Library (Li and Ma)"
 
 loan_periods:
-  "2HWF-RES"  : "2 hours"
-  "3HWF-RES"  : "3 hours"
-  "4HWF-RES"  : "4 hours"
+  "2HWF-RES": "2 hours"
+  "3HWF-RES": "3 hours"
+  "4HWF-RES": "4 hours"
   "1DNDWF-RES": "1 day"
-  "2DWF-RES"  : "2 days"
-  "3DWF-RES"  : "3 days"
+  "2DWF-RES": "2 days"
+  "3DWF-RES": "3 days"
 
 terms:
 - term: Winter 2012
