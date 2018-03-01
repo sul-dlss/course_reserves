@@ -7,11 +7,11 @@ module ApplicationHelper
       false
     end
   end
-  
+
   def app_config
     CourseReserves::Application.config
   end
-  
+
   def current_term
     Terms.current_term
   end
@@ -19,9 +19,9 @@ module ApplicationHelper
   def future_terms(*args)
     Terms.future_terms(*args)
   end
-  
+
   def sortable_term_value(value)
-    term_data = CourseReserves::Application.config.terms.find { |t| t[:term] == value } || {}
+    term_data = Settings.terms.find { |t| t[:term] == value } || {}
     term_data[:end_date]
   end
 end
