@@ -81,7 +81,7 @@ end
 
 # to be run on machines w/ mysql
 group :production do
-  gem "mysql2", '~> 0.3.20'
+  gem "mysql2"
 end
 
 group :deployment do
