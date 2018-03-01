@@ -23,16 +23,16 @@
   			<tr>
   				<th id="term">Term</th>
   				<th id="course_id">Course ID</th>
-  				<th id="course_description">Description</th>
+  				<th id="course_description" data-sort-method='none' class="no-sort">Description</th>
   				<th id="instructor">Instructor</th>
   				<th id="status">Status</th>
-  				<th id="clone">Clone for new quarter</th>
+  				<th id="clone" data-sort-method='none' class="no-sort">Clone for new quarter</th>
   			</tr>
   		</thead>
   		<tbody>
   			<% @my_reserves.each do |course| -%>
   				<tr class="<%= cycle("odd", "even") -%>">
-  					<td><%= course.term -%></td>
+  					<td data-sort='<%= sortable_term_value(course.term) %>'><%= course.term -%></td>
   					<td><%= course.cid -%></td>
             <%- # TODO: Create some sort of model method for the title of the course so we can fall back if there is no #desc -%>
   					<td><%= link_to(course.desc, edit_reserve_path(course[:id])) -%></td>
@@ -47,5 +47,8 @@
 
 	
   	</table>
+    <script>
+      new Tablesort(document.getElementById('my-reserves'));
+    </script>
   <% end %>
 </div>
