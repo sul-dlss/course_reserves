@@ -54,6 +54,8 @@ gem 'whenever', "~> 0.9"
 # Use honeybadger for exception reporting
 gem 'honeybadger'
 
+gem 'okcomputer'
+
 # to be run on machines w/ sqlite3
 group :development, :test do
   gem "sqlite3"
