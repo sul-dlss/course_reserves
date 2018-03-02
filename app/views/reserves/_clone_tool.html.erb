@@ -2,8 +2,8 @@
   <div class="clone_widget"><%= label %> <span class="clone_dropdown">&nbsp;</span></div>
   <div class="clone_select" style="display:none;">
     <%- [current_term, future_terms].flatten.each do |term| -%>
-      <%- unless term == course.term -%>
-  	    <div><%= link_to(term, clone_reserve_path(course.compound_key, :term=>term)) -%></div>
+      <%- unless term == reserve.term -%>
+  	    <div><%= link_to(term, clone_reserve_path(reserve.id, :term=>term)) -%></div>
 	    <%- end -%>
     <%- end -%>
   </div>

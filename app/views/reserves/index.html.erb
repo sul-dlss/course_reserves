@@ -51,7 +51,7 @@
   					<td><%= course.instructor_names %></td>
   					<td><%= (course.sent_date.blank? or course.sent_date.nil?) ? "Not sent" : "Sent #{course.sent_date}" %></td>
   					<td>
-  					  <%= render :partial => "clone_tool", :locals => {:course => course, :label => "Select quarter"} %>
+  					  <%= render :partial => "clone_tool", :locals => {:reserve => course, :label => "Select quarter"} %>
   					</td>
   				</tr>
   			<% end %>

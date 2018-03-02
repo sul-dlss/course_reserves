@@ -62,7 +62,7 @@
 
 	  <div class="section">
 	    <%= "<p class='sent_date'>Request sent #{@reserve.sent_date}</p>".html_safe if @reserve and !@reserve.sent_date.nil? -%>
-	    <%= render :partial => "clone_tool", :locals => {:course => @reserve, :label => "Clone this list for"} if @reserve && @reserve.has_been_sent %>
+	    <%= render :partial => "clone_tool", :locals => {:reserve => @reserve, :label => "Clone this list for"} if @reserve && @reserve.has_been_sent %>
 	  </div>
 	</div>
 

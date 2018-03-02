@@ -2,7 +2,7 @@ require 'net/http'
 require 'nokogiri'
 require 'terms'
 class ReservesController < ApplicationController
-  load_and_authorize_resource except: [:new, :clone]
+  load_and_authorize_resource except: :new
   skip_authorize_resource only: :index
   skip_load_resource only: :index
 
@@ -34,11 +34,11 @@ class ReservesController < ApplicationController
     render :json => {"aaData" => items}.to_json, :layout => false
   end
 
-  # Raising our own CanCan::AccessDenied here because we also let courses be created by the SUNet IDs in the course XML
   def new
     @course = course_for_compound_key(params[:comp_key])
+    @reserve = Reserve.new(compound_key: params[:comp_key])
     raise RecordNotFound if @course.blank?
-    authorize! :create, Reserve.new(compound_key: params[:comp_key])
+    authorize! :create, @reserve
   end
 
   def add_item
@@ -93,16 +93,11 @@ class ReservesController < ApplicationController
   end
 
   def clone
-    original_reserves = Reserve.where(compound_key: params[:id])
-    original_reserve = original_reserves.first
-    authorize! :clone, original_reserve
-    original_reserves.each do |og_res|
-      if og_res.term == params[:term]
-        flash[:error] = "Course reserve list already exists for this course and term."
-        redirect_to edit_reserve_path(og_res[:id]) and return
-      end
+    if Reserve.where(compound_key: @reserve.compound_key, term: params[:term]).any?
+      flash[:error] = "Course reserve list already exists for this course and term."
+      redirect_to edit_reserve_path(@reserve) and return
     end
-    reserve = original_reserve.dup
+    reserve = @reserve.dup
     reserve.has_been_sent = nil
     reserve.disabled = nil
     reserve.sent_date = nil
