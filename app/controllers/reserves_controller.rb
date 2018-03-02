@@ -34,11 +34,11 @@ class ReservesController < ApplicationController
     render :json => {"aaData" => items}.to_json, :layout => false
   end
 
-  # Raising our own CanCan::AccessDenied here because we also let courses be created by the SUNet IDs in the course XML
   def new
     @course = course_for_compound_key(params[:comp_key])
+    @reserve = Reserve.new(compound_key: params[:comp_key])
     raise RecordNotFound if @course.blank?
-    authorize! :create, Reserve.new(compound_key: params[:comp_key])
+    authorize! :create, @reserve
   end
 
   def add_item

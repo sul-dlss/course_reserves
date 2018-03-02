@@ -17,7 +17,7 @@ RSpec.describe ReservesController do
       r1.save!
       r = Reserve.create(reserve_params.merge({:cid => "CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet", :term => "Winter 2012"}))
       r.save!
-      allow(controller).to receive(:current_user).and_return("user_sunet")
+      allow(controller).to receive(:current_user).and_return(user)
       get :new, :params => {:comp_key => "CID1,user_sunet"}
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
     end
