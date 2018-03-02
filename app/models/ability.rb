@@ -3,9 +3,12 @@ class Ability
 
   def initialize(user)
     can :manage, Reserve, editors: { sunetid: user.sunetid }
+
     can [:create, :clone], Reserve do |reserve|
       reserve.course && reserve.course.instructor_sunets.include?(user.sunetid)
     end
+
+    cannot :clone, Reserve, has_been_sent: nil
 
     return unless user.superuser?
     can :manage, :all

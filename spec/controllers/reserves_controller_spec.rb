@@ -167,21 +167,21 @@ RSpec.describe ReservesController do
   describe "GET clone" do
     it "should allow you to clone an item if you are an existing editor" do
       allow(controller).to receive(:current_user).and_return(user)
-      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :compound_key => "CID1,user_sunet", :sid => "01", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :compound_key => "CID1,user_sunet", :sid => "01", :instructor_sunet_ids => "user_sunet", :has_been_sent => true))
       r.save!
       get :clone, :params => { :id => r.id, :term => Terms.future_terms.first }
       expect(response).to redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should allow you to clone an item if you are an super user" do
       allow(controller).to receive_messages(current_user: superuser)
-      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet", :has_been_sent => true))
       r.save!
       get :clone, :params => { :id => r.id, :term => Terms.future_terms.first }
       expect(response).to redirect_to(edit_reserve_path((r[:id] + 1).to_s))
     end
     it "should transfer editor relationships to new object" do
       allow(controller).to receive(:current_user).and_return(user)
-      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term=> "Spring 2010", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :term=> "Spring 2010", :instructor_sunet_ids => "user_sunet", :has_been_sent => true))
       r.save!
       get :clone, :params => { :id => r.id, :term => Terms.future_terms.first }
       expect(response).to redirect_to(edit_reserve_path((r[:id] + 1).to_s))
@@ -192,14 +192,14 @@ RSpec.describe ReservesController do
     end
     it "should redirect you to an existing course if you try to clone a course w/ the same term" do
       allow(controller).to receive(:current_user).and_return(user)
-      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :term=> "Spring 2010", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :term=> "Spring 2010", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet", :has_been_sent => true))
       r.save!
       get :clone, :params => { :id => r.id, :term => "Spring 2010" }
       expect(response).to redirect_to(edit_reserve_path(r.id))
       expect(flash[:error]).to eq("Course reserve list already exists for this course and term.")
     end
     it "should not allow you to clone an item that you are not an editor of" do
-      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet"))
+      r = Reserve.create(reserve_params.merge(:cid=>"CID1", :sid => "01", :compound_key => "CID1,user_sunet", :instructor_sunet_ids => "user_sunet", :has_been_sent => true))
       r.save!
       expect do
         get :clone, :params => { :id => r.id, :term => Terms.future_terms.first }
