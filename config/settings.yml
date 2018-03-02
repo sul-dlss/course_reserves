@@ -152,3 +152,87 @@ terms:
 - term: Summer 2020
   quarter: Summer
   end_date: 2020-08-15
+- term: Fall 2020
+  quarter: Fall
+  end_date: 2020-12-12
+- term: Winter 2021
+  quarter: Winter
+  end_date: 2021-03-26
+- term: Spring 2021
+  quarter: Spring
+  end_date: 2021-06-13
+- term: Summer 2021
+  quarter: Summer
+  end_date: 2021-08-14
+- term: Fall 2021
+  quarter: Fall
+  end_date: 2021-12-11
+- term: Winter 2022
+  quarter: Winter
+  end_date: 2022-03-26
+- term: Spring 2022
+  quarter: Spring
+  end_date: 2022-06-13
+- term: Summer 2022
+  quarter: Summer
+  end_date: 2022-08-14
+- term: Fall 2022
+  quarter: Fall
+  end_date: 2022-12-17
+- term: Winter 2023
+  quarter: Winter
+  end_date: 2023-04-01
+- term: Spring 2023
+  quarter: Spring
+  end_date: 2023-06-19
+- term: Summer 2023
+  quarter: Summer
+  end_date: 2023-08-20
+- term: Fall 2023
+  quarter: Fall
+  end_date: 2023-12-16
+- term: Winter 2024
+  quarter: Winter
+  end_date: 2024-03-30
+- term: Spring 2024
+  quarter: Spring
+  end_date: 2024-06-17
+- term: Summer 2024
+  quarter: Summer
+  end_date: 2024-08-18
+- term: Fall 2024
+  quarter: Fall
+  end_date: 2024-12-14
+- term: Winter 2025
+  quarter: Winter
+  end_date: 2025-03-29
+- term: Spring 2025
+  quarter: Spring
+  end_date: 2025-06-16
+- term: Summer 2025
+  quarter: Summer
+  end_date: 2025-08-17
+- term: Fall 2025
+  quarter: Fall
+  end_date: 2025-12-13
+- term: Winter 2026
+  quarter: Winter
+  end_date: 2026-03-28
+- term: Spring 2026
+  quarter: Spring
+  end_date: 2026-06-15
+- term: Summer 2026
+  quarter: Summer
+  end_date: 2026-08-16
+- term: Fall 2026
+  quarter: Fall
+  end_date: 2026-12-12
+- term: Winter 2027
+  quarter: Winter
+  end_date: 2027-03-27
+- term: Spring 2027
+  quarter: Spring
+  end_date: 2027-06-14
+- term: Summer 2027
+  quarter: Summer
+  end_date: 2027-08-15
