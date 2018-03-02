@@ -93,7 +93,7 @@ $(document).ready(function(){
 	      dialog_box.dialog({
 					height: 'auto',
 					width: Math.max(($(window).width() /2), 45),
-					position: { my: "center top", at: "center bottom", of: '#header' }
+					position: { my: "center bottom", at: "center top", of: '#header' }
 				});
       }
       dialog_box.dialog("open").dialog("moveToTop");
