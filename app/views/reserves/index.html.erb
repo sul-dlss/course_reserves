@@ -33,26 +33,27 @@
   	<table id="my-reserves">
   		<thead>
   			<tr>
-  				<th id="term">Term</th>
   				<th id="course_id">Course ID</th>
+  				<th id="term">Term</th>
+  				<th id="clone" data-sort-method='none' class="no-sort">Actions</th>
   				<th id="course_description" data-sort-method='none' class="no-sort">Description</th>
   				<th id="instructor">Instructor</th>
   				<th id="status">Status</th>
-  				<th id="clone" data-sort-method='none' class="no-sort">Clone for new quarter</th>
   			</tr>
   		</thead>
   		<tbody>
   			<% @reserves.each do |course| -%>
   				<tr class="<%= cycle("odd", "even") -%>">
-  					<td data-sort='<%= sortable_term_value(course.term) %>'><%= course.term -%></td>
   					<td><%= course.cid -%></td>
+  					<td data-sort='<%= sortable_term_value(course.term) %>'><%= course.term -%></td>
+            <td>
+              <%= link_to 'Edit', edit_reserve_path(course) %>
+              <%= link_to 'Copy', reserve_terms_path(course), class: 'copy-link dialog' %>
+            </td>
             <%- # TODO: Create some sort of model method for the title of the course so we can fall back if there is no #desc -%>
-  					<td><%= link_to(course.desc, edit_reserve_path(course.id)) -%></td>
+  					<td><%= course.desc -%></td>
   					<td><%= course.instructor_names %></td>
   					<td><%= (course.sent_date.blank? or course.sent_date.nil?) ? "Not sent" : "Sent #{course.sent_date}" %></td>
-  					<td>
-  					  <%= render :partial => "clone_tool", :locals => {:reserve => course, :label => "Select quarter"} %>
-  					</td>
   				</tr>
   			<% end %>
   		</tbody>

@@ -258,6 +258,10 @@ input, textarea, select {
 	margin-top: 30px;
 }
 
+#reserves-section .copy-link {
+  margin-left: 25px;
+}
+
 th.number {
 	width: 2em;
 }
@@ -346,56 +350,6 @@ a.disabled-button:hover {
 	color: #FFFFFF;
 	border-bottom: none;
 	border-radius: 3px 3px 3px 3px;
-}
-
-/* clone widget */
-.clone_term {
-	position: relative;
-}
-#reserve_form .clone_term {
-	border: none;
-	padding: 0;
-	width: auto;
-	float: left;
-}
-.clone_widget, .clone_select {
-	text-align: left;
-	margin-right: 10px;
-}
-.clone_widget a {
-	border: none;
-}
-.clone_select {
-	background-color: #ffffff;
-	border: 1px solid #b6b1a9;
-	-webkit-box-shadow: 2px 2px 3px 0px rgba(182,177,169,0.75);
-	-moz-box-shadow: 2px 2px 3px 0px rgba(182,177,169,0.75);
-	box-shadow: 2px 2px 3px 0px rgba(182,177,169,0.75); /* 75% #b6b1a9; */
-	left: 0;
-	padding: 10px;
-	position: absolute;
-	top: 1.5em;
-	width: auto;
-	z-index: 99;
-}
-.clone_select div a {
-	white-space: nowrap;
-}
-.clone_select a:hover {
-	background-color: none;	
-}
-.clone_select a {
-	border: none;
-	display:block;
-	padding: 0 5px;
-}
-.clone_dropdown {
-	background: image-url("dropbutton.png") no-repeat;
-	display: inline-block;
-    width: 15px;
-    cursor: pointer;
-	vertical-align: -webkit-baseline-middle;
-	margin-left: 5px;
 }
 
 /* flash error */
