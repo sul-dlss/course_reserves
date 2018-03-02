@@ -4,7 +4,7 @@ require 'terms'
 RSpec.describe ReservesController do
   include Terms
   let(:reserve_params) do
-    {:library => "Green", :immediate=>"true", :contact_name => "John Doe", :contact_phone=>"(555)555-5555", :contact_email=>"jdoe@example.com"}
+    {:library => "Green", :term=>Terms.current_term, :contact_name => "John Doe", :contact_phone=>"(555)555-5555", :contact_email=>"jdoe@example.com"}
   end
 
   let(:user) { instance_double('CurrentUser', sunetid: 'user_sunet', superuser?: false) }
@@ -68,13 +68,6 @@ RSpec.describe ReservesController do
       expect(r.cid).to eq('AA-272C')
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
     end
-    it "should save the configured current term when immediate is selected" do
-      allow(controller).to receive(:current_user).and_return(user_456)
-      post :create, :params => { :reserve => reserve_params.merge({:cid => 'AA-272C', :compound_key => 'AA-272C,123,456', :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"}) }
-      r = assigns[:reserve]
-      expect(r.term).to eq(Terms.current_term)
-      expect(response).to redirect_to(edit_reserve_path(r[:id]))
-    end
     it "should raise an error if the user does not have access to create this reserve list" do
       allow(controller).to receive(:current_user).and_return(CurrentUser.new('not-authed'))
 
@@ -132,17 +125,9 @@ RSpec.describe ReservesController do
       expect(Reserve.find(r2[:id]).term).to eq("Summer 2012")
       expect(flash[:error]).to eq("Course reserve list already exists for this course and term. The term has not been saved.")
     end
-    it "should save the configured current term when immediate is selected" do
-      expect(controller).to receive_messages(current_user: user)
-      r = Reserve.create(reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"}))
-      r.save!
-      get :update, :params => {:id=>r[:id], :reserve => reserve_params.merge({:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010"})}
-      expect(response).to redirect_to(edit_reserve_path(r[:id]))
-      expect(Reserve.find(r[:id]).term).to eq(Terms.current_term)
-    end
     it "should properly assign the sent_item_list for unsent items" do
       expect(controller).to receive_messages(current_user: user)
-      res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}]}
+      res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}]}
       r = Reserve.create(reserve_params.merge(res))
       r.save!
       expect(r.sent_item_list).to be_blank
@@ -151,7 +136,7 @@ RSpec.describe ReservesController do
     end
     it "should properly assign the sent_item-list for sent items" do
       expect(controller).to receive_messages(current_user: user)
-      res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}], :has_been_sent=>true, :sent_item_list=>[{"ckey"=>"12345"}]}
+      res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}], :has_been_sent=>true, :sent_item_list=>[{"ckey"=>"12345"}]}
       r = Reserve.create(reserve_params.merge(res))
       r.save!
       get :update, :params => {:id=>r[:id], :send_request=>"true", :reserve=>res.merge({:item_list=>[{"ckey"=>"12345"}, {"ckey"=>"54321"}]})}
@@ -160,7 +145,7 @@ RSpec.describe ReservesController do
 
     it 'should allow superusers to update any record' do
       expect(controller).to receive_messages(current_user: superuser)
-      res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :immediate=>"true", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}], :has_been_sent=>true, :sent_item_list=>[{"ckey"=>"12345"}]}
+      res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => "user_sunet", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}], :has_been_sent=>true, :sent_item_list=>[{"ckey"=>"12345"}]}
       r = Reserve.create(reserve_params.merge(res))
       r.save!
       get :update, :params => {:id=>r[:id], :send_request=>"true", :reserve=>res.merge({:item_list=>[{"ckey"=>"12345"}, {"ckey"=>"54321"}]})}
@@ -169,7 +154,7 @@ RSpec.describe ReservesController do
 
     it 'should not allow you to update a record you are not an editor of' do
       expect(controller).to receive_messages(current_user: user)
-      res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => 'some_other_user', :immediate=>"true", :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}], :has_been_sent=>true, :sent_item_list=>[{"ckey"=>"12345"}]}
+      res = {:cid => "CID1", :sid => "01", :instructor_sunet_ids => 'some_other_user', :term=>"Summer 2010", :item_list=>[{"ckey"=>"12345"}], :has_been_sent=>true, :sent_item_list=>[{"ckey"=>"12345"}]}
       r = Reserve.create(reserve_params.merge(res))
       r.save!
 

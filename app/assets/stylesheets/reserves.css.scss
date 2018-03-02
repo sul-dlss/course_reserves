@@ -9,6 +9,10 @@ $even: #f3f2f1;
 $data-header: #d0cdc8;
 
 
+label.disabled {
+	color: #888;
+}
+
 @mixin data-table {
 	table {
 		border: 1px solid $data-header;
