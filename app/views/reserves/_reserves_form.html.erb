@@ -55,7 +55,7 @@
 			<select id="libraries" name="reserve[library]">
 				<option>(select library)</option>
 				<% Settings.reserve_libraries.each do |code, library| %>
-					<option value="<%= code -%>" <%= "selected='selected'" if @reserve and @reserve.library == code -%> ><%= library -%></option>
+					<option value="<%= code -%>" <%= "selected='selected'" if @reserve.library.to_s == code.to_s -%> ><%= library -%></option>
 				<% end %>
 			</select>
 		</div>
