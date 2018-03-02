@@ -112,9 +112,11 @@ $(document).ready(function(){
 	      });
 
 				// set the appropriate height/width/position of dialog.
-	      dialog_box.dialog("option", "height", "auto");
-				dialog_box.dialog("option", "width", Math.max(($(window).width() /2), 45));
-		    dialog_box.dialog("option", "position", ['center', 75]);
+	      dialog_box.dialog({
+					height: 'auto',
+					width: Math.max(($(window).width() /2), 45),
+					position: { my: "center top", at: "center bottom", of: '#header' }
+				});
       }
       dialog_box.dialog("open").dialog("moveToTop");
 
