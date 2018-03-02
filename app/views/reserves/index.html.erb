@@ -52,7 +52,7 @@
               <% end %>
               <%= link_to reserve_terms_path(course), class: 'copy-link dialog' do %>
                 Copy <span class='sr-only'><%= "#{course.cid} - #{course.term}" %>
-              <% end %>
+              <% end if course.has_been_sent %>
             </td>
             <%- # TODO: Create some sort of model method for the title of the course so we can fall back if there is no #desc -%>
   					<td><%= course.desc -%></td>
