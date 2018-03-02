@@ -9,15 +9,13 @@ module Terms
     end
 
     def future_terms(term = nil)
-      if term.nil?
-        current_term_index = terms.index(current_term_hash)
+      current_term_index = if term.nil?
+        terms.index(current_term_hash)
       else
-        current_term = terms.collect{|t| t if t[:term] == term}.compact.first
-        current_term_index = terms.index(current_term)
+        terms.index { |t| t[:term] == term }
       end
-      future_terms = [terms[current_term_index+1][:term]]
-      future_terms << terms[current_term_index+2][:term] if terms[current_term_index+2]
-      return future_terms
+
+      terms.slice(current_term_index + 1, 2).map { |t| t[:term] }
     end
     
     def process_term_for_cw(term)
