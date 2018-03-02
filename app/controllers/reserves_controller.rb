@@ -92,6 +92,10 @@ class ReservesController < ApplicationController
     redirect_to({ :controller => 'reserves', :action => 'edit', :id => params[:id] })
   end
 
+  def terms
+    render layout: false if request.xhr?
+  end
+
   def clone
     if Reserve.where(compound_key: @reserve.compound_key, term: params[:term]).any?
       flash[:error] = "Course reserve list already exists for this course and term."

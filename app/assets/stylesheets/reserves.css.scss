@@ -409,6 +409,12 @@ a.disabled-button:hover {
 	padding: 15px;
 }
 
+/* Copy/Clone reserves list */
+ul.clone-reserve-list {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
 #all_courses_length, #all_courses_filter, #all_courses_info, #all_courses_paginate {
 	margin: 5px 0;
 	width: 48%;
