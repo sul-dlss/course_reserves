@@ -262,6 +262,10 @@ input, textarea, select {
   margin-left: 25px;
 }
 
+#reserves-section th#actions {
+  min-width: 110px; // Ensure edit/copy links do not wrap
+}
+
 th.number {
 	width: 2em;
 }
