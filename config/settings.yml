@@ -1,3 +1,5 @@
+block_emails?: false
+
 courseworks:
   coursexml_url: "https://bodoni.stanford.edu/coursereserves/courseXML_%{term}.xml"
 
