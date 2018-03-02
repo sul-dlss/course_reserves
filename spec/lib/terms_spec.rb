@@ -41,7 +41,7 @@ RSpec.describe Terms do
       expect(ft).to include("Winter 2017")
     end
     it "should return 1 term when we are at the end of the list" do
-      expect(terms.future_terms("Spring 2020")).to eq(["Summer 2020"])
+      expect(terms.future_terms("Spring 2027")).to eq(["Summer 2027"])
     end
   end
   describe "processing terms for CourseWork file names" do
