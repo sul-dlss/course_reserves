@@ -1,0 +1,13 @@
+<h2><%= @reserve.desc %></h2>
+<ul class='clone-reserve-list'>
+  <% Terms.all.each do |term| %>
+    <% next if term == @reserve.term %>
+    <li>
+      <% if has_existing_reserve_for_term?(@reserve, term) %>
+        <%= term %> (reserve list already exists)
+      <% else %>
+        <%= link_to(term, clone_reserve_path(@reserve, term: term)) %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

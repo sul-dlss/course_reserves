@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
   root :to => 'reserves#index'
-  
+  match 'reserves/:id/terms' => 'reserves#terms', :as => :reserve_terms, :via => :get
   match 'reserves/:id/clone' => 'reserves#clone', :as => :clone_reserve, :via => :get
   match 'reserves/add_item(.:format)' => 'reserves#add_item', :as => :add_reserves_item, :via => :get 
   match 'all_courses' => 'reserves#all_courses', :as => :all_courses, :via => :get 

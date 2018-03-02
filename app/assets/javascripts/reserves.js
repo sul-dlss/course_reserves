@@ -1,6 +1,6 @@
 // Things that need to document to be loaded to do.
 $(document).ready(function(){
-	
+
 	// Add item from SW
 	$(".add-sw-item").click(function(){
 		if($("#sw_url").val() != ""){
@@ -23,7 +23,7 @@ $(document).ready(function(){
 			return false;
 		}
 	});
-	
+
 	// Create hidden elements reflecting the value of all disabled elements
 	$("#send, #save").click(function(){
 		$("#reserve_form select:disabled").each(function(){
@@ -33,7 +33,7 @@ $(document).ready(function(){
 		var radio = $("#reserve_form #reserve-timing input:checked");
 		radio.after("<input type='hidden' name='" + radio.attr("name") + "' value='" + radio.val() + "' />");
 	});
-	
+
 	$("#add_custom").click(function(){
 		$("body").css("cursor", "progress");
 	});
@@ -41,7 +41,7 @@ $(document).ready(function(){
 	// Add comment links
 	$("body").on("click", ".add-comment", function(){
 		if($(this).text() == "Add comment"){
-		  $(this).text("Remove comment");	
+		  $(this).text("Remove comment");
 		}else{
 			$(this).text("Add comment");
 		}
@@ -49,7 +49,7 @@ $(document).ready(function(){
 		$(this).parents("td").children("textarea").val("");
     return false;
 	});
-	
+
 	// Delete item links
 	$("body").on("click", ".delete", function(){
 		$(this).parents("tr").remove();
@@ -63,45 +63,23 @@ $(document).ready(function(){
   $("#reserve_form input:not(#sw_url), #reserve_form textarea, #reserve_form select").on("change", function(){
     check_validations();
   });
-  
+
   // Term processing
   $("#reserve_form select#term").focus(function(){
 	  $("#reserve_form input#future").attr("checked", "checked");
-  });
-
-  // clone widget
-  $(".clone_widget .clone_dropdown").each(function(){
-	  $(this).click(function(){
-		  var next_select = $(this).parent(".clone_widget").next(".clone_select");
-		  if(next_select.filter(":visible").length == 0) {
-			  $(".clone_select:visible").each(function(){
-				  $(this).toggle();
-			  });
-		    next_select.toggle('slow', function(){});
-		  }
-	  });
-	  $(this).click(function(){
-		  return false;
-	  });
-  });
-  // remove any visible select widgets when we click on the body
-  $("body").click(function(){
-	  $(".clone_select:visible").each(function(){
-		  $(this).toggle();
-	  });
   });
 
   // jQuery dialog
   $("a.dialog").each(function() {
     var dialog_box = "empty";
     var link = $(this);
-    $(this).click( function() {     
+    $(this).click( function() {
       //lazy create of dialog
       if ( dialog_box == "empty") {
-        dialog_box = $('<div class="dialog_box"></div>').dialog({ autoOpen: false});          
+        dialog_box = $('<div class="dialog_box"></div>').dialog({ autoOpen: false});
 	      // Load the original URL on the link into the dialog associated
 	      // with it. Rails app will give us an appropriate partial.
-	      // pull dialog title out of first heading in contents. 
+	      // pull dialog title out of first heading in contents.
 	      $("body").css("cursor", "progress");
 	      dialog_box.load( this.href , function() {
 				  // Remove first header from loaded content, and make it a dialog
@@ -122,10 +100,10 @@ $(document).ready(function(){
 
       return false; // do not execute default href visit
     });
-    
+
   });
-  
-  
+
+
   // enforce loan period on library change
   $("select#libraries").on("change", function(){
   	  check_loan_period();
@@ -138,7 +116,7 @@ $(document).ready(function(){
 
 function check_validations(){
 	if($("#reserve_form #libraries").val() == "(select library)" || $("#item_list_table tbody tr").length < 2 ){
-	  $("input#send").attr("disabled", "true");	
+	  $("input#send").attr("disabled", "true");
 	  $("input#send").removeClass("active-button");
 	  $("input#send").addClass("disabled-button");
   }else{

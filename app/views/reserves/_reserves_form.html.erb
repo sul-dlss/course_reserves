@@ -50,6 +50,14 @@
 			</div>
 		</div>
 
+    <% if @reserve.has_been_sent %>
+      <div class="section">
+        <p class="sent_date">Request sent <%= @reserve.sent_date %></p>
+
+        <%= link_to('Copy this list for a new quarter', reserve_terms_path(@reserve), class: 'dialog active-button') %>
+      </div>
+    <% end %>
+
 		<div class="section">
 		  <label for="libraries" class="required">Send request to</label>
 			<select id="libraries" name="reserve[library]">
@@ -59,28 +67,23 @@
 				<% end %>
 			</select>
 		</div>
-
-	  <div class="section">
-	    <%= "<p class='sent_date'>Request sent #{@reserve.sent_date}</p>".html_safe if @reserve and !@reserve.sent_date.nil? -%>
-	    <%= render :partial => "clone_tool", :locals => {:reserve => @reserve, :label => "Clone this list for"} if @reserve && @reserve.has_been_sent %>
-	  </div>
 	</div>
 
-	<fieldset id="list-management">				
-		<h3>List management</h3>				
+	<fieldset id="list-management">
+		<h3>List management</h3>
 		<p>Who should the library contact about this list?</p>
 		<label for="contact_name">Name</label> <input name="reserve[contact_name]" value="<%= @reserve.contact_name if @reserve -%>" id="contact_name" type="text" /><br/>
 		<label for="contact_phone">Phone</label> <input name="reserve[contact_phone]"  value="<%= @reserve.contact_phone if @reserve -%>" id="contact_phone" type="text"/><br/>
 		<label for="contact_email">Email</label> <input name="reserve[contact_email]" value="<%= @reserve.contact_email if @reserve -%>"  id="contact_email" type="text"/><br/>
 		<label for="editor_sunet_ids" id="editors-list">Who can edit this list?</label><br/>
 		<span class="form-label"><%= params[:action] == "new" ? @course.instructor_sunets.join(", ") : @reserve.instructor_sunet_ids %>,</span> <input name="reserve[editor_sunet_ids]" value="<%= @reserve.editor_sunet_ids if @reserve -%>" id="editor_sunet_ids" type="text"/><br/>
-		<span class="help">(SUNet IDs, separated by commas)</span>					
+		<span class="help">(SUNet IDs, separated by commas)</span>
 	</fieldset>
   <div style="clear:both;"></div>
-</div>	
+</div>
 <div>
-  <table id="item_list_table">	
-    <thead>		
+  <table id="item_list_table">
+    <thead>
     	<tr>
     		<th class="number">&nbsp;</th>
     		<th class="title">Title</th>
@@ -88,13 +91,13 @@
     		<th class="loan_period">Loan period</th>
     		<th class="delete">Delete</th>
     	</tr>
-  	</thead>	
+  	</thead>
   	<tbody>
     	<% unless @reserve.blank? or @reserve.item_list.blank? %>
     		<% @reserve.item_list.each_with_index do |item, index| %>
     		  <%= render :partial => "reserves_item", :locals => { :item => item, :index => index }-%>
     		<% end %>
-    	<% end %>	
+    	<% end %>
     	<%- if !@reserve or !@reserve.disabled -%>
       	<tr id="add_row" class="<%= cycle("odd","even") %>">
       		<td class="enumerator last-row"><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
@@ -104,6 +107,6 @@
       		</td>
       	</tr>
       <%- end -%>
-  	</tbody>		
+  	</tbody>
   </table>
 </div>
