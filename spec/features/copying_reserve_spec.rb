@@ -10,6 +10,7 @@ RSpec.describe 'Copying a reserve list', js: true do
       cid: 'AA-272C',
       compound_key: 'AA-272C,123,456',
       term: Terms.current_term,
+      has_been_sent: true,
       instructor_sunet_ids: '123,456'
     )
   end
@@ -32,6 +33,7 @@ RSpec.describe 'Copying a reserve list', js: true do
       cid: 'AA-272C',
       compound_key: 'AA-272C,123,456',
       term: Terms.future_terms.first,
+      has_been_sent: true,
       instructor_sunet_ids: '123,456'
     )
 
@@ -48,5 +50,21 @@ RSpec.describe 'Copying a reserve list', js: true do
       expect(page).to have_content("#{Terms.future_terms.first} (reserve list already exists)")
       expect(page).to have_css('a', text: Terms.future_terms.last)
     end
+  end
+
+  it 'does not present a copy link for a reserve that has not been sent' do
+    reserve = Reserve.last
+    reserve.has_been_sent = false
+    reserve.save
+
+    visit '/'
+
+    within(first('#my-reserves tbody tr')) do
+      expect(page).not_to have_link('Copy')
+
+      click_link 'Edit'
+    end
+
+    expect(page).not_to have_link 'Copy this list for a new quarter'
   end
 end
