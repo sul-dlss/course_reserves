@@ -113,6 +113,7 @@ $(document).ready(function(){
 
 				// set the appropriate height/width/position of dialog.
 	      dialog_box.dialog({
+					modal: true,
 					height: 'auto',
 					width: Math.max(($(window).width() /2), 45),
 					position: { my: "center top", at: "center bottom", of: '#header' }
