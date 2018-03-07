@@ -1,7 +1,7 @@
 # Course Reserves
 =========
 
-[![Build Status](https://travis-ci.com/sul-dlss/course_reserves.svg?token=CqUnNp8DCwBNAp6k6tMP&branch=master)](https://travis-ci.com/sul-dlss/course_reserves)
+[![Build Status](https://travis-ci.org/sul-dlss/course_reserves.svg?branch=master)](https://travis-ci.org/sul-dlss/course_reserves)
 
 [https://searchworks.stanford.edu/reserves](https://searchworks.stanford.edu/reserves)
 
