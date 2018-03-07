@@ -17,10 +17,24 @@ class ApplicationController < ActionController::Base
   end
 
   def remote_privgroups
-    if request.env['WEBAUTH_LDAPPRIVGROUP']
-      request.env['WEBAUTH_LDAPPRIVGROUP'].split('|')
-    elsif Rails.env.development? && ENV['WEBAUTH_LDAPPRIVGROUP']
-      ENV['WEBAUTH_LDAPPRIVGROUP'].split('|')
+    return webauth_privgroups if webauth_privgroups.present?
+
+    shibboleth_privgroups
+  end
+
+  def webauth_privgroups
+    groups('WEBAUTH_LDAPPRIVGROUP', '|')
+  end
+
+  def shibboleth_privgroups
+    groups('eduPersonEntitlement', ';')
+  end
+
+  def groups(key, delimiter)
+    if request.env[key]
+      request.env[key].split(delimiter)
+    elsif Rails.env.development? && ENV[key]
+      ENV[key].split(delimiter)
     else
       []
     end

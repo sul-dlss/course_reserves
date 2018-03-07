@@ -1,9 +1,9 @@
 class CurrentUser
   attr_reader :sunetid, :privgroups
 
-  def initialize(sunetid, privgroups = '')
-    @sunetid = sunetid
-    @privgroups = privgroups.split('|').flatten
+  def initialize(sunetid, privgroups = [])
+    @sunetid = (sunetid || '').sub('@stanford.edu', '')
+    @privgroups = privgroups
   end
 
   def to_s

@@ -1,15 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe CurrentUser do
-  subject(:current_user) { described_class.new('sunet', privgroups) }
+  let(:sunetid) { 'sunet' }
+  subject(:current_user) { described_class.new(sunetid, privgroups) }
 
   let(:privgroups) { '' }
 
-  describe '#privgroups' do
-    let(:privgroups) { 'priv1|priv2' }
+  describe '#sunetid' do
+    context 'when it contains "@stanford.edu"' do
+      let(:sunetid) { 'sunet-wo-stanford@stanford.edu' }
 
-    it 'splits a pipe delimited string into an array' do
-      expect(current_user.privgroups).to eq %w[priv1 priv2]
+      it { expect(current_user.sunetid).to eq 'sunet-wo-stanford' }
     end
   end
 
