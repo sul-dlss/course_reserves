@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20120222195147) do
+ActiveRecord::Schema.define(version: 2018_04_06_221446) do
 
   create_table "editors", force: :cascade do |t|
     t.string "sunetid"
@@ -28,14 +28,15 @@ ActiveRecord::Schema.define(version: 20120222195147) do
     t.string "sid"
     t.string "desc"
     t.string "library"
+    t.boolean "immediate"
     t.string "term"
     t.string "compound_key"
     t.string "cross_listings"
     t.string "contact_name"
     t.string "contact_phone"
     t.string "contact_email"
-    t.string "instructor_names"
-    t.string "instructor_sunet_ids"
+    t.text "instructor_names"
+    t.text "instructor_sunet_ids"
     t.string "editor_sunet_ids"
     t.text "item_list"
     t.boolean "has_been_sent"
