@@ -14,8 +14,8 @@ ActiveRecord::Schema.define(version: 2018_04_06_221446) do
 
   create_table "editors", force: :cascade do |t|
     t.string "sunetid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "editors_reserves", id: false, force: :cascade do |t|
@@ -43,8 +43,8 @@ ActiveRecord::Schema.define(version: 2018_04_06_221446) do
     t.boolean "disabled"
     t.string "sent_date"
     t.text "sent_item_list"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
