@@ -68,7 +68,6 @@ group :development do
 end
 
 group :test do
-  gem 'poltergeist'
   gem 'capybara', ">= 2.2.0"
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
