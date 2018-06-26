@@ -69,7 +69,7 @@ end
 
 group :test do
   gem 'capybara', ">= 2.2.0"
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '!= 3.13.0'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
   gem 'rspec-rails', '~> 3.5', '>= 3.5.2'
