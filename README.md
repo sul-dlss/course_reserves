@@ -23,7 +23,7 @@ Start the rails app
 
 Start the rails app with an admin user logged in
   ```
-  $ REMOTE_USER=test_user WEBAUTH_LDAPPRIVGROUP=sulair:course-resv-admins bundle exec rails server
+  $ REMOTE_USER=test_user eduPersonEntitlement=sulair:course-resv-admins bundle exec rails server
   ```
 
 To load sample data:
