@@ -103,7 +103,7 @@ class CourseWorkCourses
       next_term = Terms.process_term_for_cw(Terms.future_terms.first)
       xml = []
       ["#{Rails.root}/lib/course_work_xml/courseXML_#{current}.xml", "#{Rails.root}/lib/course_work_xml/courseXML_#{next_term}.xml"].each do |url|
-        xml << Nokogiri::XML(File.open(url, 'r')) if File.exists?(url)
+        xml << Nokogiri::XML(File.open(url, 'r')) if File.exist?(url)
       end
       return xml
     end
@@ -113,16 +113,16 @@ class CourseWorkCourses
     return to_enum(:process_all_courses_xml, xml_files) unless block_given?
 
     xml_files.each do |xml|
-      xml.xpath("//courseclass").each_with_index do |course, idx_course|
+      xml.xpath("//courseclass").each_with_index do |course, _idx_course|
         course_title = course[:title]
         term = course[:term]
         cids = []
         course.xpath("./class").each do |cl|
           cids << cl[:id].gsub(/^\w{1,2}\d{2}-/, "")
         end
-        course.xpath("./class").each_with_index do |cl, idx_cl|
+        course.xpath("./class").each_with_index do |cl, _idx_cl|
           class_id = cl[:id].gsub(/^\w{1,2}\d{2}-/, "")
-          cl.xpath("./section").each_with_index do |sec, idx_sec|
+          cl.xpath("./section").each_with_index do |sec, _idx_sec|
             section_id = sec[:id]
             instructors = []
             sec.xpath("./instructors/instructor").each do |inst|
@@ -132,14 +132,14 @@ class CourseWorkCourses
               instructors << {:sunet => sunet, :name => name}
             end
 
-            unless instructors.blank?
+            if instructors.present?
               yield Course.new({
-                :title          => course_title,
-                :term           => term,
-                :cid            => class_id,
-                :cids           => cids,
-                :sid            => section_id,
-                :instructors    => instructors
+                :title => course_title,
+                :term => term,
+                :cid => class_id,
+                :cids => cids,
+                :sid => section_id,
+                :instructors => instructors
               })
             end
           end        

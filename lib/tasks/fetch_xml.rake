@@ -18,7 +18,7 @@ task :fetch_xml => :environment do
       errors << "#{url} returned #{response.status}\n"
     end
   end
-  Report.msg(:to=> Settings.email.reports, :subject => "Problem downloading XML file(s) from CourseWork", :message => errors).deliver_now unless errors.blank?
+  Report.msg(:to=> Settings.email.reports, :subject => "Problem downloading XML file(s) from CourseWork", :message => errors).deliver_now if errors.present?
   %x[touch tmp/restart.txt] if updated
 end
 

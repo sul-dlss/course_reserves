@@ -15,4 +15,3 @@ RSpec.describe Report do
     expect(r.body.raw_source).to be_blank
   end
 end
-  

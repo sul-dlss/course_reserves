@@ -1,7 +1,7 @@
 require 'terms'
 module ApplicationHelper
   def item_in_searchworks?(item)
-    if params[:sw] == "true" or ( item.has_key?("ckey") and !item["ckey"].blank? )
+    if params[:sw] == "true" or ( item.has_key?("ckey") and item["ckey"].present? )
       true
     else
       false

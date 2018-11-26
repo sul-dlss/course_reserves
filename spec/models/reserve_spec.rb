@@ -12,7 +12,6 @@ RSpec.describe Reserve do
   end
 
   describe "editor relationships" do
-
     it "should generate editor relationships from editor_sunet_ids field for single sunet_id" do
       reserve = Reserve.create( reserve_params.merge({ :editor_sunet_ids => 'jlavigne', :cid => 'test_cid', :item_list => [{ :title => 'My Title' }] }) )
       reserve.save!
@@ -73,7 +72,6 @@ RSpec.describe Reserve do
       expect(new_res.editors.length).to eq(1)
       expect(Editor.find_by_sunetid("jlavigne").reserves).to be_blank
     end
-
   end
 
   describe "item_list serialization" do
@@ -86,6 +84,5 @@ RSpec.describe Reserve do
     it "should throw an error for TypeMismatch when we serialize the item list with a hash" do
       expect {Reserve.create( reserve_params.merge({ :cid => 'test_cid', :item_list => { :title => 'My Title' } }) )}.to raise_error(ActiveRecord::SerializationTypeMismatch)
     end
-
   end
 end

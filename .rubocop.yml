@@ -1,7 +1,9 @@
 inherit_from: .rubocop_todo.yml
 
+require: rubocop-rspec
+
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
   DisplayCopNames: true
   Exclude:
     - 'bin/**/*'
@@ -36,4 +38,4 @@ Metrics/ClassLength:
   Max: 200
 
 Metrics/LineLength:
-  Max: 150
+  Max: 220

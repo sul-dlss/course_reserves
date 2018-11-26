@@ -20,9 +20,9 @@ class ReserveMail < ActionMailer::Base
   def process_new_item_list(reserve)
     text = ""
     reserve.item_list.each do |item| 
-      text << "Title: #{item["title"]}\n" unless item["title"].blank? 
-      text << "CKey: #{item["ckey"]} : http://searchworks.stanford.edu/view/#{item["ckey"]}\n" unless item["ckey"].blank? 
-      text << "Comment: #{item["comment"]}\n" unless item["comment"].blank? 
+      text << "Title: #{item["title"]}\n" if item["title"].present? 
+      text << "CKey: #{item["ckey"]} : http://searchworks.stanford.edu/view/#{item["ckey"]}\n" if item["ckey"].present? 
+      text << "Comment: #{item["comment"]}\n" if item["comment"].present? 
       text << "Circ rule: #{Settings.loan_periods.to_h.key(item["loan_period"])}\n" 
       text << "Copies: #{item["copies"]}\n"
       text << "Purchase this item? Yes\n" if item.has_key?("purchase") and item["purchase"] == "true" 

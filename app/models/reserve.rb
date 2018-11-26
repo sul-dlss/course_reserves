@@ -1,5 +1,4 @@
-class Reserve < ActiveRecord::Base
-
+class Reserve < ApplicationRecord
   before_save :process_sunet_ids
 
   has_and_belongs_to_many :editors
@@ -23,7 +22,7 @@ class Reserve < ActiveRecord::Base
 
     editors = []
 
-    unless self.instructor_sunet_ids.blank?
+    if self.instructor_sunet_ids.present?
       self.instructor_sunet_ids.split(/,/).map{|i| i.strip}.each do |s|
         ed = Editor.find_or_create_by sunetid: s
         ed.save!
@@ -31,7 +30,7 @@ class Reserve < ActiveRecord::Base
       end
     end
 
-    unless self.editor_sunet_ids.blank?
+    if self.editor_sunet_ids.present?
       self.editor_sunet_ids.split(/,/).map{|i| i.strip}.each do |s|
         ed = Editor.find_or_create_by sunetid: s
         ed.save!
@@ -39,9 +38,7 @@ class Reserve < ActiveRecord::Base
       end
     end
 
-    self.editors = editors unless editors.blank?
+    self.editors = editors if editors.present?
 
   end
-
-
 end

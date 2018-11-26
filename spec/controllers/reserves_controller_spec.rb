@@ -283,7 +283,6 @@ RSpec.describe ReservesController do
         expect(mail.to).to eq(["greenreserves@stanford.edu", "course-reserves-allforms@lists.stanford.edu"])
         expect(r.library).to eq("GREEN-RESV")
       end
-
     end
   end
 
@@ -346,6 +345,5 @@ RSpec.describe ReservesController do
         expect(diff_item_list).to be_blank
       end
     end
-
   end
 end
