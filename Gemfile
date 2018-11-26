@@ -59,6 +59,8 @@ gem 'okcomputer'
 # to be run on machines w/ sqlite3
 group :development, :test do
   gem "sqlite3"
+  gem 'rubocop'
+  gem 'rubocop-rspec'
 end
 
 group :development do
