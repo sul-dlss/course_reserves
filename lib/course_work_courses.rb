@@ -103,7 +103,7 @@ class CourseWorkCourses
       next_term = Terms.process_term_for_cw(Terms.future_terms.first)
       xml = []
       ["#{Rails.root}/lib/course_work_xml/courseXML_#{current}.xml", "#{Rails.root}/lib/course_work_xml/courseXML_#{next_term}.xml"].each do |url|
-        xml << Nokogiri::XML(File.open(url, 'r')) if File.exists?(url)
+        xml << Nokogiri::XML(File.open(url, 'r')) if File.exist?(url)
       end
       return xml
     end
