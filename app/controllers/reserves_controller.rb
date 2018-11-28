@@ -45,9 +45,9 @@ class ReservesController < ApplicationController
     respond_to do |format|
       format.js do
         params[:index] = 0
-        if params[:sw]=='false'
+        if params[:sw] == 'false'
           params[:item] = {}
-        elsif params[:sw]=='true'
+        elsif params[:sw] == 'true'
           params[:item] = {}
           ckey = params[:url].strip[/(\d+)$/]
           url = searchworks_ckey_url("#{ckey}.mobile?covers=false&availability=false")

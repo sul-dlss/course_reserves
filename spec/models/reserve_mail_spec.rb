@@ -21,7 +21,7 @@ RSpec.describe ReserveMail do
     end
 
     it "returns the item list formatted correctly" do
-      email = ReserveMail.first_request(Reserve.create(reserve_params.merge(item_list: [{"ckey"=>"12345", "title"=>"SW Item", "copies"=>"2", "loan_period"=>"4 hours"}])), "test@example.com", "jdoe")
+      email = ReserveMail.first_request(Reserve.create(reserve_params.merge(item_list: [{"ckey" => "12345", "title" => "SW Item", "copies" => "2", "loan_period" => "4 hours"}])), "test@example.com", "jdoe")
       body = email.body.raw_source
       expect(body).to match(/Title: SW Item/)
       expect(body).to match(/CKey: 12345 : http:\/\/searchworks.stanford.edu\/view\/12345/)
@@ -30,7 +30,7 @@ RSpec.describe ReserveMail do
     end
 
     it "has the full edit URL in the email" do
-      email = ReserveMail.first_request(Reserve.create(reserve_params.merge(item_list: [{"ckey"=>"12345", "title"=>"SW Item", "copies"=>"2", "loan_period"=>"4 hours"}])), "test@example.com", "jdoe")
+      email = ReserveMail.first_request(Reserve.create(reserve_params.merge(item_list: [{"ckey" => "12345", "title" => "SW Item", "copies" => "2", "loan_period" => "4 hours"}])), "test@example.com", "jdoe")
       expect(email.body.raw_source).to match(/http:\/\/reserves.stanford.edu\/reserves\/1\/edit/)
     end
   end

@@ -117,19 +117,6 @@ Layout/SpaceAroundEqualsInParameterDefault:
     - 'app/mailers/report.rb'
     - 'lib/course_work_courses.rb'
 
-# Offense count: 172
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment.
-Layout/SpaceAroundOperators:
-  Exclude:
-    - 'app/controllers/reserves_controller.rb'
-    - 'lib/tasks/fetch_xml.rake'
-    - 'lib/terms.rb'
-    - 'spec/controllers/reserves_controller_spec.rb'
-    - 'spec/helpers/application_helper_spec.rb'
-    - 'spec/models/reserve_mail_spec.rb'
-    - 'spec/models/reserve_spec.rb'
-
 # Offense count: 14
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces.

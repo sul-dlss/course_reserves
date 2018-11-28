@@ -127,39 +127,39 @@ RSpec.describe ReservesController do
     end
     it "properlies assign the sent_item_list for unsent items" do
       expect(controller).to receive_messages(current_user: user)
-      res = {cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{"ckey"=>"12345"}]}
+      res = {cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{"ckey" => "12345"}]}
       r = Reserve.create(reserve_params.merge(res))
       r.save!
       expect(r.sent_item_list).to be_blank
       get :update, params: {id: r[:id], send_request: "true", reserve: res}
-      expect(Reserve.find(r[:id]).sent_item_list).to eq([{"ckey"=>"12345"}])
+      expect(Reserve.find(r[:id]).sent_item_list).to eq([{"ckey" => "12345"}])
     end
     it "properlies assign the sent_item-list for sent items" do
       expect(controller).to receive_messages(current_user: user)
-      res = {cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{"ckey"=>"12345"}], has_been_sent: true, sent_item_list: [{"ckey"=>"12345"}]}
+      res = {cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{"ckey" => "12345"}], has_been_sent: true, sent_item_list: [{"ckey" => "12345"}]}
       r = Reserve.create(reserve_params.merge(res))
       r.save!
-      get :update, params: {id: r[:id], send_request: "true", reserve: res.merge({item_list: [{"ckey"=>"12345"}, {"ckey"=>"54321"}]})}
-      expect(Reserve.find(r[:id]).sent_item_list).to eq([{"ckey"=>"12345"}, {"ckey"=>"54321"}])
+      get :update, params: {id: r[:id], send_request: "true", reserve: res.merge({item_list: [{"ckey" => "12345"}, {"ckey" => "54321"}]})}
+      expect(Reserve.find(r[:id]).sent_item_list).to eq([{"ckey" => "12345"}, {"ckey" => "54321"}])
     end
 
     it 'allows superusers to update any record' do
       expect(controller).to receive_messages(current_user: superuser)
-      res = {cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{"ckey"=>"12345"}], has_been_sent: true, sent_item_list: [{"ckey"=>"12345"}]}
+      res = {cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{"ckey" => "12345"}], has_been_sent: true, sent_item_list: [{"ckey" => "12345"}]}
       r = Reserve.create(reserve_params.merge(res))
       r.save!
-      get :update, params: {id: r[:id], send_request: "true", reserve: res.merge({item_list: [{"ckey"=>"12345"}, {"ckey"=>"54321"}]})}
-      expect(Reserve.find(r[:id]).sent_item_list).to eq([{"ckey"=>"12345"}, {"ckey"=>"54321"}])
+      get :update, params: {id: r[:id], send_request: "true", reserve: res.merge({item_list: [{"ckey" => "12345"}, {"ckey" => "54321"}]})}
+      expect(Reserve.find(r[:id]).sent_item_list).to eq([{"ckey" => "12345"}, {"ckey" => "54321"}])
     end
 
     it 'does not allow you to update a record you are not an editor of' do
       expect(controller).to receive_messages(current_user: user)
-      res = {cid: "CID1", sid: "01", instructor_sunet_ids: 'some_other_user', term: "Summer 2010", item_list: [{"ckey"=>"12345"}], has_been_sent: true, sent_item_list: [{"ckey"=>"12345"}]}
+      res = {cid: "CID1", sid: "01", instructor_sunet_ids: 'some_other_user', term: "Summer 2010", item_list: [{"ckey" => "12345"}], has_been_sent: true, sent_item_list: [{"ckey" => "12345"}]}
       r = Reserve.create(reserve_params.merge(res))
       r.save!
 
       expect do
-        get :update, params: {id: r[:id], send_request: "true", reserve: res.merge({item_list: [{"ckey"=>"12345"}, {"ckey"=>"54321"}]})}
+        get :update, params: {id: r[:id], send_request: "true", reserve: res.merge({item_list: [{"ckey" => "12345"}, {"ckey" => "54321"}]})}
       end.to raise_error(CanCan::AccessDenied)
     end
   end
@@ -290,8 +290,8 @@ RSpec.describe ReservesController do
   describe "protected methods" do
     describe "email diff" do
       it "returns new items added to the item list" do
-        old_item_list = [{"ckey" => "12345", "title"=>"FirstTitle", "copies"=>"4"}]
-        new_item_list = [{"ckey" => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey"=>"54321", "title"=>"SecondTitle", "copies"=>"1"}]
+        old_item_list = [{"ckey" => "12345", "title" => "FirstTitle", "copies" => "4"}]
+        new_item_list = [{"ckey" => "12345", "title" => "FirstTitle", "copies" => "4"}, {"ckey" => "54321", "title" => "SecondTitle", "copies" => "1"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/ADDED ITEM/)
         expect(diff_item_list).to match(/CKey: 54321 : https:\/\/searchworks.stanford.edu\/view\/54321/)
@@ -299,8 +299,8 @@ RSpec.describe ReservesController do
         expect(diff_item_list).not_to match(/DELETED ITEM/)
       end
       it "returns changed items from the item list" do
-        old_item_list = [{"ckey" => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey" => "54321", "title"=>"SecondTitle", "copies"=>"1"}]
-        new_item_list = [{"ckey" => "12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey" => "54321", "title"=>"SecondTitle", "copies"=>"2"}]
+        old_item_list = [{"ckey" => "12345", "title" => "FirstTitle", "copies" => "4"}, {"ckey" => "54321", "title" => "SecondTitle", "copies" => "1"}]
+        new_item_list = [{"ckey" => "12345", "title" => "FirstTitle", "copies" => "4"}, {"ckey" => "54321", "title" => "SecondTitle", "copies" => "2"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/EDITED ITEM/)
         expect(diff_item_list).to match(/CKey: 54321 : https:\/\/searchworks.stanford.edu\/view\/54321/)
@@ -309,8 +309,8 @@ RSpec.describe ReservesController do
         expect(diff_item_list).not_to match(/DELETED ITEM/)
       end
       it "returns items deleted from the item list" do
-        old_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey"=>"54321", "title"=>"ToBeDeleted", "copies"=>"1"}]
-        new_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}]
+        old_item_list = [{"ckey" => "12345", "title" => "FirstTitle", "copies" => "4"}, {"ckey" => "54321", "title" => "ToBeDeleted", "copies" => "1"}]
+        new_item_list = [{"ckey" => "12345", "title" => "FirstTitle", "copies" => "4"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/DELETED ITEM/)
         expect(diff_item_list).to match(/CKey: 54321 : https:\/\/searchworks.stanford.edu\/view\/54321/)
@@ -319,8 +319,8 @@ RSpec.describe ReservesController do
         expect(diff_item_list).not_to match(/EDITED ITEM/)
       end
       it "gets an item w/ the same ckey that is drastically out of the old order" do
-        old_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey"=>"23456", "title"=>"SecondTitle", "copies"=>"1"}, {"ckey"=>"34567", "title"=>"ThirdTitle", "copies"=>"1"}]
-        new_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}, {"ckey"=>"34567", "title"=>"ThirdTitle", "copies"=>"1"}, {"ckey"=>"23456", "title"=>"ChangedTitle", "copies"=>"1"}]
+        old_item_list = [{"ckey" => "12345", "title" => "FirstTitle", "copies" => "4"}, {"ckey" => "23456", "title" => "SecondTitle", "copies" => "1"}, {"ckey" => "34567", "title" => "ThirdTitle", "copies" => "1"}]
+        new_item_list = [{"ckey" => "12345", "title" => "FirstTitle", "copies" => "4"}, {"ckey" => "34567", "title" => "ThirdTitle", "copies" => "1"}, {"ckey" => "23456", "title" => "ChangedTitle", "copies" => "1"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/EDITED ITEM/)
         expect(diff_item_list).to match(/CKey: 23456 : https:\/\/searchworks.stanford.edu\/view\/23456/)
@@ -329,8 +329,8 @@ RSpec.describe ReservesController do
         expect(diff_item_list).not_to match(/DELETED ITEM/)
       end
       it "hadnels custom items w/ the same comment as the same items" do
-        old_item_list = [{"ckey"=>"", "title"=>"", "comment"=>"This is Item1", "copies"=>"4", "loan_period"=>"2 hours"}, {"ckey"=>"", "title"=>"", "comment"=>"This is Item2", "copies"=>"1", "loan_period"=>"4 hours"}]
-        new_item_list = [{"ckey"=>"", "title"=>"", "comment"=>"This is Item1", "copies"=>"4", "loan_period"=>"4 hours"}, {"ckey"=>"", "title"=>"", "comment"=>"This is Item2", "copies"=>"2", "loan_period"=>"4 hours"}]
+        old_item_list = [{"ckey" => "", "title" => "", "comment" => "This is Item1", "copies" => "4", "loan_period" => "2 hours"}, {"ckey" => "", "title" => "", "comment" => "This is Item2", "copies" => "1", "loan_period" => "4 hours"}]
+        new_item_list = [{"ckey" => "", "title" => "", "comment" => "This is Item1", "copies" => "4", "loan_period" => "4 hours"}, {"ckey" => "", "title" => "", "comment" => "This is Item2", "copies" => "2", "loan_period" => "4 hours"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/EDITED ITEM/)
         expect(diff_item_list).to match(/Circ rule: 4HWF-RES \(was: 2HWF-RES\)/)
@@ -340,8 +340,8 @@ RSpec.describe ReservesController do
       end
 
       it "does not return unchanged items from the item list" do
-        old_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}]
-        new_item_list = [{"ckey"=>"12345", "title"=>"FirstTitle", "copies"=>"4"}]
+        old_item_list = [{"ckey" => "12345", "title" => "FirstTitle", "copies" => "4"}]
+        new_item_list = [{"ckey" => "12345", "title" => "FirstTitle", "copies" => "4"}]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to be_blank
       end
