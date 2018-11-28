@@ -17,7 +17,7 @@ module Terms
 
       terms.slice(current_term_index + 1, 2).map { |t| t[:term] }
     end
-    
+
     def process_term_for_cw(term)
       term.gsub(/Spring \d{2}/, "Sp").gsub(/Summer \d{2}/, "Su").gsub(/Winter \d{2}/, "W").gsub(/Fall \d{2}/, "F")
     end
@@ -29,7 +29,7 @@ module Terms
         return term if term[:end_date] >= date and terms[ix - 1][:end_date] < date
       end
     end
-    
+
     def terms
       Settings.terms
     end

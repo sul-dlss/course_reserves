@@ -17,7 +17,7 @@ RSpec.describe CourseWorkCourses do
       expect(courses.first.sid).to eq("01")
     end
   end
-  
+
   describe "#all_courses" do
     subject(:course_list) { courses.all_courses }
 
@@ -31,7 +31,7 @@ RSpec.describe CourseWorkCourses do
       expect(course_titles).to eq(["Residential Racial Segregation and the Education of African-American Youth", "Global Positioning Systems", "Art/Hist Cross Listed Course"])
     end
   end
-  
+
   describe ".find_by_sunet" do
     describe "by SUNet ID" do
       it "returns the subset of courses for the SUNet ID w/ fewer courses" do
@@ -50,7 +50,7 @@ RSpec.describe CourseWorkCourses do
         expect(courses.find_by_sunet("no-sunet")).to be_blank
       end
     end
-  
+
     describe ".find_by_class_id" do
       it "returns the appropriate course when passing a class id" do
         two_section_course = courses.find_by_class_id("EDUC-237X")
@@ -62,7 +62,7 @@ RSpec.describe CourseWorkCourses do
         expect(courses.find_by_class_id("DOES-NOT-EXIST")).to be_blank
       end
     end
-  
+
     describe ".find_by_class_id_and_section" do
       it "returns the appropriate course when passing a class id and section id" do
         course = courses.find_by_class_id_and_section("EDUC-237X", "01")
@@ -78,7 +78,7 @@ RSpec.describe CourseWorkCourses do
         expect(courses.find_by_class_id_and_section("EDUC-237X", "03")).to be_blank
       end
     end
-    
+
     describe "find by class id and sunet" do
       it "returns the appropriate course when passing a class id and sunet" do
         course = courses.find_by_class_id_and_sunet("EDUC-237X", "456")
@@ -93,7 +93,7 @@ RSpec.describe CourseWorkCourses do
         expect(courses.find_by_class_id_and_sunet("EDUC-237X", "654")).to be_blank
       end
     end
-    
+
     describe "by class id, section, and SUNet ID" do
       it "returns the appripriate course when passing all valid information" do
         course = courses.find_by_class_id_and_section_and_sunet("EDUC-237X", "01", "123")
@@ -113,9 +113,8 @@ RSpec.describe CourseWorkCourses do
         expect(courses.find_by_class_id_and_section_and_sunet("EDUC-237X", "02", "456")).to be_blank
       end
     end
-    
   end
-  
+
   describe "XML processing" do
     it "does not add a course that doesn't have an instructor" do
       expect(CourseWorkCourses.new("<response><courseclass term='WINTER'><section id='01'></section></courseclass></response>").all_courses).to be_blank
@@ -151,5 +150,4 @@ RSpec.describe CourseWorkCourses do
       expect(course.first.cross_listings).to eq("ART-102")
     end
   end
-  
 end

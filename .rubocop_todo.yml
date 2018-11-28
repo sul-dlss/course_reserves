@@ -59,27 +59,6 @@ Layout/IndentationWidth:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: final_newline, final_blank_line
-Layout/TrailingBlankLines:
-  Exclude:
-    - 'spec/models/report_spec.rb'
-
-# Offense count: 42
-# Cop supports --auto-correct.
-# Configuration parameters: AllowInHeredoc.
-Layout/TrailingWhitespace:
-  Exclude:
-    - 'app/mailers/report.rb'
-    - 'app/mailers/reserve_mail.rb'
-    - 'app/models/editor.rb'
-    - 'lib/course_work_courses.rb'
-    - 'lib/terms.rb'
-    - 'spec/lib/course_work_courses_spec.rb'
-    - 'spec/models/report_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
 Lint/DeprecatedClassMethods:
   Exclude:
     - 'lib/course_work_courses.rb'

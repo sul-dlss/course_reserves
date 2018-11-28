@@ -12,7 +12,7 @@ class CourseWorkCourses
       @sid = sid
       @instructors = instructors
     end
-    
+
     def key
       "#{cid}-#{instructor_sunets.join("-")}"
     end
@@ -33,7 +33,7 @@ class CourseWorkCourses
       cids.reject { |c| c == cid }.join(", ")
     end
   end
-  
+
   def self.instance
     @instance ||= CourseWorkCourses.new
   end
@@ -45,29 +45,29 @@ class CourseWorkCourses
       @raw_xml = load_xml_from_coursework
     end
   end
-  
+
   def raw_xml
     @raw_xml ||= self.raw_xml
   end
-  
+
   def find_by_sunet(sunet)
     self.all_courses.select do |course|
       course.instructor_sunets.include?(sunet)
     end
   end
-  
+
   def find_by_class_id(class_id)
     self.all_courses.select do |course|
       course.cid == class_id
     end
   end
-  
+
   def find_by_compound_key(key)
     self.all_courses.select do |course|
       course.comp_key == key
     end
   end
-  
+
   def find_by_class_id_and_section(class_id, section)
     self.all_courses.select do |course|
       course.cid == class_id && course.sid == section
@@ -79,22 +79,22 @@ class CourseWorkCourses
       course.cid == class_id && course.instructor_sunets.include?(sunet)
     end
   end
-  
+
   def find_by_class_id_and_section_and_sunet(class_id, section, sunet)
     self.all_courses.select do |course|
       course.cid == class_id && course.sid == section && course.instructor_sunets.include?(sunet)
     end
   end
-  
+
   # TODO: We have tests that are highly sensitive to the order of the courses; this unfortunate
   # logic preserves the bottom-most course from the xml. it's unclear whether this is incidental
   # or a feature.
   def all_courses
     @all_courses ||= process_all_courses_xml(self.raw_xml).to_a.reverse.uniq(&:key).reverse.to_a
   end
-  
+
   private
-  
+
   def load_xml_from_coursework
     if Rails.env.test?
       return [Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))]
@@ -108,7 +108,7 @@ class CourseWorkCourses
       return xml
     end
   end
-  
+
   def process_all_courses_xml(xml_files)
     return to_enum(:process_all_courses_xml, xml_files) unless block_given?
 
@@ -142,10 +142,9 @@ class CourseWorkCourses
                 instructors: instructors
               })
             end
-          end        
+          end
         end
       end
     end
   end
-  
 end
