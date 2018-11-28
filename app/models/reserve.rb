@@ -1,5 +1,4 @@
 class Reserve < ActiveRecord::Base
-
   before_save :process_sunet_ids
 
   has_and_belongs_to_many :editors
@@ -20,7 +19,6 @@ class Reserve < ActiveRecord::Base
   private
 
   def process_sunet_ids
-
     editors = []
 
     unless self.instructor_sunet_ids.blank?
@@ -40,8 +38,5 @@ class Reserve < ActiveRecord::Base
     end
 
     self.editors = editors unless editors.blank?
-
   end
-
-
 end

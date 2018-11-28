@@ -38,6 +38,7 @@ class ReservesController < ApplicationController
     @course = course_for_compound_key(params[:comp_key])
     @reserve = Reserve.new(compound_key: params[:comp_key])
     raise RecordNotFound if @course.blank?
+
     authorize! :create, @reserve
   end
 
@@ -113,7 +114,6 @@ class ReservesController < ApplicationController
   def show
     @reserve = Reserve.find(params[:id])
   end
-
 
   protected
 
