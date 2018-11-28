@@ -37,13 +37,13 @@ RSpec.describe CourseWorkCourses do
       it "returns the subset of courses for the SUNet ID w/ fewer courses" do
         courses_456 = courses.find_by_sunet("456")
         expect(courses_456.length).to eq(2)
-        expect(courses_456.map{|c| c.title }).to eq(["Residential Racial Segregation and the Education of African-American Youth", "Global Positioning Systems"])
+        expect(courses_456.map { |c| c.title }).to eq(["Residential Racial Segregation and the Education of African-American Youth", "Global Positioning Systems"])
       end
 
       it "returns the subset of courses for the SUNet ID that is an instructor for all courses" do
         courses_123 = courses.find_by_sunet("123")
         expect(courses_123.length).to eq(5)
-        expect(courses_123.map{|c| c.title }.uniq).to eq(["Residential Racial Segregation and the Education of African-American Youth", "Global Positioning Systems"])
+        expect(courses_123.map { |c| c.title }.uniq).to eq(["Residential Racial Segregation and the Education of African-American Youth", "Global Positioning Systems"])
       end
 
       it "is blank when a course doesn't exist with the specified SUNet" do
@@ -55,7 +55,7 @@ RSpec.describe CourseWorkCourses do
       it "returns the appropriate course when passing a class id" do
         two_section_course = courses.find_by_class_id("EDUC-237X")
         expect(two_section_course.length).to eq(2)
-        expect(two_section_course.map{|c| "#{c.cid}-#{c.sid}"}).to eq(["EDUC-237X-01", "EDUC-237X-02"])
+        expect(two_section_course.map { |c| "#{c.cid}-#{c.sid}" }).to eq(["EDUC-237X-01", "EDUC-237X-02"])
       end
 
       it "is blank when a course doesn't exist with the specified class id" do
@@ -101,7 +101,7 @@ RSpec.describe CourseWorkCourses do
         expect(course.first.title).to eq("Residential Racial Segregation and the Education of African-American Youth")
         expect(course.first.cid).to eq("EDUC-237X")
         expect(course.first.sid).to eq("01")
-        expect(course.first.instructors.map{|i| i[:sunet] }).to include("123")
+        expect(course.first.instructors.map { |i| i[:sunet] }).to include("123")
       end
       it "returns blank when the class id does not exist" do
         expect(courses.find_by_class_id_and_section_and_sunet("DOES-NOT-EXIST", "01", "123")).to be_blank

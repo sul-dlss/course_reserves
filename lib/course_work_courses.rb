@@ -38,7 +38,7 @@ class CourseWorkCourses
     @instance ||= CourseWorkCourses.new
   end
 
-  def initialize(xml=nil)
+  def initialize(xml = nil)
     if xml
       @raw_xml = [Nokogiri::XML(xml)]
     else
@@ -129,7 +129,7 @@ class CourseWorkCourses
               sunet = inst[:sunetid]
               name = inst.text
               name = sunet if inst.text.blank?
-              instructors << {sunet: sunet, name: name}
+              instructors << { sunet: sunet, name: name }
             end
 
             unless instructors.blank?

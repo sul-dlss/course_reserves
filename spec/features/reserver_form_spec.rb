@@ -9,7 +9,7 @@ RSpec.describe 'Reserve Form', type: :feature do
     Reserve.create(
       cid: 'AA-272C',
       compound_key: 'AA-272C,123,456',
-      item_list: [{'ckey' => '12345'}]
+      item_list: [{ 'ckey' => '12345' }]
     )
   end
 
