@@ -55,7 +55,7 @@ class ReservesController < ApplicationController
           doc = Nokogiri::XML(Faraday.get(url).body)
           title = doc.xpath("//full_title").text
           format = doc.xpath("//formats/format").map { |x| x.text }
-          render text: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();" and return if title.blank?
+          render(text: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();") && return if title.blank?
           params[:item] = { title: doc.xpath("//full_title").text, ckey: ckey }
           params[:item].merge!(loan_period: "4 hours", media: "true") if format.include?("Video")
         end
@@ -83,9 +83,9 @@ class ReservesController < ApplicationController
       end
     end
     reserve_params[:item_list] = [] unless reserve_params.key?(:item_list)
-    if params.key?(:send_request) and reserve.has_been_sent == true
+    if params.key?(:send_request) && (reserve.has_been_sent == true)
       send_updated_reserve_request(reserve)
-    elsif params.key?(:send_request) and (reserve.has_been_sent == false or reserve.has_been_sent.nil?)
+    elsif params.key?(:send_request) && ((reserve.has_been_sent == false) || reserve.has_been_sent.nil?)
       send_course_reserve_request(reserve)
     else
       reserve.update_attributes(reserve_params)
@@ -100,7 +100,7 @@ class ReservesController < ApplicationController
   def clone
     if Reserve.where(compound_key: @reserve.compound_key, term: params[:term]).any?
       flash[:error] = "Course reserve list already exists for this course and term."
-      redirect_to edit_reserve_path(@reserve) and return
+      redirect_to(edit_reserve_path(@reserve)) && return
     end
     reserve = @reserve.dup
     reserve.has_been_sent = nil
@@ -149,13 +149,13 @@ class ReservesController < ApplicationController
     new_reserve.each_with_index do |new_item, index|
       total_reserves << new_item
       unless old_reserve.include?(new_item)
-        old_item = old_reserve.map { |item| item if (item["ckey"].blank? and item["comment"] == new_item["comment"]) or (!item["ckey"].blank? and item["ckey"] == new_item["ckey"]) }.compact.first
+        old_item = old_reserve.map { |item| item if (item["ckey"].blank? && (item["comment"] == new_item["comment"])) || (!item["ckey"].blank? && (item["ckey"] == new_item["ckey"])) }.compact.first
         unless old_item.blank?
           total_reserves << old_item
           item_text << "***EDITED ITEM***\n"
           new_item.each do |key, value|
             if old_item[key] == value
-              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank? and old_item[key].blank?
+              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank? && old_item[key].blank?
             else
               item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)} (was: #{translate_value_for_email(key, old_item[key])})\n"
             end

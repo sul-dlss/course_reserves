@@ -26,7 +26,7 @@ module Terms
 
     def current_term_hash(date = Date::today)
       terms.each_with_index do |term, ix|
-        return term if term[:end_date] >= date and terms[ix - 1][:end_date] < date
+        return term if (term[:end_date] >= date) && (terms[ix - 1][:end_date] < date)
       end
     end
 
