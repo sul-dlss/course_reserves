@@ -13,14 +13,14 @@ RSpec.describe Reserve do
 
   describe "editor relationships" do
     it "generates editor relationships from editor_sunet_ids field for single sunet_id" do
-      reserve = Reserve.create(reserve_params.merge({ editor_sunet_ids: 'jlavigne', cid: 'test_cid', item_list: [{ title: 'My Title' }] }))
+      reserve = Reserve.create(reserve_params.merge(editor_sunet_ids: 'jlavigne', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve.editors.length).to eq(1)
       expect(reserve.editors.first[:sunetid]).to eq('jlavigne')
     end
 
     it "generates editor relationships from editor_sunet_ids field for multiple sunet_id" do
-      reserve = Reserve.create(reserve_params.merge({ editor_sunet_ids: 'jlavigne, jkeck', cid: 'test_cid', item_list: [{ title: 'My Title' }] }))
+      reserve = Reserve.create(reserve_params.merge(editor_sunet_ids: 'jlavigne, jkeck', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve.editors.length).to eq(2)
       editors = reserve.editors.map { |e| e[:sunetid] }
@@ -29,14 +29,14 @@ RSpec.describe Reserve do
     end
 
     it "generates editor relationships from instructor_sunet_ids field for single sunet_id" do
-      reserve = Reserve.create(reserve_params.merge({ instructor_sunet_ids: 'asmith', cid: 'test_cid', item_list: [{ title: 'My Title' }] }))
+      reserve = Reserve.create(reserve_params.merge(instructor_sunet_ids: 'asmith', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve.editors.length).to eq(1)
       expect(reserve.editors.first[:sunetid]).to eq('asmith')
     end
 
     it "generates editor relationships from instructor_sunet_ids field for multiple sunet_ids" do
-      reserve = Reserve.create(reserve_params.merge({ instructor_sunet_ids: 'jlavigne, jkeck', cid: 'test_cid', item_list: [{ title: 'My Title' }] }))
+      reserve = Reserve.create(reserve_params.merge(instructor_sunet_ids: 'jlavigne, jkeck', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve.editors.length).to eq(2)
       editors = reserve.editors.map { |e| e[:sunetid] }
@@ -45,16 +45,16 @@ RSpec.describe Reserve do
     end
 
     it "udpateds editors when we save an item too." do
-      res = Reserve.create(reserve_params.merge({ instructor_sunet_ids: 'jkeck' }))
+      res = Reserve.create(reserve_params.merge(instructor_sunet_ids: 'jkeck'))
       res.save!
       expect(Reserve.find(res[:id]).editors.length).to eq(1)
-      upd_res = Reserve.update(res[:id], reserve_params.merge({ instructor_sunet_ids: 'jkeck, jlavigne' }))
+      upd_res = Reserve.update(res[:id], reserve_params.merge(instructor_sunet_ids: 'jkeck, jlavigne'))
       upd_res.save!
       expect(Reserve.find(res[:id]).editors.length).to eq(2)
     end
 
     it "generates editor relationships from instructor_sunet_ids & editor_sunet_ids fields for multiple sunet_ids" do
-      reserve = Reserve.create(reserve_params.merge({ editor_sunet_ids: 'asmith, bjones', instructor_sunet_ids: 'jlavigne, jkeck', cid: 'test_cid', item_list: [{ title: 'My Title' }] }))
+      reserve = Reserve.create(reserve_params.merge(editor_sunet_ids: 'asmith, bjones', instructor_sunet_ids: 'jlavigne, jkeck', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve.editors.length).to eq(4)
       editors = reserve.editors.map { |e| e[:sunetid] }
@@ -62,11 +62,11 @@ RSpec.describe Reserve do
     end
 
     it "removes editor relationship when we remove a SUNet ID from the list" do
-      res = Reserve.create(reserve_params.merge({ instructor_sunet_ids: 'jkeck, jlavigne' }))
+      res = Reserve.create(reserve_params.merge(instructor_sunet_ids: 'jkeck, jlavigne'))
       res.save!
       expect(res.editors.length).to eq(2)
       expect(Editor.find_by_sunetid("jlavigne").reserves.length).to eq(1)
-      upd_res = Reserve.update(res[:id], reserve_params.merge({ instructor_sunet_ids: 'jkeck' }))
+      upd_res = Reserve.update(res[:id], reserve_params.merge(instructor_sunet_ids: 'jkeck'))
       upd_res.save!
       new_res = Reserve.find(res[:id])
       expect(new_res.editors.length).to eq(1)
@@ -76,13 +76,13 @@ RSpec.describe Reserve do
 
   describe "item_list serialization" do
     it "serializes the item list" do
-      reserve = Reserve.create(reserve_params.merge({ cid: 'test_cid', item_list: [{ title: 'My Title' }] }))
+      reserve = Reserve.create(reserve_params.merge(cid: 'test_cid', item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve[:item_list].first[:title]).to eq('My Title')
     end
 
     it "throws an error for TypeMismatch when we serialize the item list with a hash" do
-      expect { Reserve.create(reserve_params.merge({ cid: 'test_cid', item_list: { title: 'My Title' } })) }.to raise_error(ActiveRecord::SerializationTypeMismatch)
+      expect { Reserve.create(reserve_params.merge(cid: 'test_cid', item_list: { title: 'My Title' })) }.to raise_error(ActiveRecord::SerializationTypeMismatch)
     end
   end
 end

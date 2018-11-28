@@ -133,14 +133,14 @@ class CourseWorkCourses
             end
 
             unless instructors.blank?
-              yield Course.new({
+              yield Course.new(
                 title: course_title,
                 term: term,
                 cid: class_id,
                 cids: cids,
                 sid: section_id,
                 instructors: instructors
-              })
+              )
             end
           end
         end

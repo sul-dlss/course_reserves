@@ -13,16 +13,16 @@ RSpec.describe ReservesController do
 
   describe "GET new" do
     it "redirects to an existing course list if it exists and the current user is an editor" do
-      r1 = Reserve.create(reserve_params.merge({ cid: "CID1", sid: "02", compound_key: "CID1,another_sunet", instructor_sunet_ids: "another_sunet", term: "Winter 2012" }))
+      r1 = Reserve.create(reserve_params.merge(cid: "CID1", sid: "02", compound_key: "CID1,another_sunet", instructor_sunet_ids: "another_sunet", term: "Winter 2012"))
       r1.save!
-      r = Reserve.create(reserve_params.merge({ cid: "CID1", sid: "01", compound_key: "CID1,user_sunet", instructor_sunet_ids: "user_sunet", term: "Winter 2012" }))
+      r = Reserve.create(reserve_params.merge(cid: "CID1", sid: "01", compound_key: "CID1,user_sunet", instructor_sunet_ids: "user_sunet", term: "Winter 2012"))
       r.save!
       allow(controller).to receive(:current_user).and_return(user)
       get :new, params: { comp_key: "CID1,user_sunet" }
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
     end
     it "redirects to an existing course list if it exists and the current user is a super user" do
-      r = Reserve.create(reserve_params.merge({ cid: "CID1", sid: "01", compound_key: "CID1,user_sunet", instructor_sunet_ids: "user_sunet", term: "Winter 2012" }))
+      r = Reserve.create(reserve_params.merge(cid: "CID1", sid: "01", compound_key: "CID1,user_sunet", instructor_sunet_ids: "user_sunet", term: "Winter 2012"))
       r.save!
 
       allow(controller).to receive_messages(current_user: user)
@@ -56,14 +56,14 @@ RSpec.describe ReservesController do
   describe "POST create" do
     it "allows you to create an item if you are the instructor" do
       allow(controller).to receive(:current_user).and_return(user_456)
-      post :create, params: { reserve: reserve_params.merge({ cid: 'AA-272C', compound_key: 'AA-272C,123,456', sid: "02", term: "Winter 2012", instructor_sunet_ids: "prof_a, user_sunet" }) }
+      post :create, params: { reserve: reserve_params.merge(cid: 'AA-272C', compound_key: 'AA-272C,123,456', sid: "02", term: "Winter 2012", instructor_sunet_ids: "prof_a, user_sunet") }
       r = assigns(:reserve)
       expect(r.cid).to eq('AA-272C')
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
     end
     it "allows you to create an item if you are a super sunet" do
       allow(controller).to receive_messages(current_user: superuser)
-      post :create, params: { reserve: reserve_params.merge({ cid: 'AA-272C', compound_key: 'AA-272C,123,456', sid: "02", term: "Winter 2012", instructor_sunet_ids: "prof_a, user_sunet" }) }
+      post :create, params: { reserve: reserve_params.merge(cid: 'AA-272C', compound_key: 'AA-272C,123,456', sid: "02", term: "Winter 2012", instructor_sunet_ids: "prof_a, user_sunet") }
       r = assigns(:reserve)
       expect(r.cid).to eq('AA-272C')
       expect(response).to redirect_to(edit_reserve_path(r[:id]))
@@ -72,7 +72,7 @@ RSpec.describe ReservesController do
       allow(controller).to receive(:current_user).and_return(CurrentUser.new('not-authed'))
 
       expect do
-        post :create, params: { reserve: reserve_params.merge({ cid: "AA-272C", compound_key: 'AA-272C,123,456', sid: "02", term: "Winter 2012", instructor_sunet_ids: "prof_a, user_sunet" }) }
+        post :create, params: { reserve: reserve_params.merge(cid: "AA-272C", compound_key: 'AA-272C,123,456', sid: "02", term: "Winter 2012", instructor_sunet_ids: "prof_a, user_sunet") }
       end.to raise_error(CanCan::AccessDenied)
     end
   end
@@ -80,7 +80,7 @@ RSpec.describe ReservesController do
   describe "GET edit" do
     it "allows you to get to the edit screen if you are an editor if the item" do
       allow(controller).to receive(:current_user).and_return(user)
-      r = Reserve.create(reserve_params.merge({ cid: "CID1", sid: "SID1", instructor_sunet_ids: "user_sunet" }))
+      r = Reserve.create(reserve_params.merge(cid: "CID1", sid: "SID1", instructor_sunet_ids: "user_sunet"))
       r.save!
       get :edit, params: { id: r[:id] }
       expect(response).to be_successful
@@ -88,7 +88,7 @@ RSpec.describe ReservesController do
     end
     it "allows you to get to the edit screen if you are an super sunet" do
       allow(controller).to receive_messages(current_user: superuser)
-      r = Reserve.create(reserve_params.merge({ cid: "CID1", sid: "SID1", instructor_sunet_ids: "user_sunet" }))
+      r = Reserve.create(reserve_params.merge(cid: "CID1", sid: "SID1", instructor_sunet_ids: "user_sunet"))
       r.save!
       get :edit, params: { id: r[:id] }
       expect(response).to be_successful
@@ -96,7 +96,7 @@ RSpec.describe ReservesController do
     end
     it "redirects if the user does not have permissions to edit the reserve" do
       allow(controller).to receive(:current_user).and_return(user_456)
-      r = Reserve.create(reserve_params.merge({ cid: "CID1", sid: "SID1", instructor_sunet_ids: "user_sunet" }))
+      r = Reserve.create(reserve_params.merge(cid: "CID1", sid: "SID1", instructor_sunet_ids: "user_sunet"))
       r.save!
       expect do
         get :edit, params: { id: r[:id] }
@@ -107,7 +107,7 @@ RSpec.describe ReservesController do
   describe "GET update" do
     it "clears out the item_list if no item_list params is in the URL" do
       expect(controller).to receive_messages(current_user: user)
-      r = Reserve.create(reserve_params.merge({ cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", item_list: [{ ckey: "item1" }] }))
+      r = Reserve.create(reserve_params.merge(cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", item_list: [{ ckey: "item1" }]))
       r.save!
       expect(r.item_list.length).to eq(1)
       get :update, params: { id: r[:id], reserve: { cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet" } }
@@ -116,8 +116,8 @@ RSpec.describe ReservesController do
     end
     it "does not allow you to update a reserve w/ a term that already has a record in the database" do
       expect(controller).to receive_messages(current_user: user)
-      r1 = Reserve.create(reserve_params.merge({ cid: "CID1", sid: "01", compound_key: "CID1,user_sunet", term: "Spring 2012", instructor_sunet_ids: "user_sunet" }))
-      r2 = Reserve.create(reserve_params.merge({ cid: "CID1", sid: "01", compound_key: "CID1,user_sunet", term: "Summer 2012", instructor_sunet_ids: "user_sunet" }))
+      r1 = Reserve.create(reserve_params.merge(cid: "CID1", sid: "01", compound_key: "CID1,user_sunet", term: "Spring 2012", instructor_sunet_ids: "user_sunet"))
+      r2 = Reserve.create(reserve_params.merge(cid: "CID1", sid: "01", compound_key: "CID1,user_sunet", term: "Summer 2012", instructor_sunet_ids: "user_sunet"))
       r1.save!
       r2.save!
       get :update, params: { id: r2[:id], reserve: { cid: "CID1", sid: "01", term: "Spring 2012" } }
@@ -139,7 +139,7 @@ RSpec.describe ReservesController do
       res = { cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{ "ckey" => "12345" }], has_been_sent: true, sent_item_list: [{ "ckey" => "12345" }] }
       r = Reserve.create(reserve_params.merge(res))
       r.save!
-      get :update, params: { id: r[:id], send_request: "true", reserve: res.merge({ item_list: [{ "ckey" => "12345" }, { "ckey" => "54321" }] }) }
+      get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: [{ "ckey" => "12345" }, { "ckey" => "54321" }]) }
       expect(Reserve.find(r[:id]).sent_item_list).to eq([{ "ckey" => "12345" }, { "ckey" => "54321" }])
     end
 
@@ -148,7 +148,7 @@ RSpec.describe ReservesController do
       res = { cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{ "ckey" => "12345" }], has_been_sent: true, sent_item_list: [{ "ckey" => "12345" }] }
       r = Reserve.create(reserve_params.merge(res))
       r.save!
-      get :update, params: { id: r[:id], send_request: "true", reserve: res.merge({ item_list: [{ "ckey" => "12345" }, { "ckey" => "54321" }] }) }
+      get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: [{ "ckey" => "12345" }, { "ckey" => "54321" }]) }
       expect(Reserve.find(r[:id]).sent_item_list).to eq([{ "ckey" => "12345" }, { "ckey" => "54321" }])
     end
 
@@ -159,7 +159,7 @@ RSpec.describe ReservesController do
       r.save!
 
       expect do
-        get :update, params: { id: r[:id], send_request: "true", reserve: res.merge({ item_list: [{ "ckey" => "12345" }, { "ckey" => "54321" }] }) }
+        get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: [{ "ckey" => "12345" }, { "ckey" => "54321" }]) }
       end.to raise_error(CanCan::AccessDenied)
     end
   end
@@ -209,7 +209,7 @@ RSpec.describe ReservesController do
 
   describe "GET index" do
     it "returns reserves for a user when they have them" do
-      Reserve.create(reserve_params.merge({ cid: "CID1", compound_key: 'CID1,user_sunet', sid: "SID1", instructor_sunet_ids: "user_sunet" }))
+      Reserve.create(reserve_params.merge(cid: "CID1", compound_key: 'CID1,user_sunet', sid: "SID1", instructor_sunet_ids: "user_sunet"))
       allow(controller).to receive(:current_user).and_return(user)
       get :index
       expect(response).to be_successful
@@ -222,8 +222,8 @@ RSpec.describe ReservesController do
     context 'when the user is a super admin' do
       it 'onlies see reserve lists that they are explicitly listed as an editor' do
         allow(controller).to receive(:current_user).and_return(superuser)
-        Reserve.create(reserve_params.merge({ cid: "CID1", compound_key: 'CID1,user_sunet', sid: "SID1", instructor_sunet_ids: "user_sunet" }))
-        Reserve.create(reserve_params.merge({ cid: "CID2", compound_key: 'CID1,super-user', sid: "SID1", instructor_sunet_ids: "super-user" }))
+        Reserve.create(reserve_params.merge(cid: "CID1", compound_key: 'CID1,user_sunet', sid: "SID1", instructor_sunet_ids: "user_sunet"))
+        Reserve.create(reserve_params.merge(cid: "CID2", compound_key: 'CID1,super-user', sid: "SID1", instructor_sunet_ids: "super-user"))
 
         get :index
         expect(response).to be_successful
@@ -274,7 +274,7 @@ RSpec.describe ReservesController do
     describe "send_course_reserve_request" do
       it "uses the most updates reserve information to determine the TO address for emails" do
         allow(controller).to receive_messages(reserve_params: {}, current_user: user)
-        r = Reserve.create(reserve_params.merge({ cid: "CID1", sid: "SID1", instructor_sunet_ids: "user_sunet", library: "ENG-RESV" }))
+        r = Reserve.create(reserve_params.merge(cid: "CID1", sid: "SID1", instructor_sunet_ids: "user_sunet", library: "ENG-RESV"))
         r.save!
         mail = controller.send(:send_course_reserve_request, r)
         expect(mail.to).to eq(["englibrary@stanford.edu", "course-reserves-allforms@lists.stanford.edu"])

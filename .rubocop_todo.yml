@@ -299,18 +299,6 @@ Style/AndOr:
     - 'app/mailers/reserve_mail.rb'
     - 'lib/terms.rb'
 
-# Offense count: 34
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Exclude:
-    - 'app/controllers/reserves_controller.rb'
-    - 'lib/course_work_courses.rb'
-    - 'spec/controllers/reserves_controller_spec.rb'
-    - 'spec/helpers/application_helper_spec.rb'
-    - 'spec/models/reserve_spec.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/ColonMethodCall:

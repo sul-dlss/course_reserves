@@ -90,7 +90,7 @@ class ReservesController < ApplicationController
     else
       reserve.update_attributes(reserve_params)
     end
-    redirect_to({ controller: 'reserves', action: 'edit', id: params[:id] })
+    redirect_to(controller: 'reserves', action: 'edit', id: params[:id])
   end
 
   def terms
