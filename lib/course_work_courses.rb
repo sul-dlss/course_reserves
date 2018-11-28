@@ -12,13 +12,13 @@ class CourseWorkCourses
       @sid = sid
       @instructors = instructors
     end
-    
+
     def key
-      "#{cid}-#{instructor_sunets.join("-")}"
+      "#{cid}-#{instructor_sunets.join('-')}"
     end
 
     def comp_key
-      "#{cids.sort.join(",")},#{instructor_sunets.join(",")}"
+      "#{cids.sort.join(',')},#{instructor_sunets.join(',')}"
     end
 
     def instructor_sunets
@@ -33,41 +33,41 @@ class CourseWorkCourses
       cids.reject { |c| c == cid }.join(", ")
     end
   end
-  
+
   def self.instance
     @instance ||= CourseWorkCourses.new
   end
 
-  def initialize(xml=nil)
+  def initialize(xml = nil)
     if xml
       @raw_xml = [Nokogiri::XML(xml)]
     else
       @raw_xml = load_xml_from_coursework
     end
   end
-  
+
   def raw_xml
     @raw_xml ||= self.raw_xml
   end
-  
+
   def find_by_sunet(sunet)
     self.all_courses.select do |course|
       course.instructor_sunets.include?(sunet)
     end
   end
-  
+
   def find_by_class_id(class_id)
     self.all_courses.select do |course|
       course.cid == class_id
     end
   end
-  
+
   def find_by_compound_key(key)
     self.all_courses.select do |course|
       course.comp_key == key
     end
   end
-  
+
   def find_by_class_id_and_section(class_id, section)
     self.all_courses.select do |course|
       course.cid == class_id && course.sid == section
@@ -79,22 +79,22 @@ class CourseWorkCourses
       course.cid == class_id && course.instructor_sunets.include?(sunet)
     end
   end
-  
+
   def find_by_class_id_and_section_and_sunet(class_id, section, sunet)
     self.all_courses.select do |course|
       course.cid == class_id && course.sid == section && course.instructor_sunets.include?(sunet)
     end
   end
-  
+
   # TODO: We have tests that are highly sensitive to the order of the courses; this unfortunate
   # logic preserves the bottom-most course from the xml. it's unclear whether this is incidental
   # or a feature.
   def all_courses
     @all_courses ||= process_all_courses_xml(self.raw_xml).to_a.reverse.uniq(&:key).reverse.to_a
   end
-  
+
   private
-  
+
   def load_xml_from_coursework
     if Rails.env.test?
       return [Nokogiri::XML(File.open("#{Rails.root}/spec/fixtures/course_work.xml", 'r'))]
@@ -103,12 +103,12 @@ class CourseWorkCourses
       next_term = Terms.process_term_for_cw(Terms.future_terms.first)
       xml = []
       ["#{Rails.root}/lib/course_work_xml/courseXML_#{current}.xml", "#{Rails.root}/lib/course_work_xml/courseXML_#{next_term}.xml"].each do |url|
-        xml << Nokogiri::XML(File.open(url, 'r')) if File.exists?(url)
+        xml << Nokogiri::XML(File.open(url, 'r')) if File.exist?(url)
       end
       return xml
     end
   end
-  
+
   def process_all_courses_xml(xml_files)
     return to_enum(:process_all_courses_xml, xml_files) unless block_given?
 
@@ -129,23 +129,22 @@ class CourseWorkCourses
               sunet = inst[:sunetid]
               name = inst.text
               name = sunet if inst.text.blank?
-              instructors << {:sunet => sunet, :name => name}
+              instructors << { sunet: sunet, name: name }
             end
 
-            unless instructors.blank?
-              yield Course.new({
-                :title          => course_title,
-                :term           => term,
-                :cid            => class_id,
-                :cids           => cids,
-                :sid            => section_id,
-                :instructors    => instructors
-              })
+            if instructors.present?
+              yield Course.new(
+                title: course_title,
+                term: term,
+                cid: class_id,
+                cids: cids,
+                sid: section_id,
+                instructors: instructors
+              )
             end
-          end        
+          end
         end
       end
     end
   end
-  
 end

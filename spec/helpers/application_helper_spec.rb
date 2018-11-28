@@ -8,11 +8,11 @@ RSpec.describe ApplicationHelper do
     end
 
     it "returns true if an item has a ckey" do
-      expect(item_in_searchworks?({"ckey" => "54321"})).to be_truthy
+      expect(item_in_searchworks?("ckey" => "54321")).to be_truthy
     end
 
     it "returns false when neither the params nor the item indicate it is a SearchWorks item" do
-      expect(item_in_searchworks?({:comment=>"hello", :copies=>"3", :loan_period => "1 day"})).to be_falsey
+      expect(item_in_searchworks?(comment: "hello", copies: "3", loan_period: "1 day")).to be_falsey
     end
   end
 

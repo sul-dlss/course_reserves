@@ -59,6 +59,8 @@ gem 'okcomputer'
 # to be run on machines w/ sqlite3
 group :development, :test do
   gem "sqlite3"
+  gem 'rubocop'
+  gem 'rubocop-rspec'
 end
 
 group :development do
@@ -73,7 +75,7 @@ group :test do
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
   gem 'rspec-rails', '~> 3.5', '>= 3.5.2'
-  gem 'simplecov', :require => false
+  gem 'simplecov', require: false
   gem 'database_cleaner'
   gem 'rails-controller-testing'
 end

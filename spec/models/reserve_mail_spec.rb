@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ReserveMail do
   let(:reserve_params) do
-    {:cid=>"CID1", :instructor_sunet_ids => "jdoe, jondoe", :instructor_names => "Doe, John, Doe, Jon", :desc => "MySuperCoolCourse", :sid => "SID1", :library => "GREEN-RESV", :term=>"Spring 2010", :contact_name => "John Doe", :contact_phone => "555-555-5555", :contact_email => "jdoe@example.com"}
+    { cid: "CID1", instructor_sunet_ids: "jdoe, jondoe", instructor_names: "Doe, John, Doe, Jon", desc: "MySuperCoolCourse", sid: "SID1", library: "GREEN-RESV", term: "Spring 2010", contact_name: "John Doe", contact_phone: "555-555-5555", contact_email: "jdoe@example.com" }
   end
 
   describe ".first_request" do
@@ -21,7 +21,7 @@ RSpec.describe ReserveMail do
     end
 
     it "returns the item list formatted correctly" do
-      email = ReserveMail.first_request(Reserve.create(reserve_params.merge(:item_list=>[{"ckey"=>"12345", "title"=>"SW Item", "copies"=>"2", "loan_period"=>"4 hours"}])), "test@example.com", "jdoe")
+      email = ReserveMail.first_request(Reserve.create(reserve_params.merge(item_list: [{ "ckey" => "12345", "title" => "SW Item", "copies" => "2", "loan_period" => "4 hours" }])), "test@example.com", "jdoe")
       body = email.body.raw_source
       expect(body).to match(/Title: SW Item/)
       expect(body).to match(/CKey: 12345 : http:\/\/searchworks.stanford.edu\/view\/12345/)
@@ -30,7 +30,7 @@ RSpec.describe ReserveMail do
     end
 
     it "has the full edit URL in the email" do
-      email = ReserveMail.first_request(Reserve.create(reserve_params.merge(:item_list=>[{"ckey"=>"12345", "title"=>"SW Item", "copies"=>"2", "loan_period"=>"4 hours"}])), "test@example.com", "jdoe")
+      email = ReserveMail.first_request(Reserve.create(reserve_params.merge(item_list: [{ "ckey" => "12345", "title" => "SW Item", "copies" => "2", "loan_period" => "4 hours" }])), "test@example.com", "jdoe")
       expect(email.body.raw_source).to match(/http:\/\/reserves.stanford.edu\/reserves\/1\/edit/)
     end
   end

@@ -11,6 +11,7 @@ class Ability
     cannot :clone, Reserve, has_been_sent: nil
 
     return unless user.superuser?
+
     can :manage, :all
 
     # Define abilities for the passed in user here. For example:
