@@ -14,11 +14,11 @@ class CourseWorkCourses
     end
 
     def key
-      "#{cid}-#{instructor_sunets.join("-")}"
+      "#{cid}-#{instructor_sunets.join('-')}"
     end
 
     def comp_key
-      "#{cids.sort.join(",")},#{instructor_sunets.join(",")}"
+      "#{cids.sort.join(',')},#{instructor_sunets.join(',')}"
     end
 
     def instructor_sunets

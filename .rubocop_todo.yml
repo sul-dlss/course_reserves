@@ -421,16 +421,6 @@ Style/SafeNavigation:
   Exclude:
     - 'app/models/ability.rb'
 
-# Offense count: 11
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiteralsInInterpolation:
-  Exclude:
-    - 'app/controllers/reserves_controller.rb'
-    - 'app/mailers/reserve_mail.rb'
-    - 'lib/course_work_courses.rb'
-
 # Offense count: 6
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoredMethods.
