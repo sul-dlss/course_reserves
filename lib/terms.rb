@@ -10,10 +10,10 @@ module Terms
 
     def future_terms(term = nil)
       current_term_index = if term.nil?
-        terms.index(current_term_hash)
-      else
-        terms.index { |t| t[:term] == term }
-      end
+                             terms.index(current_term_hash)
+                           else
+                             terms.index { |t| t[:term] == term }
+                           end
 
       terms.slice(current_term_index + 1, 2).map { |t| t[:term] }
     end
