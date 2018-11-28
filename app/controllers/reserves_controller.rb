@@ -17,7 +17,7 @@ class ReservesController < ApplicationController
   end
 
   def all_courses
-    render :layout => false if request.xhr?
+    render layout: false if request.xhr?
   end
 
   def all_courses_response
@@ -31,7 +31,7 @@ class ReservesController < ApplicationController
       cl = course.cross_listings.blank? ? "" : "(#{course.cross_listings})"
       items << [course.cid, "<a href='/reserves/new?comp_key=#{course.comp_key.gsub("&","%26")}'>#{course.title}</a> #{cl}", course.instructor_names.join(", ")]
     end
-    render :json => {"aaData" => items}.to_json, :layout => false
+    render json: {"aaData" => items}.to_json, layout: false
   end
 
   def new
@@ -54,9 +54,9 @@ class ReservesController < ApplicationController
           doc = Nokogiri::XML(Faraday.get(url).body)
           title = doc.xpath("//full_title").text
           format = doc.xpath("//formats/format").map{|x| x.text }
-          render :text => "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();" and return if title.blank?
-          params[:item] = {:title => doc.xpath("//full_title").text, :ckey => ckey }
-          params[:item].merge!(:loan_period=>"4 hours", :media=>"true") if format.include?("Video")
+          render text: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();" and return if title.blank?
+          params[:item] = {title: doc.xpath("//full_title").text, ckey: ckey }
+          params[:item].merge!(loan_period: "4 hours", media: "true") if format.include?("Video")
         end
       end
     end
@@ -89,7 +89,7 @@ class ReservesController < ApplicationController
     else
       reserve.update_attributes(reserve_params)
     end
-    redirect_to({ :controller => 'reserves', :action => 'edit', :id => params[:id] })
+    redirect_to({ controller: 'reserves', action: 'edit', id: params[:id] })
   end
 
   def terms
@@ -130,14 +130,14 @@ class ReservesController < ApplicationController
   end
 
   def send_course_reserve_request(reserve)
-    reserve.update_attributes(reserve_params.merge(:has_been_sent => true, :sent_item_list => reserve_params[:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
+    reserve.update_attributes(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
 
     ReserveMail.first_request(reserve, reserve_mail_address(reserve), current_user).deliver_now
   end
 
   def send_updated_reserve_request(reserve)
     old_reserve = reserve.dup
-    reserve.update_attributes(reserve_params.merge(:has_been_sent => true, :sent_item_list => reserve_params[:item_list], :sent_date => DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
+    reserve.update_attributes(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM","am").gsub("PM","pm")))
     diff_text = process_diff(old_reserve.sent_item_list, reserve.item_list)
 
     ReserveMail.updated_request(reserve, reserve_mail_address(reserve), diff_text, current_user).deliver_now

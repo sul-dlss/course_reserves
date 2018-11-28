@@ -529,24 +529,6 @@ Style/GuardClause:
     - 'app/controllers/reserves_controller.rb'
     - 'lib/course_work_courses.rb'
 
-# Offense count: 290
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
-# SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
-Style/HashSyntax:
-  Exclude:
-    - 'Gemfile'
-    - 'app/controllers/reserves_controller.rb'
-    - 'app/mailers/report.rb'
-    - 'app/mailers/reserve_mail.rb'
-    - 'lib/course_work_courses.rb'
-    - 'lib/tasks/fetch_xml.rake'
-    - 'spec/controllers/reserves_controller_spec.rb'
-    - 'spec/helpers/application_helper_spec.rb'
-    - 'spec/models/report_spec.rb'
-    - 'spec/models/reserve_mail_spec.rb'
-    - 'spec/models/reserve_spec.rb'
-
 # Offense count: 2
 Style/IdenticalConditionalBranches:
   Exclude:

@@ -5,14 +5,14 @@ class ReserveMail < ActionMailer::Base
     @reserve = reserve
     @item_text = process_new_item_list(reserve)
     @current_user = current_user
-    mail(:to => address, :subject => "New Reserve Form: #{reserve.cid}-#{reserve.sid} - #{reserve.term}")
+    mail(to: address, subject: "New Reserve Form: #{reserve.cid}-#{reserve.sid} - #{reserve.term}")
   end
   
   def updated_request(reserve, address, diff_text, current_user)
     @reserve = reserve
     @diff_text = diff_text
     @current_user = current_user
-    mail(:to => address, :subject => "Updated Reserve Form: #{reserve.cid}-#{reserve.sid} - #{reserve.term}")
+    mail(to: address, subject: "Updated Reserve Form: #{reserve.cid}-#{reserve.sid} - #{reserve.term}")
   end
   
   protected

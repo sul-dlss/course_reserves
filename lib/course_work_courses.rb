@@ -129,17 +129,17 @@ class CourseWorkCourses
               sunet = inst[:sunetid]
               name = inst.text
               name = sunet if inst.text.blank?
-              instructors << {:sunet => sunet, :name => name}
+              instructors << {sunet: sunet, name: name}
             end
 
             unless instructors.blank?
               yield Course.new({
-                :title          => course_title,
-                :term           => term,
-                :cid            => class_id,
-                :cids           => cids,
-                :sid            => section_id,
-                :instructors    => instructors
+                title: course_title,
+                term: term,
+                cid: class_id,
+                cids: cids,
+                sid: section_id,
+                instructors: instructors
               })
             end
           end        
