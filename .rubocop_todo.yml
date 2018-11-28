@@ -225,18 +225,6 @@ Rails/HasAndBelongsToMany:
     - 'app/models/editor.rb'
     - 'app/models/reserve.rb'
 
-# Offense count: 13
-# Cop supports --auto-correct.
-# Configuration parameters: NotNilAndNotEmpty, NotBlank, UnlessBlank.
-Rails/Present:
-  Exclude:
-    - 'app/controllers/reserves_controller.rb'
-    - 'app/helpers/application_helper.rb'
-    - 'app/mailers/reserve_mail.rb'
-    - 'app/models/reserve.rb'
-    - 'lib/course_work_courses.rb'
-    - 'lib/tasks/fetch_xml.rake'
-
 # Offense count: 2
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: strict, flexible

@@ -149,8 +149,8 @@ class ReservesController < ApplicationController
     new_reserve.each_with_index do |new_item, index|
       total_reserves << new_item
       unless old_reserve.include?(new_item)
-        old_item = old_reserve.map { |item| item if (item["ckey"].blank? && (item["comment"] == new_item["comment"])) || (!item["ckey"].blank? && (item["ckey"] == new_item["ckey"])) }.compact.first
-        unless old_item.blank?
+        old_item = old_reserve.map { |item| item if (item["ckey"].blank? && (item["comment"] == new_item["comment"])) || (item["ckey"].present? && (item["ckey"] == new_item["ckey"])) }.compact.first
+        if old_item.present?
           total_reserves << old_item
           item_text << "***EDITED ITEM***\n"
           new_item.each do |key, value|
@@ -164,7 +164,7 @@ class ReservesController < ApplicationController
         else
           item_text << "***ADDED ITEM***\n"
           new_item.each do |key, value|
-            item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank?
+            item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" if value.present?
           end
           item_text << "------------------------------------\n"
         end
@@ -173,7 +173,7 @@ class ReservesController < ApplicationController
     (old_reserve - total_reserves).each do |delete_item|
       item_text << "***DELETED ITEM***\n"
       delete_item.each do |key, value|
-        item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank?
+        item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" if value.present?
       end
       item_text << "------------------------------------\n"
     end

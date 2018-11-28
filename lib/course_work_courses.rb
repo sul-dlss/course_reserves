@@ -132,7 +132,7 @@ class CourseWorkCourses
               instructors << { sunet: sunet, name: name }
             end
 
-            unless instructors.blank?
+            if instructors.present?
               yield Course.new(
                 title: course_title,
                 term: term,
