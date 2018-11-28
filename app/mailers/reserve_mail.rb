@@ -25,8 +25,8 @@ class ReserveMail < ActionMailer::Base
       text << "Comment: #{item["comment"]}\n" unless item["comment"].blank?
       text << "Circ rule: #{Settings.loan_periods.to_h.key(item["loan_period"])}\n"
       text << "Copies: #{item["copies"]}\n"
-      text << "Purchase this item? Yes\n" if item.has_key?("purchase") and item["purchase"] == "true"
-      text << "Is there a personal copy available? Yes\n" if item.has_key?("personal") and item["personal"] == "true"
+      text << "Purchase this item? Yes\n" if item.key?("purchase") and item["purchase"] == "true"
+      text << "Is there a personal copy available? Yes\n" if item.key?("personal") and item["personal"] == "true"
       text << "------------------------------------\n"
     end
     return text

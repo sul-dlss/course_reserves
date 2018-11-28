@@ -67,7 +67,7 @@ class ReservesController < ApplicationController
   def create
     @reserve.save!
 
-    send_course_reserve_request(@reserve) if params.has_key?(:send_request)
+    send_course_reserve_request(@reserve) if params.key?(:send_request)
     redirect_to edit_reserve_path(@reserve[:id])
   end
 
@@ -82,10 +82,10 @@ class ReservesController < ApplicationController
         reserve_params[:term] = original_term
       end
     end
-    reserve_params[:item_list] = [] unless reserve_params.has_key?(:item_list)
-    if params.has_key?(:send_request) and reserve.has_been_sent == true
+    reserve_params[:item_list] = [] unless reserve_params.key?(:item_list)
+    if params.key?(:send_request) and reserve.has_been_sent == true
       send_updated_reserve_request(reserve)
-    elsif params.has_key?(:send_request) and (reserve.has_been_sent == false or reserve.has_been_sent.nil?)
+    elsif params.key?(:send_request) and (reserve.has_been_sent == false or reserve.has_been_sent.nil?)
       send_course_reserve_request(reserve)
     else
       reserve.update_attributes(reserve_params)

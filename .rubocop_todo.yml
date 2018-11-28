@@ -387,16 +387,6 @@ Style/PercentLiteralDelimiters:
     - 'lib/tasks/fetch_xml.rake'
     - 'spec/rails_helper.rb'
 
-# Offense count: 7
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: short, verbose
-Style/PreferredHashMethods:
-  Exclude:
-    - 'app/controllers/reserves_controller.rb'
-    - 'app/helpers/application_helper.rb'
-    - 'app/mailers/reserve_mail.rb'
-
 # Offense count: 9
 # Cop supports --auto-correct.
 # Configuration parameters: AllowMultipleReturnValues.
