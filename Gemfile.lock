@@ -149,7 +149,7 @@ GEM
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     honeybadger (4.1.0)
-    i18n (1.1.1)
+    i18n (1.2.0)
       concurrent-ruby (~> 1.0)
     io-like (0.3.0)
     jaro_winkler (1.5.1)
@@ -165,7 +165,7 @@ GEM
     json (2.1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    letter_opener (1.6.0)
+    letter_opener (1.7.0)
       launchy (~> 2.2)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -355,4 +355,4 @@ DEPENDENCIES
   whenever (~> 0.9)
 
 BUNDLED WITH
-   1.17.1
+   1.17.2
