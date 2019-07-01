@@ -1,3 +1,4 @@
+dist: xenial
 rvm:
   - '2.6.3'
 
