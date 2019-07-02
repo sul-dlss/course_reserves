@@ -1,4 +1,5 @@
 require:
+  - rubocop-rails
   - rubocop-rspec
   - rubocop-performance
 
@@ -16,9 +17,6 @@ AllCops:
 
 Rails:
   Enabled: true
-
-Layout/IndentHash:
-  EnforcedStyle: consistent
 
 Style/Documentation:
   Enabled: false
