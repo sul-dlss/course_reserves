@@ -81,7 +81,8 @@ end
 
 # to be run on machines w/ mysql
 group :production do
-  gem "mysql2", "~> 0.4"
+  # mysql 0.5.3 is not compatible with the version of ruby we are using
+  gem 'mysql2', '< 0.5.3'
 end
 
 group :deployment do
