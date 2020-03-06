@@ -63,9 +63,7 @@ class CourseWorkCourses
   end
 
   def find_by_compound_key(key)
-    self.all_courses.select do |course|
-      course.comp_key == key
-    end
+    self.course_map[key] || []
   end
 
   def find_by_class_id_and_section(class_id, section)
@@ -91,6 +89,17 @@ class CourseWorkCourses
   # or a feature.
   def all_courses
     @all_courses ||= process_all_courses_xml(self.raw_xml).to_a.reverse.uniq(&:key).reverse.to_a
+  end
+
+  # Efficient lookup of course data by compound key (which is used in a few places around the app)
+  def course_map
+    @course_map ||= all_courses.each_with_object({}) do |course, map|
+      if map[course.comp_key]
+        map[course.comp_key] << course
+      else
+        map[course.comp_key] = [course]
+      end
+    end
   end
 
   private

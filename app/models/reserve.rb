@@ -16,6 +16,10 @@ class Reserve < ActiveRecord::Base
     @course ||= CourseWorkCourses.instance.find_by_compound_key(compound_key).first
   end
 
+  def course_title
+    course&.title || desc
+  end
+
   private
 
   def process_sunet_ids

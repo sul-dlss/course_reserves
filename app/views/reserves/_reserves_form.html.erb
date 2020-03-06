@@ -5,25 +5,24 @@
       <div class="error"><%=  flash[:error] %></div>
     <%- end -%>
 	  <%- if params[:action] == "new" -%>
-  		<h2>
-  		  <%= @course.cid if @course -%>: <%= @course.title if @course -%>
-  		  <%= "(#{@course.cross_listings})" if @course and @course.cross_listings.present? %>
-  		</h2>
-  		<input type="hidden" name="reserve[cid]" value="<%= @course.cid if @course -%>" />
-  		<input type="hidden" name="reserve[desc]" value="<%= @course.title if @course -%>" />
-  		<input type="hidden" name="reserve[sid]" value="<%= @course.sid if @course -%>" />
-  		<input type="hidden" name="reserve[compound_key]" value="<%= @course.comp_key if @course -%>" />
-  		<input type="hidden" name="reserve[cross_listings]" value="<%= @course.cross_listings if @course -%>" />
-  		<div class="section"><span>Instructor:</span> <%= @course.instructor_names.join(', ') if @course -%></div>
-  		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @course.instructor_sunets.join(', ') if @course -%>" />
-  		<input type="hidden" name="reserve[instructor_names]" value="<%= @course.instructor_names.join(', ') if @course -%>" />
+      <h2>
+        <%= @course.cid if @course -%>: <%= @course.title if @course -%>
+        <%= "(#{@course.cross_listings})" if @course and @course.cross_listings.present? %>
+      </h2>
+      <input type="hidden" name="reserve[cid]" value="<%= @course.cid if @course -%>" />
+      <input type="hidden" name="reserve[sid]" value="<%= @course.sid if @course -%>" />
+      <input type="hidden" name="reserve[desc]" value="<%= @course.title if @course -%>" />
+      <input type="hidden" name="reserve[compound_key]" value="<%= @course.comp_key if @course -%>" />
+      <input type="hidden" name="reserve[cross_listings]" value="<%= @course.cross_listings if @course -%>" />
+      <div class="section"><span>Instructor:</span> <%= @course.instructor_names.join(', ') if @course -%></div>
+      <input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @course.instructor_sunets.join(', ') if @course -%>" />
+      <input type="hidden" name="reserve[instructor_names]" value="<%= @course.instructor_names.join(', ') if @course -%>" />
 		<%- else -%>
   		<h2>
-  		  <%= @reserve.cid if (@reserve and @reserve.cid) -%>: <%= @reserve.desc if (@reserve and @reserve.desc) -%>
+        <%= @reserve.cid if (@reserve and @reserve.cid) -%>: <%= @reserve.course_title if (@reserve and @reserve.course_title) -%>
   		  <%= "(#{@reserve.cross_listings})" if @reserve and @reserve.cross_listings and !@reserve.cross_listings.blank? %>
   		</h2>
   		<input type="hidden" name="reserve[cid]" value="<%= @reserve.cid if (@reserve and @reserve.cid) -%>" />
-  		<input type="hidden" name="reserve[desc]" value="<%= @reserve.desc if (@reserve and @reserve.desc) -%>" />
   		<input type="hidden" name="reserve[sid]" value="<%= @reserve.sid if (@reserve and @reserve.sid) -%>" />
   		<input type="hidden" name="reserve[compound_key]" value="<%= @reserve.compound_key if (@reserve and @reserve.compound_key) -%>" />
   		<input type="hidden" name="reserve[cross_listings]" value="<%= @reserve.cross_listings if (@reserve and @reserve.cross_listings) -%>" />
