@@ -1,4 +1,4 @@
-<%= @reserve.cid %>-<%= @reserve.sid %>: <%= @reserve.desc %>
+<%= @reserve.cid %>-<%= @reserve.sid %>: <%= @reserve.course_title %>
 <%= "Cross listed as: #{@reserve.cross_listings}" unless @reserve.cross_listings.blank? %>
 Instructor Name(s): <%= @reserve.instructor_names %>
 Instructor SUNet ID(s): <%= @reserve.instructor_sunet_ids %>

@@ -11,6 +11,20 @@ RSpec.describe Reserve do
     end
   end
 
+  describe '#course_title' do
+    it 'fetches the title from the course XML (so it remains updated)' do
+      reserve = Reserve.new(compound_key: 'AA-272C,123,456', desc: 'An Outdated Course Title')
+
+      expect(reserve.course_title).to eq 'Global Positioning Systems'
+    end
+
+    it 'falls back to the reserve description if no course title is present' do
+      reserve = Reserve.new(compound_key: 'A-KEY-WO-A-COURSE', desc: 'A Course Title')
+
+      expect(reserve.course_title).to eq 'A Course Title'
+    end
+  end
+
   describe "editor relationships" do
     it "generates editor relationships from editor_sunet_ids field for single sunet_id" do
       reserve = Reserve.create(reserve_params.merge(editor_sunet_ids: 'jlavigne', cid: 'test_cid', item_list: [{ title: 'My Title' }]))

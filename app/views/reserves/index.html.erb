@@ -54,13 +54,12 @@
                 Copy <span class='sr-only'><%= "#{course.cid} - #{course.term}" %>
               <% end if course.has_been_sent %>
             </td>
-            <%- # TODO: Create some sort of model method for the title of the course so we can fall back if there is no #desc -%>
-  					<td><%= course.desc -%></td>
-  					<td><%= course.instructor_names %></td>
-  					<td><%= (course.sent_date.blank? or course.sent_date.nil?) ? "Not sent" : "Sent #{course.sent_date}" %></td>
-  				</tr>
-  			<% end %>
-  		</tbody>
+            <td><%= course.course_title -%></td>
+            <td><%= course.instructor_names %></td>
+            <td><%= (course.sent_date.blank? or course.sent_date.nil?) ? "Not sent" : "Sent #{course.sent_date}" %></td>
+          </tr>
+        <% end %>
+      </tbody>
 
 
   	</table>
