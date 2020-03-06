@@ -32,6 +32,23 @@ RSpec.describe CourseWorkCourses do
     end
   end
 
+  describe '#course_map' do
+    subject(:course_map) { courses.course_map }
+
+    it 'is a hash of all courses indexed by the compound key (for efficient lookup)' do
+      expect(course_map.keys).to eq [
+        'AFRICAAM-165E,EDUC-237X,ETHICSOC-165E,123,456',
+        'AFRICAAM-165E,EDUC-237X,ETHICSOC-165E,123',
+        'AA-272C,123,456',
+        'ART-102,HIST-201,789'
+      ]
+
+      expect(course_map.values.flatten).to all(be_a_kind_of(CourseWorkCourses::Course))
+      expect(course_map['AA-272C,123,456'].length).to eq 1
+      expect(course_map['ART-102,HIST-201,789'].length).to eq 2
+    end
+  end
+
   describe ".find_by_sunet" do
     describe "by SUNet ID" do
       it "returns the subset of courses for the SUNet ID w/ fewer courses" do
