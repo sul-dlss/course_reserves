@@ -9,7 +9,7 @@ email:
   from: "no-reply@reserves.stanford.edu"
   reports: "searchworks-reports@lists.stanford.edu"
   allforms: "course-reserves-allforms@lists.stanford.edu"
-  questions: "greenreserves@stanford.edu"
+  questions: "coursereserves@stanford.edu"
 
 email_mapping:
   "ART-RESV": "artlibrary@stanford.edu"
