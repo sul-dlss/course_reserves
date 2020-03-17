@@ -7,7 +7,7 @@ $cardinal: #8c1515;
 $odd: #fbfbf9;
 $even: #f3f2f1;
 $data-header: #d0cdc8;
-
+$global-alert-color: rgb(204, 0, 0);
 
 label.disabled {
 	color: #888;
@@ -399,4 +399,12 @@ ul.clone-reserve-list {
   position: absolute;
   white-space: nowrap;
   width: 1px;
+}
+
+.global-alert {
+  border: 1px solid $global-alert-color;
+  margin: 10px 0;
+  padding: 10px;
+
+  b { font-weight: bold; }
 }

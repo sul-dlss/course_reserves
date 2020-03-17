@@ -17,6 +17,9 @@
           <%= current_user %> <span>(close browser to logout)</span>
         </span>
       </header>
+      <% if Settings.global_alert %>
+        <%= render 'shared/global_alert' %>
+      <% end %>
       <%= yield %>
     </div>
   </div>

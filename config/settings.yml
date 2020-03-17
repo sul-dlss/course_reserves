@@ -1,3 +1,5 @@
+global_alert: false
+
 block_emails?: false
 
 courseworks:

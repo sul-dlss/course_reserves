@@ -31,3 +31,9 @@
 
 en:
   hello: "Hello world"
+  global_alert_html: >
+    <b>COVID-19 update</b> <br/>
+    Instructors please submit your course reserves requests for Spring Quarter 2020 as soon as possible. <br/>
+    Library staff will work to determine what e-resources are available for purchase or licensing as surrogates for print and media materials.  <br/>
+     If digital surrogates cannot be found in a timely manner, library staff will contact you with other options. <br/>
+     If you have any questions, please contact <a href="mailto:coursereserves@stanford.edu">coursereserves@stanford.edu</a>
