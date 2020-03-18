@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   private
 
   def remote_user_id
-    if request.env['REMOTE_USER']
+    if request.env['REMOTE_USER'].present?
       request.env['REMOTE_USER']
     elsif Rails.env.development? && ENV['REMOTE_USER']
       ENV['REMOTE_USER']
