@@ -56,7 +56,7 @@
 
 		<div class="section">
 		  <label for="libraries" class="required">Send request to <span aria-hidden="true" class="badge badge-warning text-white">Required</span></label>
-			<select required id="libraries" name="reserve[library]" class="form-control ml-4" autocomplete="off">
+			<select id="libraries" name="reserve[library]" class="form-control ml-4" autocomplete="off">
 				<option disabled selected hidden value="">(select library)</option>
 				<% Settings.reserve_libraries.each do |code, library| %>
 					<option value="<%= code -%>" <%= "selected='selected'" if @reserve.library.to_s == code.to_s -%> ><%= library -%></option>
