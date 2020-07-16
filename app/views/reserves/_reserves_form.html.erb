@@ -108,18 +108,20 @@
     	<% end %>
     	<%- if !@reserve or !@reserve.disabled -%>
       	<tr id="add_row">
-      		<td class="enumerator last-row"><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
+      		<td class="enumerator last-row">
+            <span class="counter"></span>
+          </td>
           <td colspan="3">
-      			<label for="sw_url">Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "https://searchworks.stanford.edu/", rel: 'noopener', target: '_blank') %>.</span><br/>
+      			<label for="sw_url">Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "https://searchworks.stanford.edu/", rel: 'noopener', target: '_blank') %>.</label><br/>
 						<div class="d-flex align-items-center mt-1">
 							<div class="input-group w-auto">
 								<input class="form-control" type="text" id="sw_url" />
 								<div class="input-group-append">
-									<%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item btn btn-cardinal-red") -%>
+                  <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item btn btn-cardinal-red") -%>
 								</div>
 							</div>
 							<div>
-								&nbsp; - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :id=>"add_custom", :remote => true ) %>
+                &nbsp; - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :id=>"add_custom", :remote => true ) %>
 							</div>
 						</div>
       		</td>

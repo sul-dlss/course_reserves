@@ -127,19 +127,20 @@ RSpec.describe ReservesController do
     end
     it "properlies assign the sent_item_list for unsent items" do
       expect(controller).to receive_messages(current_user: user)
-      res = { cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{ "ckey" => "12345" }] }
+      item_list = { 0 => { "ckey" => "12345" } }
+      res = { cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: item_list.values }
       r = Reserve.create(reserve_params.merge(res))
       r.save!
       expect(r.sent_item_list).to be_blank
-      get :update, params: { id: r[:id], send_request: "true", reserve: res }
+      get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: item_list) }
       expect(Reserve.find(r[:id]).sent_item_list).to eq([{ "ckey" => "12345" }])
     end
     it "properlies assign the sent_item-list for sent items" do
       expect(controller).to receive_messages(current_user: user)
-      res = { cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{ "ckey" => "12345" }], has_been_sent: true, sent_item_list: [{ "ckey" => "12345" }] }
+      res = { cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{ "ckey" => "12345" }], sent_item_list: [{ "ckey" => "12345" }] }
       r = Reserve.create(reserve_params.merge(res))
       r.save!
-      get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: [{ "ckey" => "12345" }, { "ckey" => "54321" }]) }
+      get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: { 0 => { "ckey" => "12345" }, 'whatever' => { "ckey" => "54321" } }) }
       expect(Reserve.find(r[:id]).sent_item_list).to eq([{ "ckey" => "12345" }, { "ckey" => "54321" }])
     end
 
@@ -148,7 +149,7 @@ RSpec.describe ReservesController do
       res = { cid: "CID1", sid: "01", instructor_sunet_ids: "user_sunet", term: "Summer 2010", item_list: [{ "ckey" => "12345" }], has_been_sent: true, sent_item_list: [{ "ckey" => "12345" }] }
       r = Reserve.create(reserve_params.merge(res))
       r.save!
-      get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: [{ "ckey" => "12345" }, { "ckey" => "54321" }]) }
+      get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: { 0 => { "ckey" => "12345" }, '42' => { "ckey" => "54321" } }) }
       expect(Reserve.find(r[:id]).sent_item_list).to eq([{ "ckey" => "12345" }, { "ckey" => "54321" }])
     end
 
@@ -159,7 +160,7 @@ RSpec.describe ReservesController do
       r.save!
 
       expect do
-        get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: [{ "ckey" => "12345" }, { "ckey" => "54321" }]) }
+        get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: { 0 => { "ckey" => "12345" }, 1 => { "ckey" => "54321" } }) }
       end.to raise_error(CanCan::AccessDenied)
     end
   end

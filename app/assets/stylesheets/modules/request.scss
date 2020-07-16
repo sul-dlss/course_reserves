@@ -13,10 +13,20 @@ th.delete {
 	width: 6em;
 }
 
+#item_list_table {
+  counter-reset: section;
+}
+
 .enumerator {
-	padding-left: 1rem;
 	font-size: 2rem;
 	color: $su-driftwood;
+
+  .counter {
+    &::before {
+      content: counter(section);
+      counter-increment: section;
+    }
+  }
 }
 
 #libraries { width: 35ch; }

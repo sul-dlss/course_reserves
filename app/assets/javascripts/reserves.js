@@ -41,7 +41,7 @@ $(document).ready(function(){
 	// Delete item links
 	$("body").on("click", ".delete", function(){
 		$(this).parents("tr").remove();
-		update_item_list_numbers_and_classes();
+    togglePartialWorkTextarea();
 		show_changed($("#item_list_table"));
 		check_validations();
 		return false;
@@ -66,15 +66,7 @@ $(document).ready(function(){
 	  check_loan_period();
   }
 
-  $('.digital-item-type input[name="reserve[item_list][][digital_type]"]').change(function() {
-    var $textArea = $(this).closest('.digital-item-type').find('textarea[name="reserve[item_list][][digital_type_description]"]');
-    if (this.value === 'complete_work') {
-      $textArea.attr('disabled', true);
-    }
-    if (this.value === 'partial_work') {
-      $textArea.attr('disabled', false);
-    }
-  });
+  togglePartialWorkTextarea();
 });
 
 function check_validations(){
@@ -90,13 +82,19 @@ function check_validations(){
   }
 }
 
-function update_item_list_numbers_and_classes(){
-	i = 1;
-	$("#item_list_table tbody tr").each(function(){
-	  $(this).children("td:first").text(i);
-	  i += 1;
-	});
+function togglePartialWorkTextarea() {
+  $('.digital-item-type input[name$="[digital_type]"]').change(function() {
+    var $textArea = $(this).closest('.digital-item-type').find('textarea[name$="[digital_type_description]"]');
+
+    if (this.value === 'complete_work') {
+      $textArea.attr('disabled', true);
+    }
+    if (this.value === 'partial_work') {
+      $textArea.attr('disabled', false);
+    }
+  });
 }
+
 function show_changed(table){
 	table.addClass("changed")
 }

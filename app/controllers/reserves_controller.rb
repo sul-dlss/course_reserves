@@ -45,7 +45,6 @@ class ReservesController < ApplicationController
   def add_item
     respond_to do |format|
       format.js do
-        params[:index] = 0
         if params[:sw] == 'false'
           params[:item] = {}
         elsif params[:sw] == 'true'
@@ -209,7 +208,11 @@ class ReservesController < ApplicationController
   end
 
   def reserve_params
-    params.require(:reserve).permit!
+    @reserve_params ||= begin
+      reserve = params.require(:reserve).permit!
+      reserve['item_list'] = reserve['item_list'].values if reserve['item_list']
+      reserve
+    end
   end
 
   def redirect_to_edit_when_reserve_exists
