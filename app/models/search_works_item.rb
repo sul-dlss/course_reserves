@@ -13,6 +13,7 @@ class SearchWorksItem
       ckey: ckey,
       title: title,
       imprint: imprint,
+      online: online,
     }.merge(media_fields)
   end
 
@@ -21,6 +22,20 @@ class SearchWorksItem
   end
 
   private
+
+  def online
+    fulltext_item? || restricted_hathi_item?
+  end
+
+  def fulltext_item?
+    (document['access_facet'] || []).include?('Online')
+  end
+
+  def restricted_hathi_item?
+    return unless Settings.hathi_etas_access
+
+    (document['ht_access_sim'] || []).present?
+  end
 
   def media_fields
     return {} unless media?

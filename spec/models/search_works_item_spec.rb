@@ -36,6 +36,19 @@ RSpec.describe SearchWorksItem do
     it { expect(item.to_h).to include(ckey: '6490288') }
     it { expect(item.to_h).to include(title: 'Cats!') }
     it { expect(item.to_h).to include(imprint: '1st ed. - Mordor') }
+    it { expect(item.to_h).to include(online: false) }
+
+    context 'when an item available via Hathi ETAS' do
+      let(:document) { { 'ht_access_sim' => ['AnyValue'] } }
+
+      it { expect(item.to_h).to include(online: true) }
+    end
+
+    context 'when an item available via online (according the SW access facet)' do
+      let(:document) { { 'access_facet' => ['At the Library', 'Online'] } }
+
+      it { expect(item.to_h).to include(online: true) }
+    end
 
     context 'when a media item' do
       let(:document) { { 'title_full_display' => 'Cats!', format_main_ssim: ['Book', 'Video'] } }
