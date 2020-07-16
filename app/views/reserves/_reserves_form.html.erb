@@ -107,7 +107,7 @@
     		<% end %>
     	<% end %>
     	<%- if !@reserve or !@reserve.disabled -%>
-      	<tr id="add_row" class="<%= cycle("odd","even") %>">
+      	<tr id="add_row">
       		<td class="enumerator last-row"><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
           <td colspan="3">
       			<label for="sw_url">Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "https://searchworks.stanford.edu/", rel: 'noopener', target: '_blank') %>.</span><br/>

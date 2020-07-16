@@ -43,7 +43,7 @@
   		</thead>
   		<tbody>
   			<% @reserves.each do |course| -%>
-  				<tr class="<%= cycle("odd", "even") -%>">
+  				<tr>
   					<td><%= course.cid -%></td>
   					<td data-sort='<%= sortable_term_value(course.term) %>'><%= course.term -%></td>
             <td class="text-nowrap">
