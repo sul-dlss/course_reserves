@@ -9,6 +9,7 @@
         <p><%= item['imprint'] %></p>
       <% end %>
   	<% end %>
+    <input type="hidden" name="reserve[item_list][][imprint]" value="<%= item["imprint"] if item["imprint"] %>" />
   	<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
   	<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
     <label for="item-comment-<%= index %>">Comments</label>
