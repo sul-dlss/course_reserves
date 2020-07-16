@@ -49,15 +49,10 @@ class ReservesController < ApplicationController
         if params[:sw] == 'false'
           params[:item] = {}
         elsif params[:sw] == 'true'
-          params[:item] = {}
           ckey = params[:url].strip[/(\d+)$/]
-          url = searchworks_ckey_url("#{ckey}.mobile?covers=false&availability=false")
-          doc = Nokogiri::XML(Faraday.get(url).body)
-          title = doc.xpath("//full_title").text
-          format = doc.xpath("//formats/format").map { |x| x.text }
-          render(text: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();") && return if title.blank?
-          params[:item] = { title: doc.xpath("//full_title").text, ckey: ckey }
-          params[:item].merge!(loan_period: "4 hours", media: "true") if format.include?("Video")
+          item = SearchWorksItem.new(ckey)
+          render(js: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();") && return unless item.valid?
+          params[:item] = item.to_h
         end
       end
     end
