@@ -12,6 +12,7 @@ class SearchWorksItem
     {
       ckey: ckey,
       title: title,
+      imprint: imprint,
     }.merge(media_fields)
   end
 
@@ -37,6 +38,10 @@ class SearchWorksItem
 
   def title
     document['title_full_display']
+  end
+
+  def imprint
+    document['imprint_display']&.first
   end
 
   def document

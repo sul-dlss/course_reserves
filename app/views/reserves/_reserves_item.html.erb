@@ -5,6 +5,9 @@
       <p class="h5">
         <%= link_to item['title'], "https://searchworks.stanford.edu/view/#{item['ckey']}", rel: 'noopener', target: '_blank' %>
       </p>
+      <% if item['imprint'] %>
+        <p><%= item['imprint'] %></p>
+      <% end %>
   	<% end %>
   	<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
   	<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />

@@ -26,10 +26,16 @@ RSpec.describe SearchWorksItem do
   end
 
   describe '#to_h' do
-    let(:document) { { 'title_full_display' => 'Cats!' } }
+    let(:document) do
+      {
+        'title_full_display' => 'Cats!',
+        'imprint_display' => ['1st ed. - Mordor']
+      }
+    end
 
     it { expect(item.to_h).to include(ckey: '6490288') }
     it { expect(item.to_h).to include(title: 'Cats!') }
+    it { expect(item.to_h).to include(imprint: '1st ed. - Mordor') }
 
     context 'when a media item' do
       let(:document) { { 'title_full_display' => 'Cats!', format_main_ssim: ['Book', 'Video'] } }

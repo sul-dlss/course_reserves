@@ -20,4 +20,12 @@ RSpec.describe 'reserves/_reserves_item.html.erb' do
       )
     end
   end
+
+  describe 'Imprint' do
+    let(:item) { { 'ckey' => '12345', 'title' => 'Cats!', 'imprint' => '1st ed. - Mordor' } }
+
+    it do
+      expect(rendered).to have_css('p', text: '1st ed. - Mordo')
+    end
+  end
 end

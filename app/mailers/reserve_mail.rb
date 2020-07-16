@@ -21,6 +21,7 @@ class ReserveMail < ActionMailer::Base
     text = ""
     reserve.item_list.each do |item|
       text << "Title: #{item['title']}\n" if item["title"].present?
+      text << "Imprint: #{item['imprint']}\n" if item['imprint'].present?
       text << "CKey: #{item['ckey']} : http://searchworks.stanford.edu/view/#{item['ckey']}\n" if item["ckey"].present?
       text << "Comment: #{item['comment']}\n" if item["comment"].present?
       text << "Circ rule: #{Settings.loan_periods.to_h.key(item['loan_period'])}\n"

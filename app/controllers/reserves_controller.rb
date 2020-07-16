@@ -181,6 +181,7 @@ class ReservesController < ApplicationController
 
   def translations
     { "title" => "Title: ",
+      'imprint' => 'Imprint: ',
       "ckey" => "CKey: ",
       "comment" => "Comment: ",
       "loan_period" => "Circ rule: ",
