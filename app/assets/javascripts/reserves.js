@@ -38,18 +38,6 @@ $(document).ready(function(){
 		$("body").css("cursor", "progress");
 	});
 
-	// Add comment links
-	$("body").on("click", ".add-comment", function(){
-		if($(this).text() == "Add comment"){
-		  $(this).text("Remove comment");
-		}else{
-			$(this).text("Add comment");
-		}
-		$(this).parents("td").children("textarea").toggle();
-		$(this).parents("td").children("textarea").val("");
-    return false;
-	});
-
 	// Delete item links
 	$("body").on("click", ".delete", function(){
 		$(this).parents("tr").remove();

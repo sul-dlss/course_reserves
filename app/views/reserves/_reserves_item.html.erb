@@ -11,14 +11,10 @@
   	<% end %>
   	<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
   	<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
-  	<textarea aria-label="comment" cols="60" rows="5" class="item-comment" name="reserve[item_list][][comment]" <%= "style='display:none;'".html_safe if item_in_searchworks?(item) and item["comment"].blank? %>><%= item["comment"] %></textarea>
-  	<%- if item_in_searchworks?(item) -%>
-    	<%- if item["comment"].blank? -%>
-  		  <span class="add-comment"><%= link_to "Add comment", "", :class=> "add-comment" -%></span>
-  		<%- else -%>
-    		<span class="add-comment"><%= link_to "Remove comment", "", :class=> "add-comment" -%></span>
-  		<%- end -%>
-		<%- end -%>
+    <label for="item-comment-<%= index %>">Comments</label>
+    <textarea id="item-comment-<%= index %>" aria-label="comment" cols="60" rows="2" class="form-control" name="reserve[item_list][][comment]">
+      <%= item["comment"] %>
+    </textarea>
 	</td>
 	<td>
 		<input type="number" aria-label="number of copies" class="num_copies form-control mb-1" name="reserve[item_list][][copies]" value="<%= item["copies"] || "1" %>" max="99" />
