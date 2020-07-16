@@ -53,7 +53,7 @@ RSpec.describe SearchWorksItem do
     context 'when a media item' do
       let(:document) { { 'title_full_display' => 'Cats!', format_main_ssim: ['Book', 'Video'] } }
 
-      it { expect(item.to_h).to include(media: 'true') }
+      it { expect(item.to_h).to include(media: true) }
       it { expect(item.to_h).to include(loan_period: '4 hours') }
     end
   end

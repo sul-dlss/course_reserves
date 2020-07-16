@@ -133,7 +133,7 @@ RSpec.describe ReservesController do
       r.save!
       expect(r.sent_item_list).to be_blank
       get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: item_list) }
-      expect(Reserve.find(r[:id]).sent_item_list).to eq([{ "ckey" => "12345" }])
+      expect(Reserve.find(r[:id]).sent_item_list).to match_array([hash_including({ "ckey" => "12345" })])
     end
     it "properlies assign the sent_item-list for sent items" do
       expect(controller).to receive_messages(current_user: user)
@@ -141,7 +141,7 @@ RSpec.describe ReservesController do
       r = Reserve.create(reserve_params.merge(res))
       r.save!
       get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: { 0 => { "ckey" => "12345" }, 'whatever' => { "ckey" => "54321" } }) }
-      expect(Reserve.find(r[:id]).sent_item_list).to eq([{ "ckey" => "12345" }, { "ckey" => "54321" }])
+      expect(Reserve.find(r[:id]).sent_item_list).to match_array([hash_including({ "ckey" => "12345" }), hash_including({ "ckey" => "54321" })])
     end
 
     it 'allows superusers to update any record' do
@@ -150,7 +150,7 @@ RSpec.describe ReservesController do
       r = Reserve.create(reserve_params.merge(res))
       r.save!
       get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: { 0 => { "ckey" => "12345" }, '42' => { "ckey" => "54321" } }) }
-      expect(Reserve.find(r[:id]).sent_item_list).to eq([{ "ckey" => "12345" }, { "ckey" => "54321" }])
+      expect(Reserve.find(r[:id]).sent_item_list).to match_array([hash_including({ "ckey" => "12345" }), hash_including({ "ckey" => "54321" })])
     end
 
     it 'does not allow you to update a record you are not an editor of' do

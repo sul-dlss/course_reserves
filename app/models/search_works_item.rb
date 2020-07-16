@@ -40,7 +40,7 @@ class SearchWorksItem
   def media_fields
     return {} unless media?
 
-    { loan_period: '4 hours', media: 'true' }
+    { loan_period: '4 hours', media: true }
   end
 
   def media?
