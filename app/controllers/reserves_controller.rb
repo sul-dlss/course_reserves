@@ -49,15 +49,10 @@ class ReservesController < ApplicationController
         if params[:sw] == 'false'
           params[:item] = {}
         elsif params[:sw] == 'true'
-          params[:item] = {}
           ckey = params[:url].strip[/(\d+)$/]
-          url = searchworks_ckey_url("#{ckey}.json")
-          doc = JSON.parse(Faraday.get(url).body).dig('response', 'document')
-          title = doc['title_full_display']
-          format = doc['format_main_ssim']
-          render(text: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();") && return if title.blank?
-          params[:item] = { title: title, ckey: ckey }
-          params[:item].merge!(loan_period: "4 hours", media: "true") if format.include?("Video")
+          item = SearchWorksItem.new(ckey)
+          render(text: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();") && return unless item.valid?
+          params[:item] = item.to_h
         end
       end
     end
