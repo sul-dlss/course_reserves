@@ -1,3 +1,5 @@
-<div class="global-alert">
-  <%= t('global_alert_html') %>
-</div>
+<% if defined?(Settings) && Settings.global_alert && Settings.global_alert.enabled %>
+  <div class="global-alert">
+    <%= Settings.global_alert.html.html_safe %>
+  </div>
+<% end %>

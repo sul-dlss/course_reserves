@@ -1,0 +1,48 @@
+
+#list-management {
+  min-width: 354px;
+}
+
+th.number {
+	width: 2em;
+}
+th.title {
+	width: 45%;
+}
+th.copies {
+	width: 25%;
+}
+th.loan_period {
+	width: 20%;
+  min-width: 120px;
+}
+th.delete {
+	width: 6em;
+}
+
+.enumerator {
+	padding-left: 1rem;
+	font-size: 2rem;
+	color: $su-driftwood;
+}
+
+.num_copies { width: 10ch; }
+
+#libraries { width: 25ch; }
+
+table.changed {
+  border-left: 2px solid $red;
+  border-right: 2px solid $red;
+  border-bottom: 2px solid $table-border-color;
+}
+
+#sw_url {
+  width: 400px;
+}
+
+.btn.btn-cardinal-red[disabled] {
+  background-color: $su-clay;
+  border-color: $su-stone;
+  cursor: not-allowed;
+  opacity: 1;
+}

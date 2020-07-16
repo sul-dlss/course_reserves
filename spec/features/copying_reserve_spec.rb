@@ -17,11 +17,12 @@ RSpec.describe 'Copying a reserve list', js: true do
 
   it 'allows a user to copy a course into a term' do
     visit '/'
-
-    click_link 'Copy'
+    within '#main-container' do
+      click_link 'Copy'
+    end
 
     expect(page).to have_css('.clone-reserve-list', visible: true) # make sure modal renders
-    within '.ui-dialog' do
+    within '#modal' do
       expect do
         click_link Terms.future_terms.first
       end.to change { Reserve.count }.by(1)
@@ -45,7 +46,7 @@ RSpec.describe 'Copying a reserve list', js: true do
 
     expect(page).to have_css('.clone-reserve-list', visible: true) # make sure modal renders
 
-    within '.ui-dialog' do
+    within '#modal' do
       expect(page).not_to have_css('a', text: /#{Terms.future_terms.first}/)
       expect(page).to have_content("#{Terms.future_terms.first} (reserve list already exists)")
       expect(page).to have_css('a', text: Terms.future_terms.last)

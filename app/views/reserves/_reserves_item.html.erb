@@ -2,34 +2,35 @@
 	<td class="enumerator"><%= index + 1 %></td>
 	<td>
 		<% if item_in_searchworks?(item) %>
-  		<p><%= item["title"] -%> </p>
-  		<p><%= link_to "http://searchworks.stanford.edu/view/#{item["ckey"]}", "http://searchworks.stanford.edu/view/#{item["ckey"]}", rel: 'noopener', target: '_blank' -%></p>
+  		<p class="h5"><%= item["title"] -%> </p>
+  		<p><%= link_to "https://searchworks.stanford.edu/view/#{item["ckey"]}", "https://searchworks.stanford.edu/view/#{item["ckey"]}", rel: 'noopener', target: '_blank' -%></p>
   	<%- end -%>
   	<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
   	<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
-  	<textarea cols="60" rows="5" class="item-comment" name="reserve[item_list][][comment]" <%= "style='display:none;'".html_safe if item_in_searchworks?(item) and item["comment"].blank? %>><%= item["comment"] %></textarea>
+  	<textarea aria-label="comment" cols="60" rows="5" class="item-comment" name="reserve[item_list][][comment]" <%= "style='display:none;'".html_safe if item_in_searchworks?(item) and item["comment"].blank? %>><%= item["comment"] %></textarea>
   	<%- if item_in_searchworks?(item) -%>
     	<%- if item["comment"].blank? -%>
-  		  <span class="add-comment"><%= link_to "Add comment", "", :class=> "add-comment" -%></span></p>
+  		  <span class="add-comment"><%= link_to "Add comment", "", :class=> "add-comment" -%></span>
   		<%- else -%>
-    		<span class="add-comment"><%= link_to "Remove comment", "", :class=> "add-comment" -%></span></p>
+    		<span class="add-comment"><%= link_to "Remove comment", "", :class=> "add-comment" -%></span>
   		<%- end -%>
 		<%- end -%>
 	</td>
 	<td>
-		<input type="text" class="num_copies" name="reserve[item_list][][copies]" maxlength="2" value="<%= item["copies"] || "1" %>" /><br/>
-		<input type="checkbox" id="personal" name="reserve[item_list][][personal]" value="true" <%= "checked='checked'".html_safe if item["personal"] %> />	<label for="personal_copy">personal copy available</label>
+		<input type="number" aria-label="number of copies" class="num_copies form-control mb-1" name="reserve[item_list][][copies]" value="<%= item["copies"] || "1" %>" max="99" />
+		<label><input type="checkbox" name="reserve[item_list][][personal]" value="true" <%= "checked='checked'".html_safe if item["personal"] %> /> personal copy available</label>
 		<% unless item_in_searchworks?(item) %>
-			<br /><input type="checkbox" id="purchase" name="reserve[item_list][][purchase]" value="true" <%= "checked='checked'".html_safe if item["purchase"] %> />	<label for="purchase_item">purchase this item</label>
+			<br />
+			<label><input type="checkbox" name="reserve[item_list][][purchase]" value="true" <%= "checked='checked'".html_safe if item["purchase"] %> /> purchase this item</label>
 		<% end %>
 	</td>
 	<td>
 	  <input type="hidden" name="reserve[item_list][][media]" value="<%= item["media"] %>" />
-		<select class="loan-select<%= " media" if item["media"] == "true" %>" name="reserve[item_list][][loan_period]" <%= "disabled='disabled'".html_safe if item["media"] == "true" %>>
+		<select aria-label="Loan period" class="form-control loan-select<%= " media" if item["media"] == "true" %>" name="reserve[item_list][][loan_period]" <%= "disabled='disabled'".html_safe if item["media"] == "true" %>>
 		  <%- Settings.loan_periods.to_h.values.each do |lp| -%>
-  			<option<%= " selected='selected'" if lp == item["loan_period"] %>><%= lp %></option>
+  			<option<%= " selected" if lp == item["loan_period"] %>><%= lp %></option>
 			<%- end -%>
 		</select>
 	</td>
-	<td><%= link_to "[delete]", "", :class => "delete" -%></td>
+	<td><%= link_to "[delete]", "", class: "delete", method: 'delete' -%></td>
 </tr>

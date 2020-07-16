@@ -5,6 +5,6 @@ RSpec.describe "as a superuser", js: true do
     allow_any_instance_of(ApplicationController).to receive(:remote_privgroups).and_return(['sulair:course-resv-admins'])
     visit "/"
     click_on "Create a new reserve list"
-    expect(page).to have_selector '.ui-dialog-title', text: "Select a course"
+    expect(page).to have_selector '.modal-header', text: "Select a course"
   end
 end

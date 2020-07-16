@@ -23,17 +23,17 @@
   </p>
 </div>
 
-<%= link_to "Create a new reserve list", all_courses_path, :class => 'dialog active-button'  -%>
+<%= link_to "Create a new reserve list", all_courses_path, class: 'dialog btn btn-cardinal-red my-3', data: { modal: 'trigger' }  -%>
 <%- unless flash[:error].blank? -%>
   <div class="error"><%=  flash[:error] %></div>
 <%- end -%>
 <div id="reserves-section">
   <% unless @reserves.blank? %>
     <h2>Modify an existing reserve list</h2>
-  	<table id="my-reserves">
-  		<thead>
+  	<table id="my-reserves" class="table table-striped">
+  		<thead class="thead-dark">
   			<tr>
-  				<th id="course_id">Course ID</th>
+  				<th id="course_id" class="text-nowrap">Course ID</th>
   				<th id="term">Term</th>
   				<th id="actions" data-sort-method='none' class="no-sort">Actions</th>
   				<th id="course_description" data-sort-method='none' class="no-sort">Description</th>
@@ -46,11 +46,11 @@
   				<tr class="<%= cycle("odd", "even") -%>">
   					<td><%= course.cid -%></td>
   					<td data-sort='<%= sortable_term_value(course.term) %>'><%= course.term -%></td>
-            <td>
+            <td class="text-nowrap">
               <%= link_to edit_reserve_path(course) do %>
                 Edit <span class='sr-only'><%= "#{course.cid} - #{course.term}" %></span>
               <% end %>
-              <%= link_to reserve_terms_path(course), class: 'copy-link dialog' do %>
+              <%= link_to reserve_terms_path(course), class: 'copy-link dialog ml-4', data: { modal: 'trigger' } do %>
                 Copy <span class='sr-only'><%= "#{course.cid} - #{course.term}" %>
               <% end if course.has_been_sent %>
             </td>
@@ -64,7 +64,21 @@
 
   	</table>
     <script>
-      new Tablesort(document.getElementById('my-reserves'));
+      $(document).ready(function() {
+        $("#my-reserves").dataTable({
+          columns: [
+            null,
+            null,
+            { "orderable": false },
+            { "orderable": false },
+            null,
+            null
+          ],
+          info: false,
+          paging: false,
+          searching: false,
+        });
+      });
     </script>
   <% end %>
 </div>

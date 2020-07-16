@@ -69,42 +69,6 @@ $(document).ready(function(){
 	  $("#reserve_form input#future").attr("checked", "checked");
   });
 
-  // jQuery dialog
-  $("a.dialog").each(function() {
-    var dialog_box = "empty";
-    var link = $(this);
-    $(this).click( function() {
-      //lazy create of dialog
-      if ( dialog_box == "empty") {
-        dialog_box = $('<div class="dialog_box"></div>').dialog({ autoOpen: false});
-	      // Load the original URL on the link into the dialog associated
-	      // with it. Rails app will give us an appropriate partial.
-	      // pull dialog title out of first heading in contents.
-	      $("body").css("cursor", "progress");
-	      dialog_box.load( this.href , function() {
-				  // Remove first header from loaded content, and make it a dialog
-		      // title instead
-		      var heading = dialog_box.find("h1, h2, h3, h4, h5, h6").eq(0).remove();
-		      dialog_box.dialog("option", "title", heading.text());
-	        $("body").css("cursor", "auto");
-	      });
-
-				// set the appropriate height/width/position of dialog.
-	      dialog_box.dialog({
-					modal: true,
-					height: 'auto',
-					width: Math.max(($(window).width() /2), 45),
-					position: { my: "center bottom", at: "center top", of: '#header' }
-				});
-      }
-      dialog_box.dialog("open").dialog("moveToTop");
-
-      return false; // do not execute default href visit
-    });
-
-  });
-
-
   // enforce loan period on library change
   $("select#libraries").on("change", function(){
   	  check_loan_period();
