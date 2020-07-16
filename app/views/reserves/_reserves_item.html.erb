@@ -13,6 +13,7 @@
     <input type="hidden" name="reserve[item_list][<%= uuid %>][imprint]" value="<%= item["imprint"] if item["imprint"] %>" />
   	<input type="hidden" name="reserve[item_list][<%= uuid %>][title]" value="<%= item["title"] if item["title"] %>" />
   	<input type="hidden" name="reserve[item_list][<%= uuid %>][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
+    <input type="hidden" name="reserve[item_list][<%= uuid %>][media]" value="<%= item['media'] if item['media'] %>" />
     <label for="item-comment-<%= uuid %>">Comments</label>
     <textarea id="item-comment-<%= uuid %>" aria-label="comment" cols="60" rows="2" class="form-control" name="reserve[item_list][<%= uuid %>][comment]"><%= item["comment"] %></textarea>
 	</td>
@@ -30,30 +31,32 @@
           complete work
         </label>
       </div>
-      <div class="form-check">
-        <%= radio_button_tag "reserve[item_list][#{uuid}][digital_type]",
-                             "partial_work",
-                             (item["digital_type"] == "partial_work"),
-                             id: "partial-work-#{uuid}",
-                             class: "form-check-input"
-        %>
-        <label class="form-check-label" for="partial-work-<%= uuid %>">
-          chapter or article (up to 50 pages)
-        </label>
-      </div>
-      <div class="form-group">
-        <label for="partial-work-description<%= uuid %>" class="sr-only">
-          Partial work description
-        </label>
-        <textarea
-          name="reserve[item_list][<%= uuid %>][digital_type_description]"
-          class="form-control"
-          <%= 'disabled' if item['digital_type'] != 'partial_work' %>
-          id="partial-work-description-<%= uuid %>"
-          rows="2"
-          placeholder="Chapter title or page range"
-        ><%= item["digital_type_description"] if item["digital_type_description"] %></textarea>
-      </div>
+      <% if item['media'] != 'true' %>
+        <div class="form-check">
+          <%= radio_button_tag "reserve[item_list][#{uuid}][digital_type]",
+                               "partial_work",
+                               (item["digital_type"] == "partial_work"),
+                               id: "partial-work-#{uuid}",
+                               class: "form-check-input"
+          %>
+          <label class="form-check-label" for="partial-work-<%= uuid %>">
+            chapter or article (up to 50 pages)
+          </label>
+        </div>
+        <div class="form-group">
+          <label for="partial-work-description<%= uuid %>" class="sr-only">
+            Partial work description
+          </label>
+          <textarea
+            name="reserve[item_list][<%= uuid %>][digital_type_description]"
+            class="form-control"
+            <%= 'disabled' if item['digital_type'] != 'partial_work' %>
+            id="partial-work-description-<%= uuid %>"
+            rows="2"
+            placeholder="Chapter title or page range"
+          ><%= item["digital_type_description"] if item["digital_type_description"] %></textarea>
+        </div>
+      <% end %>
     </div>
   </td>
 	<td><%= link_to "[delete]", "", class: "delete", method: 'delete' -%></td>
