@@ -28,7 +28,7 @@
   		<input type="hidden" name="reserve[instructor_names]" value="<%= @reserve.instructor_names if (@reserve and @reserve.instructor_names) -%>" />
 		<%- end -%>
 
-		<div class="section">
+		<div class="section mb-3">
 			When should these items be reserved?
 			<div id="reserve-timing" class="ml-4">
 			  <%- if @reserve and @reserve.has_been_sent -%>
@@ -48,9 +48,9 @@
 
     <% if @reserve.has_been_sent %>
       <div class="section mb-3">
-        <p class="sent_date">Request sent <%= @reserve.sent_date %></p>
+        <div class="sent_date">Request sent <%= @reserve.sent_date %></div>
 
-        <%= link_to('Copy this list for a new quarter', reserve_terms_path(@reserve), class: 'dialog active-button') %>
+        <%= link_to('Copy this list for a new quarter', reserve_terms_path(@reserve), class: 'btn btn-cardinal-red', data: { modal: 'trigger' }) %>
       </div>
     <% end %>
 

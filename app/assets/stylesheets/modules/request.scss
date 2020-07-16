@@ -30,6 +30,11 @@ th.delete {
 
 #libraries { width: 35ch; }
 
+.sent_date {
+  color: $red;
+  font-size: 1.2em;
+}
+
 table.changed {
   border-left: 2px solid $red;
   border-right: 2px solid $red;
