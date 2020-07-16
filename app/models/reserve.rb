@@ -26,7 +26,28 @@ class Reserve < ActiveRecord::Base
     end
   end
 
+  def item_list
+    (super || []).map do |item|
+      cast_item_data(item)
+    end
+  end
+
+  def sent_item_list
+    (super || []).map do |item|
+      cast_item_data(item)
+    end
+  end
+
   private
+
+  def cast_item_data(item)
+    hash = {
+      'media' => ActiveModel::Type::Boolean.new.cast(item['media']),
+      'online' => ActiveModel::Type::Boolean.new.cast(item['online'])
+    }
+
+    item.merge(hash)
+  end
 
   def process_sunet_ids
     editors = []
