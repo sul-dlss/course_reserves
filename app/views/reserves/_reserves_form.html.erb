@@ -1,9 +1,6 @@
-<div id="course-details">
+<div id="course-details" class="d-block d-md-flex justify-content-between align-items-start">
 	<div id="main-details">
 	  <h1>Course Reserves List Request</h1>
-	  <%- unless flash[:error].blank? -%>
-      <div class="error"><%=  flash[:error] %></div>
-    <%- end -%>
 	  <%- if params[:action] == "new" -%>
       <h2>
         <%= @course.cid if @course -%>: <%= @course.title if @course -%>
@@ -14,7 +11,7 @@
       <input type="hidden" name="reserve[desc]" value="<%= @course.title if @course -%>" />
       <input type="hidden" name="reserve[compound_key]" value="<%= @course.comp_key if @course -%>" />
       <input type="hidden" name="reserve[cross_listings]" value="<%= @course.cross_listings if @course -%>" />
-      <div class="section"><span>Instructor:</span> <%= @course.instructor_names.join(', ') if @course -%></div>
+      <div class="section mb-3"><span>Instructor:</span> <%= @course.instructor_names.join(', ') if @course -%></div>
       <input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @course.instructor_sunets.join(', ') if @course -%>" />
       <input type="hidden" name="reserve[instructor_names]" value="<%= @course.instructor_names.join(', ') if @course -%>" />
 		<%- else -%>
@@ -26,14 +23,14 @@
   		<input type="hidden" name="reserve[sid]" value="<%= @reserve.sid if (@reserve and @reserve.sid) -%>" />
   		<input type="hidden" name="reserve[compound_key]" value="<%= @reserve.compound_key if (@reserve and @reserve.compound_key) -%>" />
   		<input type="hidden" name="reserve[cross_listings]" value="<%= @reserve.cross_listings if (@reserve and @reserve.cross_listings) -%>" />
-  		<div class="section"><span>Instructor:</span> <%= @reserve.instructor_names if (@reserve and @reserve.instructor_names) -%></div>
+  		<div class="section mb-3"><span>Instructor:</span> <%= @reserve.instructor_names if (@reserve and @reserve.instructor_names) -%></div>
   		<input type="hidden" name="reserve[instructor_sunet_ids]" value="<%= @reserve.instructor_sunet_ids if (@reserve and @reserve.instructor_sunet_ids) -%>" />
   		<input type="hidden" name="reserve[instructor_names]" value="<%= @reserve.instructor_names if (@reserve and @reserve.instructor_names) -%>" />
 		<%- end -%>
 
 		<div class="section">
 			When should these items be reserved?
-			<div id="reserve-timing">
+			<div id="reserve-timing" class="ml-4">
 			  <%- if @reserve and @reserve.has_been_sent -%>
 			    <%= @reserve.term %>
 			  <%- else -%>
@@ -50,7 +47,7 @@
 		</div>
 
     <% if @reserve.has_been_sent %>
-      <div class="section">
+      <div class="section mb-3">
         <p class="sent_date">Request sent <%= @reserve.sent_date %></p>
 
         <%= link_to('Copy this list for a new quarter', reserve_terms_path(@reserve), class: 'dialog active-button') %>
@@ -59,7 +56,7 @@
 
 		<div class="section">
 		  <label for="libraries" class="required">Send request to</label>
-			<select id="libraries" name="reserve[library]">
+			<select id="libraries" name="reserve[library]" class="form-control" autocomplete="off">
 				<option>(select library)</option>
 				<% Settings.reserve_libraries.each do |code, library| %>
 					<option value="<%= code -%>" <%= "selected='selected'" if @reserve.library.to_s == code.to_s -%> ><%= library -%></option>
@@ -67,22 +64,35 @@
 			</select>
 		</div>
 	</div>
-
-	<fieldset id="list-management">
-		<h3>List management</h3>
-		<p>Who should the library contact about this list?</p>
-		<label for="contact_name">Name</label> <input name="reserve[contact_name]" value="<%= @reserve.contact_name if @reserve -%>" id="contact_name" type="text" /><br/>
-		<label for="contact_phone">Phone</label> <input name="reserve[contact_phone]"  value="<%= @reserve.contact_phone if @reserve -%>" id="contact_phone" type="text"/><br/>
-		<label for="contact_email">Email</label> <input name="reserve[contact_email]" value="<%= @reserve.contact_email if @reserve -%>"  id="contact_email" type="text"/><br/>
-		<label for="editor_sunet_ids" id="editors-list">Who can edit this list?</label><br/>
-		<span class="form-label"><%= params[:action] == "new" ? @course.instructor_sunets.join(", ") : @reserve.instructor_sunet_ids %>,</span> <input name="reserve[editor_sunet_ids]" value="<%= @reserve.editor_sunet_ids if @reserve -%>" id="editor_sunet_ids" type="text"/><br/>
-		<span class="help">(SUNet IDs, separated by commas)</span>
+	<fieldset id="list-management" class="card bg-light">
+		<h3 class="card-header">List management</h3>
+		<div class="card-body">
+			<p>Who should the library contact about this list?</p>
+			<div class="form-group row">
+				<label for="contact_name" class="col-3 col-form-label" >Name</label> <input class="col-7 form-control" name="reserve[contact_name]" value="<%= @reserve.contact_name if @reserve -%>" id="contact_name" type="text" />
+			</div>
+			<div class="form-group row">
+				<label for="contact_phone" class="col-3 col-form-label" >Phone</label> <input class="col-7 form-control" name="reserve[contact_phone]"  value="<%= @reserve.contact_phone if @reserve -%>" id="contact_phone" type="tel"/>
+			</div>
+			<div class="form-group row">
+				<label for="contact_email" class="col-3 col-form-label" >Email</label> <input class="col-7 form-control" name="reserve[contact_email]" value="<%= @reserve.contact_email if @reserve -%>"  id="contact_email" type="email"/>
+			</div>
+				<label for="editor_sunet_ids" id="editors-list" class="col-form-label">Who can edit this list?</label>
+				<div class="form-inline row mb-1 align-items-end">
+					<span class="form-label col-3 text-right">
+						<% ((params[:action] == "new" ? @course.instructor_sunets : @reserve.instructor_sunets) || []).each do |sunet| %>
+							<span class="text-nowrap"><%= sunet %>,</span>
+						<% end %>
+					</span>
+					<input class="form-control col-7" name="reserve[editor_sunet_ids]" value="<%= @reserve.editor_sunet_ids if @reserve -%>" id="editor_sunet_ids" type="text"/><br/>
+				</div>
+				<small class="form-text text-muted">(SUNet IDs, separated by commas)</small>
+		</div>
 	</fieldset>
-  <div style="clear:both;"></div>
 </div>
-<div>
-  <table id="item_list_table">
-    <thead>
+<div class="table-responsive-md">
+  <table id="item_list_table" class="table table-striped mt-4">
+    <thead class="thead-dark">
     	<tr>
     		<th class="number">&nbsp;</th>
     		<th class="title">Title</th>
@@ -101,8 +111,18 @@
       	<tr id="add_row" class="<%= cycle("odd","even") %>">
       		<td class="enumerator last-row"><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
       		<td colspan="4">
-      			Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "http://searchworks.stanford.edu/", rel: 'noopener', target: '_blank') %>.<br/>
-      			<input type="text" id="sw_url" /> <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item active-button") -%> - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :id=>"add_custom", :remote => true ) %>
+      			<label for="sw_url">Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "https://searchworks.stanford.edu/", rel: 'noopener', target: '_blank') %>.</span><br/>
+						<div class="d-flex align-items-center mt-1">
+							<div class="input-group w-auto">
+								<input class="form-control" type="text" id="sw_url" />
+								<div class="input-group-append">
+									<%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item btn btn-cardinal-red") -%>
+								</div>
+							</div>
+							<div>
+								&nbsp; - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :id=>"add_custom", :remote => true ) %>
+							</div>
+						</div>
       		</td>
       	</tr>
       <%- end -%>

@@ -42,7 +42,6 @@ gem 'cancancan'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'jquery-rails'
-gem 'jquery-ui-rails'
 gem 'nokogiri'
 
 gem 'faraday'
@@ -94,6 +93,8 @@ group :deployment do
 end
 
 gem 'config'
+gem 'bootstrap'
+gem 'jquery-datatables'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

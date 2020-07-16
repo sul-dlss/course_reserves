@@ -20,6 +20,12 @@ class Reserve < ActiveRecord::Base
     course&.title || desc
   end
 
+  def instructor_sunets
+    if self.instructor_sunet_ids.present?
+      self.instructor_sunet_ids.split(/,/)
+    end
+  end
+
   private
 
   def process_sunet_ids
