@@ -2,9 +2,10 @@
 	<td class="enumerator"><%= index + 1 %></td>
 	<td>
 		<% if item_in_searchworks?(item) %>
-  		<p class="h5"><%= item["title"] -%> </p>
-  		<p><%= link_to "https://searchworks.stanford.edu/view/#{item["ckey"]}", "https://searchworks.stanford.edu/view/#{item["ckey"]}", rel: 'noopener', target: '_blank' -%></p>
-  	<%- end -%>
+      <p class="h5">
+        <%= link_to item['title'], "https://searchworks.stanford.edu/view/#{item['ckey']}", rel: 'noopener', target: '_blank' %>
+      </p>
+  	<% end %>
   	<input type="hidden" name="reserve[item_list][][title]" value="<%= item["title"] if item["title"] %>" />
   	<input type="hidden" name="reserve[item_list][][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
   	<textarea aria-label="comment" cols="60" rows="5" class="item-comment" name="reserve[item_list][][comment]" <%= "style='display:none;'".html_safe if item_in_searchworks?(item) and item["comment"].blank? %>><%= item["comment"] %></textarea>
