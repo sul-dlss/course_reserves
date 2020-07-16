@@ -22,7 +22,7 @@ class Reserve < ActiveRecord::Base
 
   def instructor_sunets
     if self.instructor_sunet_ids.present?
-      self.instructor_sunet_ids.split(/,/)
+      self.instructor_sunet_ids.split(/,/).map(&:strip).select(&:present?)
     end
   end
 
@@ -32,7 +32,7 @@ class Reserve < ActiveRecord::Base
     editors = []
 
     if self.instructor_sunet_ids.present?
-      self.instructor_sunet_ids.split(/,/).map { |i| i.strip }.each do |s|
+      self.instructor_sunet_ids.split(/,/).map(&:strip).select(&:present?).each do |s|
         ed = Editor.find_or_create_by sunetid: s
         ed.save!
         editors << ed
@@ -40,7 +40,7 @@ class Reserve < ActiveRecord::Base
     end
 
     if self.editor_sunet_ids.present?
-      self.editor_sunet_ids.split(/,/).map { |i| i.strip }.each do |s|
+      self.editor_sunet_ids.split(/,/).map(&:strip).select(&:present?).each do |s|
         ed = Editor.find_or_create_by sunetid: s
         ed.save!
         editors << ed

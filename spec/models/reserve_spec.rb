@@ -86,6 +86,12 @@ RSpec.describe Reserve do
       expect(new_res.editors.length).to eq(1)
       expect(Editor.find_by_sunetid("jlavigne").reserves).to be_blank
     end
+
+    it "ignores blank values" do
+      reserve = Reserve.create(reserve_params.merge(instructor_sunet_ids: 'jlavigne, jkeck, , ,', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
+      reserve.save!
+      expect(reserve.editors.length).to eq(2)
+    end
   end
 
   describe "item_list serialization" do
