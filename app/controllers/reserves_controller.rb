@@ -51,7 +51,7 @@ class ReservesController < ApplicationController
         elsif params[:sw] == 'true'
           ckey = params[:url].strip[/(\d+)$/]
           item = SearchWorksItem.new(ckey)
-          render(text: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();") && return unless item.valid?
+          render(js: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();") && return unless item.valid?
           params[:item] = item.to_h
         end
       end
