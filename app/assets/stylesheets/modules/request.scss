@@ -9,13 +9,6 @@ th.number {
 th.title {
 	width: 45%;
 }
-th.copies {
-	width: 25%;
-}
-th.loan_period {
-	width: 20%;
-  min-width: 120px;
-}
 th.delete {
 	width: 6em;
 }
@@ -25,8 +18,6 @@ th.delete {
 	font-size: 2rem;
 	color: $su-driftwood;
 }
-
-.num_copies { width: 10ch; }
 
 #libraries { width: 35ch; }
 

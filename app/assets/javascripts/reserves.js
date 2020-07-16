@@ -65,6 +65,16 @@ $(document).ready(function(){
   if($("#reserve_form").length > 0){
 	  check_loan_period();
   }
+
+  $('.digital-item-type input[name="reserve[item_list][][digital_type]"]').change(function() {
+    var $textArea = $(this).closest('.digital-item-type').find('textarea[name="reserve[item_list][][digital_type_description]"]');
+    if (this.value === 'complete_work') {
+      $textArea.attr('disabled', true);
+    }
+    if (this.value === 'partial_work') {
+      $textArea.attr('disabled', false);
+    }
+  });
 });
 
 function check_validations(){

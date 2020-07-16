@@ -18,20 +18,41 @@
     </textarea>
 	</td>
 	<td>
-		<input type="number" aria-label="number of copies" class="num_copies form-control mb-1" name="reserve[item_list][][copies]" value="<%= item["copies"] || "1" %>" max="99" />
-		<label><input type="checkbox" name="reserve[item_list][][personal]" value="true" <%= "checked='checked'".html_safe if item["personal"] %> /> personal copy available</label>
-		<% unless item_in_searchworks?(item) %>
-			<br />
-			<label><input type="checkbox" name="reserve[item_list][][purchase]" value="true" <%= "checked='checked'".html_safe if item["purchase"] %> /> purchase this item</label>
-		<% end %>
-	</td>
-	<td>
-	  <input type="hidden" name="reserve[item_list][][media]" value="<%= item["media"] %>" />
-		<select aria-label="Loan period" class="form-control loan-select<%= " media" if item["media"] == "true" %>" name="reserve[item_list][][loan_period]" <%= "disabled='disabled'".html_safe if item["media"] == "true" %>>
-		  <%- Settings.loan_periods.to_h.values.each do |lp| -%>
-  			<option<%= " selected" if lp == item["loan_period"] %>><%= lp %></option>
-			<%- end -%>
-		</select>
-	</td>
+    <div class="digital-item-type">
+      Digital item required:
+      <div class="form-check">
+        <%= radio_button_tag "reserve[item_list][][digital_type]",
+                             "complete_work",
+                             (item["digital_type"] == "complete_work"),
+                             id: "complete-work-#{index}",
+                             class: "form-check-input"
+        %>
+        <label class="form-check-label" for="complete-work-<%= index %>">
+          complete work
+        </label>
+      </div>
+      <div class="form-check">
+        <%= radio_button_tag "reserve[item_list][][digital_type]",
+                             "partial_work",
+                             (item["digital_type"] == "partial_work"),
+                             id: "partial-work-#{index}",
+                             class: "form-check-input"
+        %>
+        <label class="form-check-label" for="partial-work-<%= index %>">
+          chapter or article (up to 50 pages)
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="parial-work-description<%= index %>">Example textarea</label>
+        <textarea
+          name="reserve[item_list][][digital_type_description]"
+          class="form-control"
+          id="parial-work-description-<%= index %>"
+          rows="2"
+          placeholder="Chapter title or page range"
+        ><%= item["digital_type_description"] if item["digital_type_description"] %></textarea>
+      </div>
+    </div>
+  </td>
 	<td><%= link_to "[delete]", "", class: "delete", method: 'delete' -%></td>
 </tr>
