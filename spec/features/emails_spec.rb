@@ -115,4 +115,24 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
       end
     end
   end
+
+  describe 'Non-SearchWorks items' do
+    it 'collects the title from the user' do
+      visit new_reserve_path(comp_key: 'AA-272C,123,456')
+
+      click_link "Reserve an item that's not in SearchWorks"
+
+      within(first('table tbody tr')) do
+        expect(page).to have_css('textarea[name$="[title]"]')
+        fill_in 'Title', with: 'The title of an item that I would like'
+      end
+
+      expect do
+        click_button 'Save and SEND request'
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+
+      body = ActionMailer::Base.deliveries.last.body.to_s
+      expect(body).to include('Title: The title of an item that I would like')
+    end
+  end
 end
