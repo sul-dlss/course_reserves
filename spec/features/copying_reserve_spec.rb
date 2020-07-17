@@ -40,8 +40,10 @@ RSpec.describe 'Copying a reserve list', js: true do
 
     visit '/'
 
-    within(first('#my-reserves tbody tr')) do
-      click_link 'Copy'
+    within(('#my-reserves tbody')) do
+      within(page.all('tr').last) do
+        click_link 'Copy'
+      end
     end
 
     expect(page).to have_css('.clone-reserve-list', visible: true) # make sure modal renders
