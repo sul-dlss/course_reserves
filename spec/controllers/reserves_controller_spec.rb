@@ -300,11 +300,11 @@ RSpec.describe ReservesController do
       end
       it "returns changed items from the item list" do
         old_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }, { "ckey" => "54321", "title" => "SecondTitle", "copies" => "1" }]
-        new_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }, { "ckey" => "54321", "title" => "SecondTitle", "copies" => "2" }]
+        new_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4", "online" => true }, { "ckey" => "54321", "title" => "SecondTitle", "copies" => "2" }]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/EDITED ITEM/)
         expect(diff_item_list).to match(/CKey: 54321 : https:\/\/searchworks.stanford.edu\/view\/54321/)
-        expect(diff_item_list).to match(/Copies: 2 \(was: 1\)/)
+        expect(diff_item_list).to match(/Full text available online/)
         expect(diff_item_list).not_to match(/ADDED ITEM/)
         expect(diff_item_list).not_to match(/DELETED ITEM/)
       end
@@ -328,13 +328,11 @@ RSpec.describe ReservesController do
         expect(diff_item_list).not_to match(/ADDED ITEM/)
         expect(diff_item_list).not_to match(/DELETED ITEM/)
       end
-      it "hadnels custom items w/ the same comment as the same items" do
+      it "handles custom items w/ the same comment as the same items" do
         old_item_list = [{ "ckey" => "", "title" => "", "comment" => "This is Item1", "copies" => "4", "loan_period" => "2 hours" }, { "ckey" => "", "title" => "", "comment" => "This is Item2", "copies" => "1", "loan_period" => "4 hours" }]
         new_item_list = [{ "ckey" => "", "title" => "", "comment" => "This is Item1", "copies" => "4", "loan_period" => "4 hours" }, { "ckey" => "", "title" => "", "comment" => "This is Item2", "copies" => "2", "loan_period" => "4 hours" }]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to match(/EDITED ITEM/)
-        expect(diff_item_list).to match(/Circ rule: 4HWF-RES \(was: 2HWF-RES\)/)
-        expect(diff_item_list).to match(/Copies: 2 \(was: 1\)/)
         expect(diff_item_list).not_to match(/ADDED ITEM/)
         expect(diff_item_list).not_to match(/DELETED ITEM/)
       end
@@ -344,6 +342,14 @@ RSpec.describe ReservesController do
         new_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }]
         diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
         expect(diff_item_list).to be_blank
+      end
+
+      it "handles the change in digital_type" do
+        old_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4", "digital_type" => "complete_work" }]
+        new_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4", "digital_type" => "partial_work", "digital_type_description" => "chapter 3 please" }]
+        diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
+        expect(diff_item_list).to match(/Scan: chapter 3 please \(was: blank\)/)
+        expect(diff_item_list).to match(/Digital item required: chapter or article \(was: complete work\)/)
       end
     end
   end

@@ -183,15 +183,19 @@ class ReservesController < ApplicationController
       'imprint' => 'Imprint: ',
       "ckey" => "CKey: ",
       "comment" => "Comment: ",
-      "loan_period" => "Circ rule: ",
-      "copies" => "Copies: ",
-      "purchase" => "Purchase this item? ",
-      "personal" => "Is there a personal copy available? " }
+      "online" => "Full text available online",
+      "digital_type" => "Digital item required: ",
+      "digital_type_description" => "Scan: "
+    }
   end
 
   def translate_value_for_email(key, value)
-    if value == "true"
+    if key.to_s == "online" and value
+      return nil
+    elsif value == "true"
       return "yes"
+    elsif key.to_s == "digital_type"
+      return I18n.t(value)
     elsif key.to_s == "loan_period"
       return Settings.loan_periods.to_h.key(value)
     elsif key.to_s == "ckey"
