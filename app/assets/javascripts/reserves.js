@@ -12,7 +12,7 @@ $(document).ready(function(){
 		if($("#sw_url").val() != ""){
 			var already_exists = false;
 			$("a").each(function(){
-				if($(this).attr("href") == $("#sw_url").val() || $(this).attr("href") == "http://searchworks.stanford.edu/view/" + $("#sw_url").val()){
+				if($(this).attr("href") === $("#sw_url").val() || $(this).attr("href") === "https://searchworks.stanford.edu/view/" + $("#sw_url").val()){
 					already_exists = true;
 				}
 			});
