@@ -82,7 +82,7 @@ class ReservesController < ApplicationController
     elsif params.key?(:send_request) && ((reserve.has_been_sent == false) || reserve.has_been_sent.nil?)
       send_course_reserve_request(reserve)
     else
-      reserve.update_attributes(reserve_params)
+      reserve.update(reserve_params)
     end
     redirect_to(controller: 'reserves', action: 'edit', id: params[:id])
   end
@@ -124,14 +124,14 @@ class ReservesController < ApplicationController
   end
 
   def send_course_reserve_request(reserve)
-    reserve.update_attributes(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
+    reserve.update(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
 
     ReserveMail.first_request(reserve, reserve_mail_address(reserve), current_user).deliver_now
   end
 
   def send_updated_reserve_request(reserve)
     old_reserve = reserve.dup
-    reserve.update_attributes(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
+    reserve.update(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
     diff_text = process_diff(old_reserve.sent_item_list, reserve.item_list)
 
     ReserveMail.updated_request(reserve, reserve_mail_address(reserve), diff_text, current_user).deliver_now
