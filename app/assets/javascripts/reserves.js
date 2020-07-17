@@ -1,5 +1,11 @@
 // Things that need to document to be loaded to do.
 $(document).ready(function(){
+	$('#sw_url').on('keypress', function(e) {
+		if (e.keyCode == 13) {
+			e.preventDefault();
+			$('.add-sw-item')[0].click();
+		}
+	});
 
 	// Add item from SW
 	$(".add-sw-item").click(function(){
