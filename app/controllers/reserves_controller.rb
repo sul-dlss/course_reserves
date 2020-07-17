@@ -45,7 +45,6 @@ class ReservesController < ApplicationController
   def add_item
     respond_to do |format|
       format.js do
-        params[:index] = 0
         if params[:sw] == 'false'
           params[:item] = {}
         elsif params[:sw] == 'true'
@@ -181,17 +180,22 @@ class ReservesController < ApplicationController
 
   def translations
     { "title" => "Title: ",
+      'imprint' => 'Imprint: ',
       "ckey" => "CKey: ",
       "comment" => "Comment: ",
-      "loan_period" => "Circ rule: ",
-      "copies" => "Copies: ",
-      "purchase" => "Purchase this item? ",
-      "personal" => "Is there a personal copy available? " }
+      "online" => "Full text available online",
+      "digital_type" => "Digital item required: ",
+      "digital_type_description" => "Scan: "
+    }
   end
 
   def translate_value_for_email(key, value)
-    if value == "true"
+    if key.to_s == "online" and value
+      return nil
+    elsif value == "true"
       return "yes"
+    elsif key.to_s == "digital_type"
+      return I18n.t(value)
     elsif key.to_s == "loan_period"
       return Settings.loan_periods.to_h.key(value)
     elsif key.to_s == "ckey"
@@ -208,7 +212,11 @@ class ReservesController < ApplicationController
   end
 
   def reserve_params
-    params.require(:reserve).permit!
+    @reserve_params ||= begin
+      reserve = params.require(:reserve).permit!
+      reserve['item_list'] = reserve['item_list'].values if reserve['item_list']
+      reserve
+    end
   end
 
   def redirect_to_edit_when_reserve_exists

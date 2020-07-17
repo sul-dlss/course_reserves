@@ -12,6 +12,8 @@ class SearchWorksItem
     {
       ckey: ckey,
       title: title,
+      imprint: imprint,
+      online: online,
     }.merge(media_fields)
   end
 
@@ -21,10 +23,24 @@ class SearchWorksItem
 
   private
 
+  def online
+    fulltext_item? || restricted_hathi_item?
+  end
+
+  def fulltext_item?
+    (document['access_facet'] || []).include?('Online')
+  end
+
+  def restricted_hathi_item?
+    return unless Settings.hathi_etas_access
+
+    (document['ht_access_sim'] || []).present?
+  end
+
   def media_fields
     return {} unless media?
 
-    { loan_period: '4 hours', media: 'true' }
+    { loan_period: '4 hours', media: true }
   end
 
   def media?
@@ -37,6 +53,10 @@ class SearchWorksItem
 
   def title
     document['title_full_display']
+  end
+
+  def imprint
+    document['imprint_display']&.first
   end
 
   def document

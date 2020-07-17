@@ -6,6 +6,7 @@ global_alert:
      If digital surrogates cannot be found in a timely manner, library staff will contact you with other options. <br/>
      If you have any questions, please contact <a href="mailto:coursereserves@stanford.edu">coursereserves@stanford.edu</a>
 
+hathi_etas_access: true
 
 block_emails?: false
 

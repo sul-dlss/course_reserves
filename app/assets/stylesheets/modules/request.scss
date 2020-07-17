@@ -9,24 +9,25 @@ th.number {
 th.title {
 	width: 45%;
 }
-th.copies {
-	width: 25%;
-}
-th.loan_period {
-	width: 20%;
-  min-width: 120px;
-}
 th.delete {
 	width: 6em;
 }
 
-.enumerator {
-	padding-left: 1rem;
-	font-size: 2rem;
-	color: $su-driftwood;
+#item_list_table {
+  counter-reset: section;
 }
 
-.num_copies { width: 10ch; }
+.enumerator {
+	font-size: 2rem;
+	color: $su-driftwood;
+
+  .counter {
+    &::before {
+      content: counter(section);
+      counter-increment: section;
+    }
+  }
+}
 
 #libraries { width: 35ch; }
 

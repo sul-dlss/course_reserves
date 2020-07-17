@@ -21,12 +21,12 @@ RSpec.describe ReserveMail do
     end
 
     it "returns the item list formatted correctly" do
-      email = ReserveMail.first_request(Reserve.create(reserve_params.merge(item_list: [{ "ckey" => "12345", "title" => "SW Item", "copies" => "2", "loan_period" => "4 hours" }])), "test@example.com", "jdoe")
+      email = ReserveMail.first_request(Reserve.create(reserve_params.merge(item_list: [{ "ckey" => "12345", "title" => "SW Item", 'imprint' => '1st ed. - Mordor', "copies" => "2", "loan_period" => "4 hours", "online" => true }])), "test@example.com", "jdoe")
       body = email.body.raw_source
       expect(body).to match(/Title: SW Item/)
-      expect(body).to match(/CKey: 12345 : http:\/\/searchworks.stanford.edu\/view\/12345/)
-      expect(body).to match(/Circ rule: 4HWF-RES/)
-      expect(body).to match(/Copies: 2/)
+      expect(body).to match(/Imprint: 1st ed\. - Mordor/)
+      expect(body).to match(/CKey: 12345 : https:\/\/searchworks.stanford.edu\/view\/12345/)
+      expect(body).to match(/Full text available online/)
     end
 
     it "has the full edit URL in the email" do

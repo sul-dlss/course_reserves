@@ -29,7 +29,7 @@
 		<%- end -%>
 
 		<div class="section mb-3">
-			When should these items be reserved?
+      Reserve for this quarter:
 			<div id="reserve-timing" class="ml-4">
 			  <%- if @reserve and @reserve.has_been_sent -%>
 			    <%= @reserve.term %>
@@ -56,7 +56,7 @@
 
 		<div class="section">
 		  <label for="libraries" class="required">Send request to <span aria-hidden="true" class="badge badge-warning text-white">Required</span></label>
-			<select required id="libraries" name="reserve[library]" class="form-control ml-4" autocomplete="off">
+			<select id="libraries" name="reserve[library]" class="form-control ml-4" autocomplete="off">
 				<option disabled selected hidden value="">(select library)</option>
 				<% Settings.reserve_libraries.each do |code, library| %>
 					<option value="<%= code -%>" <%= "selected='selected'" if @reserve.library.to_s == code.to_s -%> ><%= library -%></option>
@@ -96,8 +96,7 @@
     	<tr>
     		<th class="number">&nbsp;</th>
     		<th class="title">Title</th>
-    		<th class="copies">Copies</th>
-    		<th class="loan_period">Loan period</th>
+        <th class="reserve">Reserve (all reserves are digital)</th>
     		<th class="delete">Delete</th>
     	</tr>
   	</thead>
@@ -108,19 +107,21 @@
     		<% end %>
     	<% end %>
     	<%- if !@reserve or !@reserve.disabled -%>
-      	<tr id="add_row" class="<%= cycle("odd","even") %>">
-      		<td class="enumerator last-row"><%= (@reserve.blank? or @reserve.item_list.blank?) ? 1 : @reserve.item_list.length + 1 -%></td>
-      		<td colspan="4">
-      			<label for="sw_url">Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "https://searchworks.stanford.edu/", rel: 'noopener', target: '_blank') %>.</span><br/>
+      	<tr id="add_row">
+      		<td class="enumerator last-row">
+            <span class="counter"></span>
+          </td>
+          <td colspan="3">
+      			<label for="sw_url">Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "https://searchworks.stanford.edu/", rel: 'noopener', target: '_blank') %>.</label><br/>
 						<div class="d-flex align-items-center mt-1">
 							<div class="input-group w-auto">
 								<input class="form-control" type="text" id="sw_url" />
 								<div class="input-group-append">
-									<%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item btn btn-cardinal-red") -%>
+                  <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item btn btn-cardinal-red") -%>
 								</div>
 							</div>
 							<div>
-								&nbsp; - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :id=>"add_custom", :remote => true ) %>
+                &nbsp; - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :id=>"add_custom", :remote => true ) %>
 							</div>
 						</div>
       		</td>
