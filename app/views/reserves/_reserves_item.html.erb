@@ -15,8 +15,13 @@
   	<input type="hidden" name="reserve[item_list][<%= uuid %>][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
     <input type="hidden" name="reserve[item_list][<%= uuid %>][media]" value="<%= item['media'] if item['media'] %>" />
     <input type="hidden" name="reserve[item_list][<%= uuid %>][online]" value="<%= item['online'] if item['online'] %>" />
-    <label for="item-comment-<%= uuid %>">Comments</label>
-    <textarea id="item-comment-<%= uuid %>" aria-label="comment" cols="60" rows="2" class="form-control" name="reserve[item_list][<%= uuid %>][comment]"><%= item["comment"] %></textarea>
+    <% if item_in_searchworks?(item) %>
+      <label for="item-comment-<%= uuid %>">Comments</label>
+      <textarea id="item-comment-<%= uuid %>" aria-label="comment" cols="60" rows="2" class="form-control" name="reserve[item_list][<%= uuid %>][comment]"><%= item["comment"] %></textarea>
+    <% else %>
+      <label for="item-title-<%= uuid %>">Title</label>
+      <textarea id="item-title-<%= uuid %>" aria-label="title" cols="60" rows="5" class="form-control" name="reserve[item_list][<%= uuid %>][title]"><%= item["title"] %></textarea>
+    <% end %>
 	</td>
 	<td>
     <% if item['online']  %>
