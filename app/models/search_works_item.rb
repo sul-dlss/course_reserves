@@ -61,7 +61,7 @@ class SearchWorksItem
 
   def document
     @document ||= begin
-      JSON.parse(Faraday.get(url).body).dig('response', 'document')
+      JSON.parse(Faraday.get(url).body).dig('response', 'document') || {}
     rescue => e
       Honeybadger.notify("SearchWorks request failed for #{url} with #{e}")
       {}
