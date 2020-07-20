@@ -8,7 +8,7 @@ set :ssh_options, {
 }
 
 # Default branch is :master
-set :branch, 'master'
+ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call unless ENV['DEPLOY']
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/opt/app/reserves/reserves'
