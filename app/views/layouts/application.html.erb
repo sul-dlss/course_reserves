@@ -1,27 +1,41 @@
 <!DOCTYPE html>
-<html>
+<%= content_tag :html, class: 'no-js', lang: 'en', **(try(:html_tag_attributes) || {}) do %>
 <head>
-  <title>Request Course Reserves</title>
-  <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= favicon_link_tag %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag "https://www-media.stanford.edu/su-identity/css/su-identity.css" %>
+  <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" %>
+  <%= javascript_include_tag 'application' %>
+  <%= content_for(:head) %>
+  <title>Request Course Reserves</title>
 </head>
-<body id="<%= "#{params[:controller]}-#{params[:action]}" %>">
-  <div id="wrapper">
-    <div id="container">
-      <header id="header">
-        <%= link_to(image_tag("StanfordLibraries-logo-cmyk.svg"), "http://library.stanford.edu", :class=>"logo img-link") %>
-        <span id="links">
-          <%= current_user %> <span>(close browser to logout)</span>
-        </span>
-      </header>
-      <% if Settings.global_alert %>
-        <%= render 'shared/global_alert' %>
-      <% end %>
-      <%= yield %>
-    </div>
+<body class="<%= try(:render_body_class) %>">
+  <%= render 'shared/body_top' %>
+  <div id="skip-link">
+    <%= render 'shared/skip_links' %>
   </div>
+  <div id="su-wrap"> <!-- #su-wrap start -->
+    <div id="su-content"> <!-- #su-content start -->
+      <%= render 'shared/top_navbar' %>
+      <%= render 'shared/header_navbar' %>
+      <div id='main-container' role='main' class='container mt-3 mb-3'>
+        <%= content_for(:container_header) %>
+        <%= render '/shared/global_alert' %>
+        <%= render partial: '/shared/flash_msg', layout: 'shared/flash_messages' %>
+        <%= content_for?(:content) ? yield(:content) : yield %>
+      </div>
+    </div> <!-- #su-content end -->
+  </div> <!-- #su-wrap end -->
+  <%= render 'shared/modal' %>
+  <footer role="contentinfo">
+    <%= render 'shared/sul_footer' %>
+    <%= render 'shared/global_footer' %>
+  </footer>
+  <%= render 'shared/footer' %>
 </body>
-</html>
+<% end %>

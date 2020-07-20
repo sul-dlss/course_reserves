@@ -20,13 +20,40 @@ class Reserve < ActiveRecord::Base
     course&.title || desc
   end
 
+  def instructor_sunets
+    if self.instructor_sunet_ids.present?
+      self.instructor_sunet_ids.split(/,/).map(&:strip).select(&:present?)
+    end
+  end
+
+  def item_list
+    (super || []).map do |item|
+      cast_item_data(item)
+    end
+  end
+
+  def sent_item_list
+    (super || []).map do |item|
+      cast_item_data(item)
+    end
+  end
+
   private
+
+  def cast_item_data(item)
+    hash = {
+      'media' => ActiveModel::Type::Boolean.new.cast(item['media']),
+      'online' => ActiveModel::Type::Boolean.new.cast(item['online'])
+    }
+
+    item.merge(hash)
+  end
 
   def process_sunet_ids
     editors = []
 
     if self.instructor_sunet_ids.present?
-      self.instructor_sunet_ids.split(/,/).map { |i| i.strip }.each do |s|
+      self.instructor_sunet_ids.split(/,/).map(&:strip).select(&:present?).each do |s|
         ed = Editor.find_or_create_by sunetid: s
         ed.save!
         editors << ed
@@ -34,7 +61,7 @@ class Reserve < ActiveRecord::Base
     end
 
     if self.editor_sunet_ids.present?
-      self.editor_sunet_ids.split(/,/).map { |i| i.strip }.each do |s|
+      self.editor_sunet_ids.split(/,/).map(&:strip).select(&:present?).each do |s|
         ed = Editor.find_or_create_by sunetid: s
         ed.save!
         editors << ed

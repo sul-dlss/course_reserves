@@ -1,12 +1,18 @@
 // Things that need to document to be loaded to do.
 $(document).ready(function(){
+	$('#sw_url').on('keypress', function(e) {
+		if (e.keyCode == 13) {
+			e.preventDefault();
+			$('.add-sw-item')[0].click();
+		}
+	});
 
 	// Add item from SW
 	$(".add-sw-item").click(function(){
 		if($("#sw_url").val() != ""){
 			var already_exists = false;
 			$("a").each(function(){
-				if($(this).attr("href") == $("#sw_url").val() || $(this).attr("href") == "http://searchworks.stanford.edu/view/" + $("#sw_url").val()){
+				if($(this).attr("href") === $("#sw_url").val() || $(this).attr("href") === "https://searchworks.stanford.edu/view/" + $("#sw_url").val()){
 					already_exists = true;
 				}
 			});
@@ -38,22 +44,10 @@ $(document).ready(function(){
 		$("body").css("cursor", "progress");
 	});
 
-	// Add comment links
-	$("body").on("click", ".add-comment", function(){
-		if($(this).text() == "Add comment"){
-		  $(this).text("Remove comment");
-		}else{
-			$(this).text("Add comment");
-		}
-		$(this).parents("td").children("textarea").toggle();
-		$(this).parents("td").children("textarea").val("");
-    return false;
-	});
-
 	// Delete item links
 	$("body").on("click", ".delete", function(){
 		$(this).parents("tr").remove();
-		update_item_list_numbers_and_classes();
+    togglePartialWorkTextarea();
 		show_changed($("#item_list_table"));
 		check_validations();
 		return false;
@@ -69,42 +63,6 @@ $(document).ready(function(){
 	  $("#reserve_form input#future").attr("checked", "checked");
   });
 
-  // jQuery dialog
-  $("a.dialog").each(function() {
-    var dialog_box = "empty";
-    var link = $(this);
-    $(this).click( function() {
-      //lazy create of dialog
-      if ( dialog_box == "empty") {
-        dialog_box = $('<div class="dialog_box"></div>').dialog({ autoOpen: false});
-	      // Load the original URL on the link into the dialog associated
-	      // with it. Rails app will give us an appropriate partial.
-	      // pull dialog title out of first heading in contents.
-	      $("body").css("cursor", "progress");
-	      dialog_box.load( this.href , function() {
-				  // Remove first header from loaded content, and make it a dialog
-		      // title instead
-		      var heading = dialog_box.find("h1, h2, h3, h4, h5, h6").eq(0).remove();
-		      dialog_box.dialog("option", "title", heading.text());
-	        $("body").css("cursor", "auto");
-	      });
-
-				// set the appropriate height/width/position of dialog.
-	      dialog_box.dialog({
-					modal: true,
-					height: 'auto',
-					width: Math.max(($(window).width() /2), 45),
-					position: { my: "center bottom", at: "center top", of: '#header' }
-				});
-      }
-      dialog_box.dialog("open").dialog("moveToTop");
-
-      return false; // do not execute default href visit
-    });
-
-  });
-
-
   // enforce loan period on library change
   $("select#libraries").on("change", function(){
   	  check_loan_period();
@@ -113,6 +71,8 @@ $(document).ready(function(){
   if($("#reserve_form").length > 0){
 	  check_loan_period();
   }
+
+  togglePartialWorkTextarea();
 });
 
 function check_validations(){
@@ -128,14 +88,19 @@ function check_validations(){
   }
 }
 
-function update_item_list_numbers_and_classes(){
-	i = 1;
-	$("#item_list_table tbody tr").each(function(){
-		$(this).attr("class", (i % 2 == 0) ? "even" : "odd");
-	  $(this).children("td:first").text(i);
-	  i += 1;
-	});
+function togglePartialWorkTextarea() {
+  $('.digital-item-type input[name$="[digital_type]"]').change(function() {
+    var $textArea = $(this).closest('.digital-item-type').find('textarea[name$="[digital_type_description]"]');
+
+    if (this.value === 'complete_work') {
+      $textArea.attr('disabled', true);
+    }
+    if (this.value === 'partial_work') {
+      $textArea.attr('disabled', false);
+    }
+  });
 }
+
 function show_changed(table){
 	table.addClass("changed")
 }

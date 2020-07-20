@@ -2,11 +2,11 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Use rails for the application framework
-gem 'rails', '~> 5.2'
+gem 'rails', '~> 6.0'
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 4.1'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '>= 6'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -15,7 +15,7 @@ gem 'uglifier', '>= 1.3.0'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 # gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.5'
+gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -26,9 +26,6 @@ gem 'jbuilder', '~> 2.5'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
-# Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.1.0', require: false
 
 # Ues Cancancan for authZ
 gem 'cancancan'
@@ -42,12 +39,11 @@ gem 'cancancan'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'jquery-rails'
-gem 'jquery-ui-rails'
 gem 'nokogiri'
 
 gem 'faraday'
 
-gem 'whenever', "~> 0.9"
+gem 'whenever', "~> 1.0"
 
 # Use honeybadger for exception reporting
 gem 'honeybadger'
@@ -64,16 +60,17 @@ group :development, :test do
 end
 
 group :development do
+  gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'letter_opener'
   gem 'byebug'
 end
 
 group :test do
-  gem 'capybara', ">= 2.2.0"
+  gem 'capybara', ">= 2.15"
   gem 'selenium-webdriver', '!= 3.13.0'
   gem 'webdrivers'
-  gem 'rspec-rails', '~> 3.5', '>= 3.5.2'
+  gem 'rspec-rails', '~> 4.0'
   gem 'simplecov', require: false
   gem 'database_cleaner'
   gem 'rails-controller-testing'
@@ -81,8 +78,7 @@ end
 
 # to be run on machines w/ mysql
 group :production do
-  # mysql 0.5.3 is not compatible with the version of ruby we are using
-  gem 'mysql2', '< 0.5.3'
+  gem 'mysql2'
 end
 
 group :deployment do
@@ -94,6 +90,8 @@ group :deployment do
 end
 
 gem 'config'
+gem 'bootstrap'
+gem 'jquery-datatables'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

@@ -45,7 +45,6 @@ class ReservesController < ApplicationController
   def add_item
     respond_to do |format|
       format.js do
-        params[:index] = 0
         if params[:sw] == 'false'
           params[:item] = {}
         elsif params[:sw] == 'true'
@@ -83,7 +82,7 @@ class ReservesController < ApplicationController
     elsif params.key?(:send_request) && ((reserve.has_been_sent == false) || reserve.has_been_sent.nil?)
       send_course_reserve_request(reserve)
     else
-      reserve.update_attributes(reserve_params)
+      reserve.update(reserve_params)
     end
     redirect_to(controller: 'reserves', action: 'edit', id: params[:id])
   end
@@ -125,14 +124,14 @@ class ReservesController < ApplicationController
   end
 
   def send_course_reserve_request(reserve)
-    reserve.update_attributes(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
+    reserve.update(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
 
     ReserveMail.first_request(reserve, reserve_mail_address(reserve), current_user).deliver_now
   end
 
   def send_updated_reserve_request(reserve)
     old_reserve = reserve.dup
-    reserve.update_attributes(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
+    reserve.update(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
     diff_text = process_diff(old_reserve.sent_item_list, reserve.item_list)
 
     ReserveMail.updated_request(reserve, reserve_mail_address(reserve), diff_text, current_user).deliver_now
@@ -181,17 +180,22 @@ class ReservesController < ApplicationController
 
   def translations
     { "title" => "Title: ",
+      'imprint' => 'Imprint: ',
       "ckey" => "CKey: ",
       "comment" => "Comment: ",
-      "loan_period" => "Circ rule: ",
-      "copies" => "Copies: ",
-      "purchase" => "Purchase this item? ",
-      "personal" => "Is there a personal copy available? " }
+      "online" => "Full text available online",
+      "digital_type" => "Digital item required: ",
+      "digital_type_description" => "Scan: "
+    }
   end
 
   def translate_value_for_email(key, value)
-    if value == "true"
+    if key.to_s == "online" and value
+      return nil
+    elsif value == "true"
       return "yes"
+    elsif key.to_s == "digital_type"
+      return I18n.t(value)
     elsif key.to_s == "loan_period"
       return Settings.loan_periods.to_h.key(value)
     elsif key.to_s == "ckey"
@@ -208,7 +212,11 @@ class ReservesController < ApplicationController
   end
 
   def reserve_params
-    params.require(:reserve).permit!
+    @reserve_params ||= begin
+      reserve = params.require(:reserve).permit!
+      reserve['item_list'] = reserve['item_list'].values if reserve['item_list']
+      reserve
+    end
   end
 
   def redirect_to_edit_when_reserve_exists

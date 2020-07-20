@@ -60,7 +60,7 @@ RSpec.describe 'Reserve Form', type: :feature do
         it 'does not clone the reserve and redirects to most recently updated reserve (with the same term)' do
           visit clone_reserve_path(reserve, term: reserve.term)
 
-          expect(page).to have_css('.error', text: 'Course reserve list already exists for this course and term.')
+          expect(page).to have_css('.alert-danger', text: 'Course reserve list already exists for this course and term.')
           expect(current_path).to eq "/reserves/#{reserve.id}/edit"
         end
       end

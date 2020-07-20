@@ -25,6 +25,22 @@ RSpec.describe Reserve do
     end
   end
 
+  describe 'casting boolean values' do
+    it 'casts media/online booleans in item_list' do
+      reserve = Reserve.create(reserve_params.merge(cid: 'test_cid', item_list: [{ title: 'My Title', 'online' => 'true', 'media' => 'false' }]))
+
+      expect(reserve.item_list.first['online']).to be true
+      expect(reserve.item_list.first['media']).to be false
+    end
+
+    it 'casts media/online booleans in sent_item_list' do
+      reserve = Reserve.create(reserve_params.merge(cid: 'test_cid', sent_item_list: [{ title: 'My Title', 'online' => 'true', 'media' => 'false' }]))
+
+      expect(reserve.sent_item_list.first['online']).to be true
+      expect(reserve.sent_item_list.first['media']).to be false
+    end
+  end
+
   describe "editor relationships" do
     it "generates editor relationships from editor_sunet_ids field for single sunet_id" do
       reserve = Reserve.create(reserve_params.merge(editor_sunet_ids: 'jlavigne', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
@@ -85,6 +101,12 @@ RSpec.describe Reserve do
       new_res = Reserve.find(res[:id])
       expect(new_res.editors.length).to eq(1)
       expect(Editor.find_by_sunetid("jlavigne").reserves).to be_blank
+    end
+
+    it "ignores blank values" do
+      reserve = Reserve.create(reserve_params.merge(instructor_sunet_ids: 'jlavigne, jkeck, , ,', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
+      reserve.save!
+      expect(reserve.editors.length).to eq(2)
     end
   end
 

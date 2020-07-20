@@ -1,20 +1,10 @@
 <h1>Request Course Reserves</h1>
 <div id="introduction">
-  <h2>Authorization</h2>
+  <h2 class="text-cardinal-red">Fall 2020: All course reserves will be digital</h2>
   <p>
-    The instructor of record can create and edit lists for their course, and can
-     authorize others to edit and copy their lists. To do this: Create a new
-     list or open an existing list. Add the SUNetID (lower case) of the new
-      editor under "Who can edit this list?" Click "Save draft".
-  </p>
-
-  <h2>Processing time</h2>
-  <p>
-    Please save and send your course reserve list
-    <strong style="font-weight: 700;">at least one week</strong> before the
-    beginning of classes. During the active term, allow up to 7 days
-    processing time. Materials that must be purchased for your course may
-    take up to 6 weeks.
+    Please submit your requests as early as possible. Library staff will try to
+    acquire e-resources as surrogates for print or media materials. If digital
+    surrogates cannot be found, staff will contact you with other options.
   </p>
 
   <h2>Questions?</h2>
@@ -23,17 +13,17 @@
   </p>
 </div>
 
-<%= link_to "Create a new reserve list", all_courses_path, :class => 'dialog active-button'  -%>
+<%= link_to "Create a new reserve list", all_courses_path, class: 'dialog btn btn-cardinal-red my-3', data: { modal: 'trigger' }  -%>
 <%- unless flash[:error].blank? -%>
   <div class="error"><%=  flash[:error] %></div>
 <%- end -%>
 <div id="reserves-section">
   <% unless @reserves.blank? %>
     <h2>Modify an existing reserve list</h2>
-  	<table id="my-reserves">
-  		<thead>
+  	<table id="my-reserves" class="table table-striped">
+  		<thead class="thead-dark">
   			<tr>
-  				<th id="course_id">Course ID</th>
+  				<th id="course_id" class="text-nowrap">Course ID</th>
   				<th id="term">Term</th>
   				<th id="actions" data-sort-method='none' class="no-sort">Actions</th>
   				<th id="course_description" data-sort-method='none' class="no-sort">Description</th>
@@ -43,14 +33,14 @@
   		</thead>
   		<tbody>
   			<% @reserves.each do |course| -%>
-  				<tr class="<%= cycle("odd", "even") -%>">
+  				<tr>
   					<td><%= course.cid -%></td>
   					<td data-sort='<%= sortable_term_value(course.term) %>'><%= course.term -%></td>
-            <td>
+            <td class="text-nowrap">
               <%= link_to edit_reserve_path(course) do %>
                 Edit <span class='sr-only'><%= "#{course.cid} - #{course.term}" %></span>
               <% end %>
-              <%= link_to reserve_terms_path(course), class: 'copy-link dialog' do %>
+              <%= link_to reserve_terms_path(course), class: 'copy-link dialog ml-4', data: { modal: 'trigger' } do %>
                 Copy <span class='sr-only'><%= "#{course.cid} - #{course.term}" %>
               <% end if course.has_been_sent %>
             </td>
@@ -64,7 +54,24 @@
 
   	</table>
     <script>
-      new Tablesort(document.getElementById('my-reserves'));
+      $(document).ready(function() {
+        $("#my-reserves").dataTable({
+          order: [
+            [ 1, "desc" ]
+          ],
+          columns: [
+            null,
+            null,
+            { "orderable": false },
+            { "orderable": false },
+            null,
+            null
+          ],
+          info: false,
+          paging: false,
+          searching: false,
+        });
+      });
     </script>
   <% end %>
 </div>

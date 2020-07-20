@@ -1,5 +1,9 @@
 require 'terms'
 module ApplicationHelper
+  def application_name
+    'Course Reserves'
+  end
+
   def item_in_searchworks?(item)
     if (params[:sw] == "true") || (item.key?("ckey") && item["ckey"].present?)
       true

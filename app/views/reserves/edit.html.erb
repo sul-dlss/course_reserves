@@ -1,15 +1,14 @@
-<div>
-  <p><%= link_to("Home", root_path) %></p>
+<div class="mb-5">
 	<%= form_for @reserve, :url => { :action => 'update'}, :html => {:id=>"reserve_form"} do |f| -%>
 		<%= render :partial => "reserves_form", :locals => {:f => f} -%>
 		<%- unless @reserve.disabled -%>
-  		<input type="submit" id="save" value="Save draft" class="active-button">
+  		<input type="submit" id="save" value="Save draft" class="btn btn-cardinal-red">
   		<%- if @reserve.has_been_sent -%>
-  		  <input type="submit" name="send_request" value="Sent <%= @reserve.sent_date %>" class="disabled-button" id="send" disabled="true">
+  		  <input type="submit" name="send_request" value="Sent <%= @reserve.sent_date %>" class="btn btn-cardinal-red" id="send" disabled>
   		<%- else -%>
-    	  <input type="submit" name="send_request" value="Save and SEND request" class="disabled-button" id="send" disabled="true"> 	
+    	  <input type="submit" name="send_request" value="Save and SEND request" class="btn btn-cardinal-red" id="send" disabled>
     	<%- end -%>
-    	<%= link_to "Cancel [discard changes]", root_url -%>
+    	<%= link_to "Cancel [discard changes]", root_url, class: 'btn btn-link' -%>
 		<%- end -%>
 	<%- end -%>
 </div>
