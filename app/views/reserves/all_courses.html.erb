@@ -23,6 +23,9 @@
   // data tables
   $("#all_courses").dataTable({
     "bProcessing": true,
-    "sAjaxSource": $("#all_courses").attr("data-href")
+    "sAjaxSource": $("#all_courses").attr("data-href"),
+    "language": {
+      "emptyTable": "No courses found. You may not be authorized for any courses or the course list has not been released yet."
+    }
   });
 </script>
