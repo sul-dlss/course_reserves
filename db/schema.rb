@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_17_010456) do
+ActiveRecord::Schema.define(version: 2020_07_24_205512) do
 
   create_table "editors", force: :cascade do |t|
     t.string "sunetid"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 2020_07_17_010456) do
   create_table "editors_reserves", id: false, force: :cascade do |t|
     t.integer "editor_id"
     t.integer "reserve_id"
+    t.index ["editor_id", "reserve_id"], name: "index_editors_reserves_on_editor_id_and_reserve_id"
+    t.index ["reserve_id", "editor_id"], name: "index_editors_reserves_on_reserve_id_and_editor_id"
   end
 
   create_table "reserves", force: :cascade do |t|
