@@ -1,4 +1,4 @@
-dist: xenial
+dist: bionic
 rvm:
   - '2.7.0'
 
