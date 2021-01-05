@@ -123,7 +123,7 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
       click_link "Reserve an item that's not in SearchWorks"
 
       within(first('table tbody tr')) do
-        expect(page).to have_css('textarea[name$="[title]"]')
+        expect(page).to have_css('textarea[name$="[title]"]', visible: true)
         fill_in 'Title', with: 'The title of an item that I would like'
       end
 
