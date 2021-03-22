@@ -170,7 +170,7 @@ GEM
     ffi (1.15.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    honeybadger (4.7.3)
+    honeybadger (4.8.0)
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
     jbuilder (2.11.2)
@@ -399,4 +399,4 @@ DEPENDENCIES
   whenever (~> 1.0)
 
 BUNDLED WITH
-   2.2.14
+   2.2.15
