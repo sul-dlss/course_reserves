@@ -90,7 +90,7 @@ group :deployment do
 end
 
 gem 'config'
-gem 'bootstrap'
+gem 'bootstrap', '~> 4.0'
 gem 'jquery-datatables'
 
 gem 'newrelic_rpm'
