@@ -44,7 +44,7 @@
               <%= link_to edit_reserve_path(course) do %>
                 Edit <span class='sr-only'><%= "#{course.cid} - #{course.term}" %></span>
               <% end %>
-              <%= link_to reserve_terms_path(course), class: 'copy-link dialog ml-4', data: { modal: 'trigger' } do %>
+              <%= link_to reserve_terms_path(course), class: 'copy-link dialog ms-4', data: { modal: 'trigger' } do %>
                 Copy <span class='sr-only'><%= "#{course.cid} - #{course.term}" %>
               <% end if course.has_been_sent %>
             </td>

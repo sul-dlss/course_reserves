@@ -9,7 +9,7 @@ if (Reserves.modal === undefined) {
 
 Reserves.modal.modalSelector = '#modal';
 Reserves.modal.containerSelector    = '[data-modal~=container]';
-Reserves.modal.modalCloseSelector   = '[data-modal~=close]';
+Reserves.modal.modalCloseSelector   = '[data-bs-modal~=close]';
 
 Reserves.modal.modalAjaxClickLink = function(e) {
   e.preventDefault();
@@ -27,7 +27,7 @@ Reserves.modal.modalAjaxClickLink = function(e) {
 Reserves.modal.onFailure = function(data) {
   var contents =  '<div class="modal-header">' +
             '<div class="modal-title">Network Error</div>' +
-            '<button type="button" class="Reserves-modal-close close" data-dismiss="modal" aria-label="Close">' +
+            '<button type="button" class="Reserves-modal-close btn-close" data-bs-dismiss="modal" aria-label="Close">' +
             '  <span aria-hidden="true">&times;</span>' +
             '</button>';
   $(Reserves.modal.modalSelector).find('.modal-content').html(contents);
@@ -52,7 +52,7 @@ Reserves.modal.receiveAjax = function (contents) {
   // if they did preventDefault, don't show the dialog
   if (e.isDefaultPrevented()) return;
 
-  $(Reserves.modal.modalSelector).modal('show');
+  new bootstrap.Modal($(Reserves.modal.modalSelector)[0], { backdrop: 'static' }).show();
 };
 
 $(document).ready(function(){
