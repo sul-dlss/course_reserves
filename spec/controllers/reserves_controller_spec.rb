@@ -279,77 +279,10 @@ RSpec.describe ReservesController do
         r.save!
         mail = controller.send(:send_course_reserve_request, r)
         expect(mail.to).to eq(["englibrary@stanford.edu", "course-reserves-allforms@lists.stanford.edu"])
-        allow(controller).to receive_messages reserve_params: { library: "GREEN-RESV" }
+        r.update(library: "GREEN-RESV")
         mail = controller.send(:send_course_reserve_request, r)
         expect(mail.to).to eq(["greenreserves@stanford.edu", "course-reserves-allforms@lists.stanford.edu"])
         expect(r.library).to eq("GREEN-RESV")
-      end
-    end
-  end
-
-  describe "protected methods" do
-    describe "email diff" do
-      it "returns new items added to the item list" do
-        old_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }]
-        new_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }, { "ckey" => "54321", "title" => "SecondTitle", "copies" => "1" }]
-        diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
-        expect(diff_item_list).to match(/ADDED ITEM/)
-        expect(diff_item_list).to match(/CKey: 54321 : https:\/\/searchworks.stanford.edu\/view\/54321/)
-        expect(diff_item_list).not_to match(/EDITED ITEM/)
-        expect(diff_item_list).not_to match(/DELETED ITEM/)
-      end
-      it "returns changed items from the item list" do
-        old_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }, { "ckey" => "54321", "title" => "SecondTitle", "copies" => "1" }]
-        new_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4", "online" => true }, { "ckey" => "54321", "title" => "SecondTitle", "copies" => "2" }]
-        diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
-        expect(diff_item_list).to match(/EDITED ITEM/)
-        expect(diff_item_list).to match(/CKey: 54321 : https:\/\/searchworks.stanford.edu\/view\/54321/)
-        expect(diff_item_list).to match(/Full text available online/)
-        expect(diff_item_list).not_to match(/ADDED ITEM/)
-        expect(diff_item_list).not_to match(/DELETED ITEM/)
-      end
-      it "returns items deleted from the item list" do
-        old_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }, { "ckey" => "54321", "title" => "ToBeDeleted", "copies" => "1" }]
-        new_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }]
-        diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
-        expect(diff_item_list).to match(/DELETED ITEM/)
-        expect(diff_item_list).to match(/CKey: 54321 : https:\/\/searchworks.stanford.edu\/view\/54321/)
-        expect(diff_item_list).to match(/Title: ToBeDeleted/)
-        expect(diff_item_list).not_to match(/ADDED ITEM/)
-        expect(diff_item_list).not_to match(/EDITED ITEM/)
-      end
-      it "gets an item w/ the same ckey that is drastically out of the old order" do
-        old_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }, { "ckey" => "23456", "title" => "SecondTitle", "copies" => "1" }, { "ckey" => "34567", "title" => "ThirdTitle", "copies" => "1" }]
-        new_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }, { "ckey" => "34567", "title" => "ThirdTitle", "copies" => "1" }, { "ckey" => "23456", "title" => "ChangedTitle", "copies" => "1" }]
-        diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
-        expect(diff_item_list).to match(/EDITED ITEM/)
-        expect(diff_item_list).to match(/CKey: 23456 : https:\/\/searchworks.stanford.edu\/view\/23456/)
-        expect(diff_item_list).to match(/Title: ChangedTitle \(was: SecondTitle\)/)
-        expect(diff_item_list).not_to match(/ADDED ITEM/)
-        expect(diff_item_list).not_to match(/DELETED ITEM/)
-      end
-      it "handles custom items w/ the same comment as the same items" do
-        old_item_list = [{ "ckey" => "", "title" => "", "comment" => "This is Item1", "copies" => "4", "loan_period" => "2 hours" }, { "ckey" => "", "title" => "", "comment" => "This is Item2", "copies" => "1", "loan_period" => "4 hours" }]
-        new_item_list = [{ "ckey" => "", "title" => "", "comment" => "This is Item1", "copies" => "4", "loan_period" => "4 hours" }, { "ckey" => "", "title" => "", "comment" => "This is Item2", "copies" => "2", "loan_period" => "4 hours" }]
-        diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
-        expect(diff_item_list).to match(/EDITED ITEM/)
-        expect(diff_item_list).not_to match(/ADDED ITEM/)
-        expect(diff_item_list).not_to match(/DELETED ITEM/)
-      end
-
-      it "does not return unchanged items from the item list" do
-        old_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }]
-        new_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4" }]
-        diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
-        expect(diff_item_list).to be_blank
-      end
-
-      it "handles the change in digital_type" do
-        old_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4", "digital_type" => "complete_work" }]
-        new_item_list = [{ "ckey" => "12345", "title" => "FirstTitle", "copies" => "4", "digital_type" => "partial_work", "digital_type_description" => "chapter 3 please" }]
-        diff_item_list = controller.send(:process_diff, old_item_list, new_item_list)
-        expect(diff_item_list).to match(/Scan: chapter 3 please \(was: blank\)/)
-        expect(diff_item_list).to match(/Digital item required: chapter or article \(was: complete work\)/)
       end
     end
   end

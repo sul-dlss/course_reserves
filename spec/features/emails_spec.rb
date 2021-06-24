@@ -31,8 +31,9 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
       body = ActionMailer::Base.deliveries.last.body.to_s
-      expect(body).to include('Title: Cats!')
-      expect(body).to include('Title: Dogs!')
+      expect(body).not_to include('*** ADDED ITEM ***')
+      expect(body).to include(' 1. Cats!')
+      expect(body).to include(' 2. Dogs!')
     end
   end
 
@@ -54,7 +55,7 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         body = ActionMailer::Base.deliveries.last.body.to_s
-        expect(body).to include('***ADDED ITEM***')
+        expect(body).to include('*** ADDED ITEM ***')
         expect(body).to include('Dogs!')
         expect(body).not_to include('Cats!') # Item sent in previous email
       end
@@ -99,6 +100,8 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
         click_button 'Save and SEND request'
 
         within(first('.reserve')) do
+          fill_in 'copies', with: 5
+          select '1 day', from: 'Loan period'
           fill_in 'Comments', with: 'My Added Comment'
         end
 
@@ -109,8 +112,10 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         body = ActionMailer::Base.deliveries.last.body.to_s
-        expect(body).to include('***EDITED ITEM***')
+        expect(body).to include('*** EDITED ITEM ***')
         expect(body).to include('Cats!')
+        expect(body).to include('Print copies needed: 5 (WAS: 1)')
+        expect(body).to include('Loan period: 1 day (WAS: 2 hours)')
         expect(body).not_to include('Dogs!') # Item not edited
       end
     end
@@ -122,7 +127,7 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
 
       click_link "Reserve an item that's not in SearchWorks"
 
-      within(first('.reserve')) do
+      within(first('.reserve:not(#add_row)')) do
         expect(page).to have_css('textarea[name$="[title]"]', visible: true)
         fill_in 'Title', with: 'The title of an item that I would like'
       end
@@ -132,7 +137,7 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
       body = ActionMailer::Base.deliveries.last.body.to_s
-      expect(body).to include('Title: The title of an item that I would like')
+      expect(body).to include('The title of an item that I would like')
     end
   end
 end
