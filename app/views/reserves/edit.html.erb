@@ -1,5 +1,5 @@
 <div class="mb-5">
-	<%= form_for @reserve, :url => { :action => 'update'}, :html => {:id=>"reserve_form"} do |f| -%>
+	<%= form_with model: @reserve, method: 'patch', html: { id: "reserve_form" } do |f| -%>
 		<%= render :partial => "reserves_form", :locals => {:f => f} -%>
 		<%- unless @reserve.disabled -%>
   		<input type="submit" id="save" value="Save draft" class="btn btn-cardinal-red">
