@@ -71,7 +71,7 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
 
         click_button 'Save and SEND request'
 
-        within(first('table tbody tr')) do
+        within(first('.reserve')) do
           click_link '[delete]'
         end
 
@@ -98,7 +98,7 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
 
         click_button 'Save and SEND request'
 
-        within(first('table tbody tr')) do
+        within(first('.reserve')) do
           fill_in 'Comments', with: 'My Added Comment'
         end
 
@@ -122,7 +122,7 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
 
       click_link "Reserve an item that's not in SearchWorks"
 
-      within(first('table tbody tr')) do
+      within(first('.reserve')) do
         expect(page).to have_css('textarea[name$="[title]"]', visible: true)
         fill_in 'Title', with: 'The title of an item that I would like'
       end

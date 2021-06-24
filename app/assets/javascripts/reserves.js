@@ -46,7 +46,7 @@ $(document).ready(function(){
 
 	// Delete item links
 	$("body").on("click", ".delete", function(){
-		$(this).parents("tr").remove();
+		$(this).parents(".reserve").remove();
     togglePartialWorkTextarea();
 		show_changed($("#item_list_table"));
 		check_validations();
@@ -76,7 +76,7 @@ $(document).ready(function(){
 });
 
 function check_validations(){
-	if($("#reserve_form #libraries").val() == "(select library)" || $("#item_list_table tbody tr").length < 2 ){
+	if($("#reserve_form #libraries").val() == "(select library)" || $("#item_list_table .reserve").length < 1 ){
 	  $("input#send").attr("disabled", "true");
 	  $("input#send").removeClass("active-button");
 	  $("input#send").addClass("disabled-button");
@@ -101,9 +101,10 @@ function togglePartialWorkTextarea() {
   });
 }
 
-function show_changed(table){
-	table.addClass("changed")
+function show_changed(el){
+	el.addClass("changed")
 }
+
 function check_loan_period(){
 	var library = $("select#libraries").children("option:selected").text();
 	$("select.loan-select").each(function(){
