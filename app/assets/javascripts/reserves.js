@@ -48,7 +48,7 @@ $(document).ready(function(){
 	$("body").on("click", ".delete", function(){
 		$(this).parents(".reserve").remove();
     togglePartialWorkTextarea();
-		show_changed($("#item_list_table"));
+		show_changed($("#item_list"));
 		check_validations();
 		return false;
 	});
@@ -76,7 +76,7 @@ $(document).ready(function(){
 });
 
 function check_validations(){
-	if($("#reserve_form #libraries").val() == "(select library)" || $("#item_list_table .reserve").length < 1 ){
+	if($("#reserve_form #libraries").val() == "(select library)" || $("#item_list .reserve").length < 1 ){
 	  $("input#send").attr("disabled", "true");
 	  $("input#send").removeClass("active-button");
 	  $("input#send").addClass("disabled-button");

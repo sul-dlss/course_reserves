@@ -1,6 +1,6 @@
 $("#add_row").before("<%= escape_javascript(render(:partial => 'reserves_item', :locals => {:item => @item })) %>");
 togglePartialWorkTextarea();
-show_changed($("#item_list_table"));
+show_changed($("#item_list"));
 check_validations();
 check_loan_period();
 $("#sw_url").val("");

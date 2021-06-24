@@ -62,7 +62,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       page.find('#sw_url').set('54321')
       click_link 'add'
 
-      within('#item_list_table') do
+      within('#item_list') do
         expect(page).to have_css('.reserve', count: 2)
 
         expect(page).to have_link('Cats!', href: 'https://searchworks.stanford.edu/view/12345')
@@ -84,7 +84,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       page.find('#sw_url').set('12345')
       click_link 'add'
 
-      within('#item_list_table') do
+      within('#item_list') do
         expect(page).to have_css('.reserve', count: 1)
         expect(page).to have_link(href: 'https://searchworks.stanford.edu/view/12345', count: 1)
       end
@@ -92,7 +92,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       page.find('#sw_url').set('12345')
       click_link 'add'
 
-      within('#item_list_table') do
+      within('#item_list') do
         expect(page).to have_css('.reserve', count: 1)
         expect(page).to have_link(href: 'https://searchworks.stanford.edu/view/12345', count: 1)
       end
