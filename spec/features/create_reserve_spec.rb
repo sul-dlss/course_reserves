@@ -63,7 +63,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       click_link 'add'
 
       within('#item_list') do
-        expect(page).to have_css('.reserve', count: 2)
+        expect(page).to have_css('.reserve:not(#add_row)', count: 2)
 
         expect(page).to have_link('Cats!', href: 'https://searchworks.stanford.edu/view/12345')
         expect(page).to have_link('Dogs!', href: 'https://searchworks.stanford.edu/view/54321')
@@ -72,7 +72,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
           click_link '[delete]'
         end
 
-        expect(page).to have_css('.reserve', count: 1)
+        expect(page).to have_css('.reserve:not(#add_row)', count: 1)
         expect(page).not_to have_link('Cats!')
         expect(page).to have_link('Dogs!', href: 'https://searchworks.stanford.edu/view/54321')
       end
@@ -85,7 +85,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       click_link 'add'
 
       within('#item_list') do
-        expect(page).to have_css('.reserve', count: 1)
+        expect(page).to have_css('.reserve:not(#add_row)', count: 1)
         expect(page).to have_link(href: 'https://searchworks.stanford.edu/view/12345', count: 1)
       end
 
@@ -93,7 +93,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       click_link 'add'
 
       within('#item_list') do
-        expect(page).to have_css('.reserve', count: 1)
+        expect(page).to have_css('.reserve:not(#add_row)', count: 1)
         expect(page).to have_link(href: 'https://searchworks.stanford.edu/view/12345', count: 1)
       end
     end

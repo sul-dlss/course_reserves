@@ -76,7 +76,7 @@ $(document).ready(function(){
 });
 
 function check_validations(){
-	if($("#reserve_form #libraries").val() == "(select library)" || $("#item_list .reserve").length < 1 ){
+	if($("#reserve_form #libraries").val() == "(select library)" || $("#item_list .reserve:not(#add_row)").length < 1 ){
 	  $("input#send").attr("disabled", "true");
 	  $("input#send").removeClass("active-button");
 	  $("input#send").addClass("disabled-button");
