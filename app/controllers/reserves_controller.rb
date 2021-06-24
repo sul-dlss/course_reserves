@@ -46,12 +46,12 @@ class ReservesController < ApplicationController
     respond_to do |format|
       format.js do
         if params[:sw] == 'false'
-          params[:item] = {}
+          @item = {}
         elsif params[:sw] == 'true'
           ckey = params[:url].strip[/(\d+)$/]
           item = SearchWorksItem.new(ckey)
           render(js: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();") && return unless item.valid?
-          params[:item] = item.to_h
+          @item = item.to_h.with_indifferent_access
         end
       end
     end
