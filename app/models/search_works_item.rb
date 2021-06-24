@@ -32,7 +32,7 @@ class SearchWorksItem
   end
 
   def restricted_hathi_item?
-    return unless Settings.hathi_etas_access
+    return false unless Settings.hathi_etas_access
 
     (document['ht_access_sim'] || []).present?
   end
