@@ -98,26 +98,4 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       end
     end
   end
-
-  describe 'Digitization request inputs' do
-    it 'the description field toggles disabled/enabled when digital_type changes' do
-      visit new_reserve_path(comp_key: 'AA-272C,123,456')
-
-      page.find('#sw_url').set('12345')
-      click_link 'add'
-
-      within('.digital-item-type') do
-        expect(page).to have_css('input[type="radio"][name$="[digital_type]"][value="complete_work"][checked]')
-        expect(page).to have_css('textarea[name$="[digital_type_description]"][disabled]')
-
-        page.choose('chapter or article (up to 50 pages)')
-        expect(page).to have_css('textarea[name$="[digital_type_description]"]')
-        expect(page).not_to have_css('textarea[name$="[digital_type_description]"][disabled]')
-
-        page.choose('complete work')
-        expect(page).to have_css('input[type="radio"][name$="[digital_type]"][value="complete_work"][checked]')
-        expect(page).to have_css('textarea[name$="[digital_type_description]"][disabled]')
-      end
-    end
-  end
 end
