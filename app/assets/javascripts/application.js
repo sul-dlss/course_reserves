@@ -13,4 +13,5 @@
 //= require jquery3
 //= require rails-ujs
 //= require datatables
+//= require bootstrap
 //= require_tree .

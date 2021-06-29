@@ -5,13 +5,17 @@
 class ReserveItem
   include ActiveModel::Model
 
-  attr_accessor :title, :imprint, :ckey, :media, :online, :comment, :digital_type, :copies, :personal, :loan_period, :required
+  attr_accessor :title, :imprint, :ckey, :media, :online, :comment, :digital_type, :copies, :personal, :loan_period, :required, :print_needed
 
   def copies
     return @copies.presence.to_i if @copies.present?
     return 0 if online?
 
     1
+  end
+
+  def print_needed
+    ActiveModel::Type::Boolean.new.cast(@print_needed)
   end
 
   def online?

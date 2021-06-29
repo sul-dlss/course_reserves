@@ -30,27 +30,38 @@
 			</div>
 			<div>
 				<hr />
-				<div class="form-group d-flex flex-column flex-md-row mb-3 mb-sm-2">
-					<div class="d-flex">
-						<%= f.label :copies, 'Print copies needed:', class: 'col-form-label' %>
-						<%= f.number_field :copies, class: 'form-control num_copies', max: 99 %>
+				<% if f.object.online? %>
+					<div class="form-group d-flex mb-2">
+					  <button class="btn btn-checkbox pl-0" type="button" data-toggle="collapse" data-target="#collapsePrint" aria-expanded="<%= f.object.copies > 0 ? 'true' : 'false' %>" aria-controls="collapsePrint">
+							<%= f.check_box :print_needed, aria: { hidden: true }, tabindex: '-1'  %>
+
+					    In addition to the online copy, please reserve print versions too
+					  </button>
+					</div>
+				<% end %>
+				<div id="collapsePrint" class="collapse <%= 'show' if !f.object.online? || f.object.copies > 0 %>">
+					<div class="form-group d-flex flex-column flex-md-row mb-3 mb-sm-2">
+						<div class="d-flex">
+							<%= f.label :copies, 'Print copies needed:', class: 'col-form-label' %>
+							<%= f.number_field :copies, class: 'form-control num_copies', max: 99 %>
+						</div>
+
+						<%= f.label :personal, class: 'col-form-label' do %>
+							<%= f.check_box :personal %>
+
+							The instructor will loan a copy to the library
+						<% end %>
 					</div>
 
-					<%= f.label :personal, class: 'col-form-label' do %>
-						<%= f.check_box :personal %>
+					<div class="form-group d-flex mb-2">
+						<%= f.label :loan_period, 'Loan period:', class: 'col-form-label' %>
 
-						The instructor will loan a copy to the library
-					<% end %>
-				</div>
+						<% if ActiveModel::Type::Boolean.new.cast(item["media"]) %>
+							<%= f.hidden_field :loan_period %>
+						<% end %>
 
-				<div class="form-group d-flex mb-2">
-					<%= f.label :loan_period, 'Loan period:', class: 'col-form-label' %>
-
-					<% if ActiveModel::Type::Boolean.new.cast(item["media"]) %>
-						<%= f.hidden_field :loan_period %>
-					<% end %>
-
-					<%= f.select :loan_period, Settings.loan_periods.to_h.values, {}, class: "loan-period form-control loan-select #{"media" if ActiveModel::Type::Boolean.new.cast(item["media"])}", disabled: ActiveModel::Type::Boolean.new.cast(item["media"]) %>
+						<%= f.select :loan_period, Settings.loan_periods.to_h.values, {}, class: "loan-period form-control loan-select #{"media" if ActiveModel::Type::Boolean.new.cast(item["media"])}", disabled: ActiveModel::Type::Boolean.new.cast(item["media"]) %>
+					</div>
 				</div>
 
 				<div class="form-group d-flex flex-column flex-md-row mb-2">

@@ -1,5 +1,11 @@
 // Things that need to document to be loaded to do.
 $(document).ready(function(){
+	$('#collapsePrint').on('show.bs.collapse', function() {
+		$('[data-target="#collapsePrint"] input[type="checkbox"]').prop( "checked", false );
+	})
+	$('#collapsePrint').on('hide.bs.collapse', function() {
+		$('[data-target="#collapsePrint"] input[type="checkbox"]').prop( "checked", true );
+	})
 	$('#sw_url').on('keypress', function(e) {
 		if (e.keyCode == 13) {
 			e.preventDefault();
