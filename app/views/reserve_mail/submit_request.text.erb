@@ -1,0 +1,33 @@
+<%= @reserve.cid %>-<%= @reserve.sid %>: <%= @reserve.course_title %>
+<%= "Cross listed as: #{@reserve.cross_listings}" unless @reserve.cross_listings.blank? %>
+Instructor Name(s): <%= @reserve.instructor_names %>
+Instructor SUNet ID(s): <%= @reserve.instructor_sunet_ids %>
+
+Reserve at: <%= Settings.reserve_libraries[@reserve.library] %>
+
+Contact Name: <%= @reserve.contact_name %>
+Contact Email: <%= @reserve.contact_email %>
+Contact Phone: <%= @reserve.contact_phone %>
+
+Sent by: <%= @current_user %>
+
+------------------------------------
+<% @reserve.item_list.each_with_index do |item, index| %>
+<% previous_entry = @reserve.sent_item_list&.find { |old_entry| (item['ckey'].present? && old_entry['ckey'] == item['ckey']) || (item['ckey'].blank? && old_entry['title'] == item['title']) } %>
+<% next if previous_entry == item %>
+<% if previous_entry %>
+*** EDITED ITEM ***
+<% elsif @reserve.sent_item_list.any? %>
+*** ADDED ITEM ***
+<% end %>
+<%= (index + 1).to_s.rjust(2, ' ') %>. <%= ReserveItem.new(item).to_email_text(previous_entry) %>
+------------------------------------
+<% end %>
+
+<% @reserve.sent_item_list.reject { |old_entry| @reserve.item_list&.find { |item| (item['ckey'].present? && old_entry['ckey'] == item['ckey']) || (item['ckey'].blank? && old_entry['title'] == item['title']) } }.each do |deleted_item| %>
+***DELETED ITEM***
+<%= ReserveItem.new(deleted_item).to_email_text %>
+------------------------------------
+<% end %>
+
+<%= edit_reserve_url(@reserve[:id], :host=>"reserves.stanford.edu") %>

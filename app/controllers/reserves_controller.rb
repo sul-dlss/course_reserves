@@ -46,12 +46,12 @@ class ReservesController < ApplicationController
     respond_to do |format|
       format.js do
         if params[:sw] == 'false'
-          params[:item] = {}
+          @item = {}
         elsif params[:sw] == 'true'
           ckey = params[:url].strip[/(\d+)$/]
           item = SearchWorksItem.new(ckey)
           render(js: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();") && return unless item.valid?
-          params[:item] = item.to_h
+          @item = item.to_h.with_indifferent_access
         end
       end
     end
@@ -77,13 +77,9 @@ class ReservesController < ApplicationController
       end
     end
     reserve_params[:item_list] = [] unless reserve_params.key?(:item_list)
-    if params.key?(:send_request) && (reserve.has_been_sent == true)
-      send_updated_reserve_request(reserve)
-    elsif params.key?(:send_request) && ((reserve.has_been_sent == false) || reserve.has_been_sent.nil?)
-      send_course_reserve_request(reserve)
-    else
-      reserve.update(reserve_params)
-    end
+    reserve.update(reserve_params)
+    send_course_reserve_request(@reserve) if params.key?(:send_request)
+
     redirect_to(controller: 'reserves', action: 'edit', id: params[:id])
   end
 
@@ -124,86 +120,8 @@ class ReservesController < ApplicationController
   end
 
   def send_course_reserve_request(reserve)
-    reserve.update(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
-
-    ReserveMail.first_request(reserve, reserve_mail_address(reserve), current_user).deliver_now
-  end
-
-  def send_updated_reserve_request(reserve)
-    old_reserve = reserve.dup
-    reserve.update(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
-    diff_text = process_diff(old_reserve.sent_item_list, reserve.item_list)
-
-    ReserveMail.updated_request(reserve, reserve_mail_address(reserve), diff_text, current_user).deliver_now
-  end
-
-  def process_diff(old_reserve, new_reserve)
-    total_reserves = []
-    item_text = ""
-    new_reserve.each_with_index do |new_item, index|
-      total_reserves << new_item
-      unless old_reserve.include?(new_item)
-        old_item = old_reserve.map { |item| item if (item["ckey"].blank? && (item["comment"] == new_item["comment"])) || (item["ckey"].present? && (item["ckey"] == new_item["ckey"])) }.compact.first
-        if old_item.present?
-          total_reserves << old_item
-          item_text << "***EDITED ITEM***\n"
-          new_item.each do |key, value|
-            if old_item[key] == value
-              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" unless value.blank? && old_item[key].blank?
-            else
-              item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)} (was: #{translate_value_for_email(key, old_item[key])})\n"
-            end
-          end
-          item_text << "------------------------------------\n"
-        else
-          item_text << "***ADDED ITEM***\n"
-          new_item.each do |key, value|
-            item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" if value.present?
-          end
-          item_text << "------------------------------------\n"
-        end
-      end
-    end
-    (old_reserve - total_reserves).each do |delete_item|
-      item_text << "***DELETED ITEM***\n"
-      delete_item.each do |key, value|
-        item_text << "#{translate_key_for_email(key)}#{translate_value_for_email(key, value)}\n" if value.present?
-      end
-      item_text << "------------------------------------\n"
-    end
-    item_text
-  end
-
-  def translate_key_for_email(key)
-    return translations[key.to_s]
-  end
-
-  def translations
-    { "title" => "Title: ",
-      'imprint' => 'Imprint: ',
-      "ckey" => "CKey: ",
-      "comment" => "Comment: ",
-      "online" => "Full text available online",
-      "digital_type" => "Digital item required: ",
-      "digital_type_description" => "Scan: "
-    }
-  end
-
-  def translate_value_for_email(key, value)
-    if key.to_s == "online" and value
-      return nil
-    elsif value == "true"
-      return "yes"
-    elsif key.to_s == "digital_type"
-      return I18n.t(value)
-    elsif key.to_s == "loan_period"
-      return Settings.loan_periods.to_h.key(value)
-    elsif key.to_s == "ckey"
-      return "#{value} : #{searchworks_ckey_url(value)}"
-    elsif value.blank?
-      return "blank"
-    else
-      return value
+    ReserveMail.submit_request(reserve, reserve_mail_address(reserve), current_user).deliver_now.tap do
+      reserve.update(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
     end
   end
 

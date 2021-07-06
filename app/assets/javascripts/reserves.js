@@ -30,25 +30,15 @@ $(document).ready(function(){
 		}
 	});
 
-	// Create hidden elements reflecting the value of all disabled elements
-	$("#send, #save").click(function(){
-		$("#reserve_form select:disabled").each(function(){
-			$(this).after("<input type='hidden' name='" + $(this).attr("name") + "' value='" + $(this).val() + "' />");
-		});
-		// We may not need to do this.  I won't hurt, but since we don't allow people to edit the term once we've disabled term, it really doesn't need to update.
-		var radio = $("#reserve_form #reserve-timing input:checked");
-		radio.after("<input type='hidden' name='" + radio.attr("name") + "' value='" + radio.val() + "' />");
-	});
-
 	$("#add_custom").click(function(){
 		$("body").css("cursor", "progress");
 	});
 
 	// Delete item links
 	$("body").on("click", ".delete", function(){
-		$(this).parents("tr").remove();
+		$(this).parents(".reserve").remove();
     togglePartialWorkTextarea();
-		show_changed($("#item_list_table"));
+		show_changed($("#item_list"));
 		check_validations();
 		return false;
 	});
@@ -76,7 +66,7 @@ $(document).ready(function(){
 });
 
 function check_validations(){
-	if($("#reserve_form #libraries").val() == "(select library)" || $("#item_list_table tbody tr").length < 2 ){
+	if($("#reserve_form #libraries").val() == "(select library)" || $("#item_list .reserve:not(#add_row)").length < 1 ){
 	  $("input#send").attr("disabled", "true");
 	  $("input#send").removeClass("active-button");
 	  $("input#send").addClass("disabled-button");
@@ -101,9 +91,10 @@ function togglePartialWorkTextarea() {
   });
 }
 
-function show_changed(table){
-	table.addClass("changed")
+function show_changed(el){
+	el.addClass("changed")
 }
+
 function check_loan_period(){
 	var library = $("select#libraries").children("option:selected").text();
 	$("select.loan-select").each(function(){

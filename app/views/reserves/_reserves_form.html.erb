@@ -90,43 +90,32 @@
 		</div>
 	</fieldset>
 </div>
-<div class="table-responsive-md">
-  <table id="item_list_table" class="table table-striped mt-4">
-    <thead class="thead-dark">
-    	<tr>
-    		<th class="number">&nbsp;</th>
-    		<th class="title">Title</th>
-        <th class="reserve">Reserve (all reserves are digital)</th>
-    		<th class="delete">Delete</th>
-    	</tr>
-  	</thead>
-  	<tbody>
-    	<% unless @reserve.blank? or @reserve.item_list.blank? %>
-    		<% @reserve.item_list.each_with_index do |item, index| %>
-    		  <%= render :partial => "reserves_item", :locals => { :item => item, :index => index }-%>
-    		<% end %>
-    	<% end %>
-    	<%- if !@reserve or !@reserve.disabled -%>
-      	<tr id="add_row">
-      		<td class="enumerator last-row">
-            <span class="counter"></span>
-          </td>
-          <td colspan="3">
-      			<label for="sw_url">Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "https://searchworks.stanford.edu/", rel: 'noopener', target: '_blank') %>.</label><br/>
-						<div class="d-flex align-items-center mt-1">
-							<div class="input-group w-auto">
-								<input class="form-control" type="text" id="sw_url" />
-								<div class="input-group-append">
-                  <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item btn btn-cardinal-red") -%>
-								</div>
-							</div>
-							<div>
-                &nbsp; - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :id=>"add_custom", :remote => true ) %>
-							</div>
+<div id="item_list">
+	<div class="header"></div>
+	<% unless @reserve.blank? or @reserve.item_list.blank? %>
+		<% @reserve.item_list.each_with_index do |item, index| %>
+		  <%= render :partial => "reserves_item", :locals => { :item => item, :index => index }-%>
+		<% end %>
+	<% end %>
+	<%- if !@reserve or !@reserve.disabled -%>
+  	<div id="add_row" class="reserve d-flex">
+  		<div class="enumerator last-row">
+        <span class="counter"></span>
+      </div>
+      <div>
+  			<label for="sw_url">Copy/paste an item URL or catkey from <%= link_to( "SearchWorks", "https://searchworks.stanford.edu/", rel: 'noopener', target: '_blank') %>.</label><br/>
+				<div class="d-flex align-items-center mt-1">
+					<div class="input-group w-auto">
+						<input class="form-control" type="text" id="sw_url" />
+						<div class="input-group-append">
+              <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item btn btn-cardinal-red") -%>
 						</div>
-      		</td>
-      	</tr>
-      <%- end -%>
-  	</tbody>
-  </table>
+					</div>
+					<div>
+            &nbsp; - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :id=>"add_custom", :remote => true ) %>
+					</div>
+				</div>
+  		</div>
+  	</div>
+  <%- end -%>
 </div>

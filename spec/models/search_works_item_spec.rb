@@ -41,6 +41,10 @@ RSpec.describe SearchWorksItem do
     context 'when an item available via Hathi ETAS' do
       let(:document) { { 'ht_access_sim' => ['AnyValue'] } }
 
+      before do
+        allow(Settings).to receive(:hathi_etas_access).and_return(true)
+      end
+
       it { expect(item.to_h).to include(online: true) }
     end
 

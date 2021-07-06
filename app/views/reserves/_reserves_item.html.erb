@@ -1,73 +1,78 @@
 <% uuid = SecureRandom.uuid %>
-<tr>
-	<td class="enumerator"><span class="counter"></span></td>
-	<td>
-		<% if item_in_searchworks?(item) %>
-      <p class="h5">
-        <%= link_to item['title'], "https://searchworks.stanford.edu/view/#{item['ckey']}", rel: 'noopener', target: '_blank' %>
-      </p>
-      <% if item['imprint'] %>
-        <p><%= item['imprint'] %></p>
-      <% end %>
-  	<% end %>
-    <input type="hidden" name="reserve[item_list][<%= uuid %>][imprint]" value="<%= item["imprint"] if item["imprint"] %>" />
-  	<input type="hidden" name="reserve[item_list][<%= uuid %>][title]" value="<%= item["title"] if item["title"] %>" />
-  	<input type="hidden" name="reserve[item_list][<%= uuid %>][ckey]" value="<%= item["ckey"] if item["ckey"] %>" />
-    <input type="hidden" name="reserve[item_list][<%= uuid %>][media]" value="<%= item['media'] if item['media'] %>" />
-    <input type="hidden" name="reserve[item_list][<%= uuid %>][online]" value="<%= item['online'] if item['online'] %>" />
-    <% if item_in_searchworks?(item) %>
-      <label for="item-comment-<%= uuid %>">Comments</label>
-      <textarea id="item-comment-<%= uuid %>" aria-label="comment" cols="60" rows="2" class="form-control" name="reserve[item_list][<%= uuid %>][comment]"><%= item["comment"] %></textarea>
-    <% else %>
-      <label for="item-title-<%= uuid %>">Title</label>
-      <textarea id="item-title-<%= uuid %>" aria-label="title" cols="60" rows="5" class="form-control" name="reserve[item_list][<%= uuid %>][title]"><%= item["title"] %></textarea>
-    <% end %>
-	</td>
-	<td>
-    <% if item['online']  %>
-      ✅ Full text available online
-    <% else %>
-      <div class="digital-item-type">
-        Digital item required:
-        <div class="form-check">
-          <%= radio_button_tag "reserve[item_list][#{uuid}][digital_type]",
-                               "complete_work",
-                               (item["digital_type"] != "partial_work"),
-                               id: "complete-work-#{uuid}",
-                               class: "form-check-input"
-          %>
-          <label class="form-check-label" for="complete-work-<%= uuid %>">
-            complete work
-          </label>
-        </div>
-        <% unless item['media'] %>
-          <div class="form-check">
-            <%= radio_button_tag "reserve[item_list][#{uuid}][digital_type]",
-                                 "partial_work",
-                                 (item["digital_type"] == "partial_work"),
-                                 id: "partial-work-#{uuid}",
-                                 class: "form-check-input"
-            %>
-            <label class="form-check-label" for="partial-work-<%= uuid %>">
-              chapter or article (up to 50 pages)
-            </label>
-          </div>
-          <div class="form-group">
-            <label for="partial-work-description<%= uuid %>" class="sr-only">
-              Partial work description
-            </label>
-            <textarea
-              name="reserve[item_list][<%= uuid %>][digital_type_description]"
-              class="form-control"
-              <%= 'disabled' if item['digital_type'] != 'partial_work' %>
-              id="partial-work-description-<%= uuid %>"
-              rows="2"
-              placeholder="Chapter title or page range"
-            ><%= item["digital_type_description"] if item["digital_type_description"] %></textarea>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-  </td>
-	<td><%= link_to "[delete]", "", class: "delete", method: 'delete' -%></td>
-</tr>
+<%= fields_for "reserve[item_list][#{uuid}]", ReserveItem.new(item) do |f| %>
+	<div class="reserve d-flex">
+		<div class="enumerator"><span class="counter"></span></div>
+		<div class="container">
+			<div class="d-flex justify-content-between mb-2">
+				<div class="">
+					<% if item_in_searchworks?(item) %>
+			      <p class="h5">
+			        <%= link_to item['title'], "https://searchworks.stanford.edu/view/#{item['ckey']}", rel: 'noopener', target: '_blank' %>
+			      </p>
+			      <% if item['imprint'] %>
+			        <p class="mb-1"><%= item['imprint'] %></p>
+			      <% end %>
+				    <% if item['online'] %>
+				      <p class="mb-1"><span class="badge badge-success" aria-hidden="true">Online</span> Full text available online</p>
+				    <% end %>
+						<%= f.hidden_field :title %>
+					<% else %>
+						<%= f.label :title, 'Title', class: 'col-form-label mt-0' %>
+						<%= f.text_area :title, cols: 60, rows: 3, class: 'form-control' %>
+			  	<% end %>
+
+					<%= f.hidden_field :imprint %>
+					<%= f.hidden_field :ckey %>
+					<%= f.hidden_field :media %>
+					<%= f.hidden_field :online %>
+				</div>
+				<div class=""><%= link_to "[delete]", "", class: "delete", method: 'delete' -%></div>
+			</div>
+			<div>
+				<hr />
+				<div class="form-group d-flex flex-column flex-md-row mb-3 mb-sm-2">
+					<div class="d-flex">
+						<%= f.label :copies, 'Print copies needed:', class: 'col-form-label' %>
+						<%= f.number_field :copies, class: 'form-control num_copies', max: 99 %>
+					</div>
+
+					<%= f.label :personal, class: 'col-form-label' do %>
+						<%= f.check_box :personal %>
+
+						The instructor will loan a copy to the library
+					<% end %>
+				</div>
+
+				<div class="form-group d-flex mb-2">
+					<%= f.label :loan_period, 'Loan period:', class: 'col-form-label' %>
+
+					<% if ActiveModel::Type::Boolean.new.cast(item["media"]) %>
+						<%= f.hidden_field :loan_period %>
+					<% end %>
+
+					<%= f.select :loan_period, Settings.loan_periods.to_h.values, {}, class: "loan-period form-control loan-select #{"media" if ActiveModel::Type::Boolean.new.cast(item["media"])}", disabled: ActiveModel::Type::Boolean.new.cast(item["media"]) %>
+				</div>
+
+				<div class="form-group d-flex flex-column flex-md-row mb-2">
+					<%= content_tag :span, 'Is this a required or recommended text?', class: 'col-form-label pb-0'  %>
+					<div class="d-flex flex-column mx-3">
+						<%= f.label :required_true, class: 'col-form-label pt-0 pt-md-2 pb-0' do %>
+							<%= f.radio_button :required, true %> Required
+						<% end %>
+
+						<%= f.label :required_false, class: 'col-form-label pt-0' do %>
+							<%= f.radio_button :required, false %> Recommended
+						<% end %>
+					</div>
+				</div>
+
+				<% if item_in_searchworks?(item) %>
+					<div class="form-group">
+						<%= f.label :comment, 'Comments', class: 'col-form-label mt-0' %>
+						<%= f.text_area :comment, cols: 60, rows: 3, class: 'form-control' %>
+					</div>
+				<% end %>
+		  </div>
+		</div>
+	</div>
+<% end %>

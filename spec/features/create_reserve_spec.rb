@@ -30,7 +30,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       expect(page).to have_button('Save draft', disabled: false)
       expect(page).to have_button('Save and SEND request', disabled: false)
 
-      within(first('table tbody tr')) do
+      within(first('.reserve')) do
         click_link '[delete]'
       end
 
@@ -62,17 +62,17 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       page.find('#sw_url').set('54321')
       click_link 'add'
 
-      within('table#item_list_table tbody') do
-        expect(page).to have_css('tr', count: 3)
+      within('#item_list') do
+        expect(page).to have_css('.reserve:not(#add_row)', count: 2)
 
         expect(page).to have_link('Cats!', href: 'https://searchworks.stanford.edu/view/12345')
         expect(page).to have_link('Dogs!', href: 'https://searchworks.stanford.edu/view/54321')
 
-        within(first('tr')) do
+        within(first('.reserve')) do
           click_link '[delete]'
         end
 
-        expect(page).to have_css('tr', count: 2)
+        expect(page).to have_css('.reserve:not(#add_row)', count: 1)
         expect(page).not_to have_link('Cats!')
         expect(page).to have_link('Dogs!', href: 'https://searchworks.stanford.edu/view/54321')
       end
@@ -84,39 +84,17 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       page.find('#sw_url').set('12345')
       click_link 'add'
 
-      within('table#item_list_table tbody') do
-        expect(page).to have_css('tr', count: 2)
+      within('#item_list') do
+        expect(page).to have_css('.reserve:not(#add_row)', count: 1)
         expect(page).to have_link(href: 'https://searchworks.stanford.edu/view/12345', count: 1)
       end
 
       page.find('#sw_url').set('12345')
       click_link 'add'
 
-      within('table#item_list_table tbody') do
-        expect(page).to have_css('tr', count: 2)
+      within('#item_list') do
+        expect(page).to have_css('.reserve:not(#add_row)', count: 1)
         expect(page).to have_link(href: 'https://searchworks.stanford.edu/view/12345', count: 1)
-      end
-    end
-  end
-
-  describe 'Digitization request inputs' do
-    it 'the description field toggles disabled/enabled when digital_type changes' do
-      visit new_reserve_path(comp_key: 'AA-272C,123,456')
-
-      page.find('#sw_url').set('12345')
-      click_link 'add'
-
-      within('.digital-item-type') do
-        expect(page).to have_css('input[type="radio"][name$="[digital_type]"][value="complete_work"][checked]')
-        expect(page).to have_css('textarea[name$="[digital_type_description]"][disabled]')
-
-        page.choose('chapter or article (up to 50 pages)')
-        expect(page).to have_css('textarea[name$="[digital_type_description]"]')
-        expect(page).not_to have_css('textarea[name$="[digital_type_description]"][disabled]')
-
-        page.choose('complete work')
-        expect(page).to have_css('input[type="radio"][name$="[digital_type]"][value="complete_work"][checked]')
-        expect(page).to have_css('textarea[name$="[digital_type_description]"][disabled]')
       end
     end
   end
