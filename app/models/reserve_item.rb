@@ -5,7 +5,8 @@
 class ReserveItem
   include ActiveModel::Model
 
-  attr_accessor :title, :imprint, :ckey, :media, :online, :comment, :digital_type, :copies, :personal, :loan_period, :required
+  attr_accessor :title, :imprint, :ckey, :media, :online, :comment, :copies, :personal, :loan_period, :required,
+                :digital_type, :digital_type_description, :purchase
 
   def copies
     return @copies.presence.to_i if @copies.present?
