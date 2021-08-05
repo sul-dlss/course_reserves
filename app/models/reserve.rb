@@ -41,6 +41,8 @@ class Reserve < ActiveRecord::Base
   private
 
   def cast_item_data(item)
+    item = item.to_unsafe_h if item.respond_to?(:to_unsafe_h)
+
     hash = {
       'media' => ActiveModel::Type::Boolean.new.cast(item['media']),
       'online' => ActiveModel::Type::Boolean.new.cast(item['online'])
