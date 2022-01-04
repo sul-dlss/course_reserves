@@ -25,5 +25,8 @@ class TermsCheck < OkComputer::Check
   end
 end
 OkComputer::Registry.register 'terms_check', TermsCheck.new
-OkComputer::Registry.register 'reserve_mailer', OkComputer::ActionMailerCheck.new(ReserveMail)
-OkComputer::Registry.register 'report_mailer', OkComputer::ActionMailerCheck.new(Report)
+
+ActiveSupport.on_load(:action_controller) do
+  OkComputer::Registry.register 'reserve_mailer', OkComputer::ActionMailerCheck.new(ReserveMail)
+  OkComputer::Registry.register 'report_mailer', OkComputer::ActionMailerCheck.new(Report)
+end
