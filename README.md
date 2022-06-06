@@ -1,7 +1,7 @@
 # Course Reserves
 =========
 
-[![Build Status](https://travis-ci.org/sul-dlss/course_reserves.svg?branch=master)](https://travis-ci.org/sul-dlss/course_reserves)
+[![CI](https://github.com/sul-dlss/course_reserves/actions/workflows/ruby.yml/badge.svg)](https://github.com/sul-dlss/course_reserves/actions/workflows/ruby.yml)
 
 [https://searchworks.stanford.edu/reserves](https://searchworks.stanford.edu/reserves)
 
