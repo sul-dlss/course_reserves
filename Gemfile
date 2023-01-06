@@ -22,9 +22,6 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-# Use Sass to process CSS
-gem "sassc-rails"
-
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -106,7 +103,6 @@ group :deployment do
 end
 
 gem 'config'
-gem 'bootstrap', '~> 4.0'
-gem 'jquery-datatables'
-
 gem 'newrelic_rpm'
+
+gem "cssbundling-rails", "~> 1.1"

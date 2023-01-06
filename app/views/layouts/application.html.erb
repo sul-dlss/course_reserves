@@ -7,12 +7,13 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= favicon_link_tag %>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_link_tag "https://www-media.stanford.edu/su-identity/css/su-identity.css" %>
   <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" %>
   <%= javascript_include_tag 'application' %>
   <%= content_for(:head) %>
   <title>Request Course Reserves</title>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 </head>
 <body class="<%= try(:render_body_class) %>">
   <%= render 'shared/body_top' %>

@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_04_174028) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_01_04_174028) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.integer "record_id", null: false
     t.integer "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -30,7 +29,7 @@ ActiveRecord::Schema.define(version: 2022_01_04_174028) do
     t.string "service_name", null: false
     t.integer "byte_size", null: false
     t.string "checksum"
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -42,8 +41,8 @@ ActiveRecord::Schema.define(version: 2022_01_04_174028) do
 
   create_table "editors", force: :cascade do |t|
     t.string "sunetid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "editors_reserves", id: false, force: :cascade do |t|
@@ -73,8 +72,8 @@ ActiveRecord::Schema.define(version: 2022_01_04_174028) do
     t.boolean "disabled"
     t.string "sent_date"
     t.text "sent_item_list"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
