@@ -1,2 +1,2 @@
-//= require datatables/jquery.dataTables
-//= require datatables/dataTables.bootstrap4
+//= require datatables.net/js/jquery.dataTables
+//= require datatables.net-bs4/js/dataTables.bootstrap4

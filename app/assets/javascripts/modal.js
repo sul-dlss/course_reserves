@@ -1,5 +1,5 @@
 // Adapted from https://github.com/projectblacklight/blacklight/blob/master/app/javascript/blacklight/modal.js
-//= require bootstrap-sprockets
+//= require bootstrap
 
 Reserves = {};
 

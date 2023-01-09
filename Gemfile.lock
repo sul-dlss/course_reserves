@@ -71,13 +71,7 @@ GEM
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
-    autoprefixer-rails (10.4.7.0)
-      execjs (~> 2)
     bindex (0.8.1)
-    bootstrap (4.6.2)
-      autoprefixer-rails (>= 9.1.0)
-      popper_js (>= 1.16.1, < 2)
-      sassc-rails (>= 2.0.0)
     builder (3.2.4)
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
@@ -117,6 +111,8 @@ GEM
       deep_merge (~> 1.2, >= 1.2.1)
       dry-validation (~> 1.0, >= 1.0.0)
     crass (1.0.6)
+    cssbundling-rails (1.1.2)
+      railties (>= 6.0.0)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.1)
@@ -168,12 +164,10 @@ GEM
       dry-schema (>= 1.12, < 2)
       zeitwerk (~> 2.6)
     erubi (1.12.0)
-    execjs (2.8.1)
     faraday (2.7.2)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
-    ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
     honeybadger (5.0.2)
@@ -188,7 +182,6 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    jquery-datatables (1.10.20)
     jquery-rails (4.5.1)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -234,7 +227,6 @@ GEM
     parallel (1.22.1)
     parser (3.2.0.0)
       ast (~> 2.4.1)
-    popper_js (1.16.1)
     public_suffix (5.0.1)
     puma (5.6.5)
       nio4r (~> 2.0)
@@ -319,14 +311,6 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    sassc (2.4.0)
-      ffi (~> 1.9)
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
     selenium-webdriver (4.7.1)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -352,7 +336,6 @@ GEM
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
     thor (1.2.1)
-    tilt (2.0.11)
     timeout (0.3.1)
     turbo-rails (1.3.2)
       actionpack (>= 6.0.0)
@@ -382,10 +365,10 @@ GEM
 
 PLATFORMS
   x86_64-darwin-20
+  x86_64-darwin-22
   x86_64-linux
 
 DEPENDENCIES
-  bootstrap (~> 4.0)
   cancancan
   capistrano (~> 3.0)
   capistrano-bundler
@@ -393,6 +376,7 @@ DEPENDENCIES
   capistrano-rails
   capybara (>= 2.15)
   config
+  cssbundling-rails (~> 1.1)
   database_cleaner
   debug
   dlss-capistrano (~> 3.0)
@@ -400,7 +384,6 @@ DEPENDENCIES
   honeybadger
   importmap-rails
   jbuilder
-  jquery-datatables
   jquery-rails
   letter_opener
   mysql2
@@ -415,7 +398,6 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
-  sassc-rails
   selenium-webdriver (!= 3.13.0)
   simplecov
   sprockets-rails
