@@ -43,17 +43,17 @@ braces@~3.0.2:
     fsevents "~2.3.2"
 
 datatables.net-bs4@^1.13.1:
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/datatables.net-bs4/-/datatables.net-bs4-1.13.1.tgz#b704d9639bbe650c996e614dc37f529e8c09ff47"
-  integrity sha512-GBTOzUT8ooEUMPtjVHktvDk0MyakFGh89F8aHj8VwF1OFLbqTGEAPacO8XAgSfej/Ng3dbFJA6sjrk4gFra8kg==
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/datatables.net-bs4/-/datatables.net-bs4-1.13.2.tgz#681b77d5dfd755019dd1266aa8fa69ca2c2513b7"
+  integrity sha512-sr5D4pV+VqIfPGPh3oKQDu+denk/bZ3ObyAYp/EbQLoLw2U6dvVJifHeccCC5M+ZhYtucHVID/qpbswx90QQHA==
   dependencies:
     datatables.net ">=1.12.1"
     jquery ">=1.7"
 
 datatables.net@>=1.12.1:
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.13.1.tgz#199f7cb63f4536c135e161f95254212835a1c130"
-  integrity sha512-cX5dDHsbVdLLYKsWOSE0MvuGUcV88zU5dZ/taK2puJV6F9Fw0CFsP3+U/kr+qpDSFOBLWISRyM4Q9wWWovPTNg==
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.13.2.tgz#48f7035b1696a29cb70909db1f2e0ebd5f946f3e"
+  integrity sha512-u5nOU+C9SBp1SyPmd6G+niozZtrBwo1E8xzdOk3JJaAkFYgX/KxF3Gd79R8YLbUfmIs2OLnLe5gaz/qs5U8UDA==
   dependencies:
     jquery ">=1.7"
 
@@ -77,9 +77,9 @@ glob-parent@~5.1.2:
     is-glob "^4.0.1"
 
 immutable@^4.0.0:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.2.2.tgz#2da9ff4384a4330c36d4d1bc88e90f9e0b0ccd16"
-  integrity sha512-fTMKDwtbvO5tldky9QZ2fMX7slR0mYpY5nbnFWYp0fOzDhHqhgIw9KoYgxLWsoNTS9ZHGauHj18DTyEw6BK3Og==
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.2.4.tgz#83260d50889526b4b531a5e293709a77f7c55a2a"
+  integrity sha512-WDxL3Hheb1JkRN3sQkyujNlL/xRjAo3rJtaU5xeufUauG66JdMr32bLj4gF+vWl84DIA3Zxw7tiAjneYzRRw+w==
 
 is-binary-path@~2.1.0:
   version "2.1.0"
@@ -128,9 +128,9 @@ readdirp@~3.6.0:
     picomatch "^2.2.1"
 
 sass@^1.57.1:
-  version "1.57.1"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.57.1.tgz#dfafd46eb3ab94817145e8825208ecf7281119b5"
-  integrity sha512-O2+LwLS79op7GI0xZ8fqzF7X2m/m8WFfI02dHOdsK5R2ECeS5F62zrwg/relM1rjSLy7Vd/DiMNIvPrQGsA0jw==
+  version "1.58.0"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.58.0.tgz#ee8aea3ad5ea5c485c26b3096e2df6087d0bb1cc"
+  integrity sha512-PiMJcP33DdKtZ/1jSjjqVIKihoDc6yWmYr9K/4r3fVVIEDAluD0q7XZiRKrNJcPK3qkLRF/79DND1H5q1LBjgg==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
