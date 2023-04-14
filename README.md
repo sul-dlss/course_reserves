@@ -17,7 +17,15 @@
 ```
 
 Start the rails app
+   There are two methods to starting the rails app.  One is to run this command directly which will take care of some of the extra steps you would have to do otherwise:
   ```
+  $ bin/dev
+  ```
+  OR run the following commands:
+  
+  ```
+  $ yarn install
+  $ yarn build:css
   $ bundle exec rails server
   ```
 
