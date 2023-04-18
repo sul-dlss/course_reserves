@@ -6,14 +6,14 @@
 [https://searchworks.stanford.edu/reserves](https://searchworks.stanford.edu/reserves)
 
 ## Requirements
-1. Ruby
-2. Rails
-3. PhantomJS
+1. Ruby & bundler
+2. nodejs & Yarn
 
 ## Local Installation
 ```
   $ bundle install
-  $ bundle exec rake db:setup
+  $ yarn install
+  $ bin/rails db:setup
 ```
 
 Start the rails app
@@ -23,7 +23,7 @@ Start the rails app
 
 Start the rails app with an admin user logged in
   ```
-  $ REMOTE_USER=test_user eduPersonEntitlement=sulair:course-resv-admins bundle exec rails server
+  $ REMOTE_USER=test_user eduPersonEntitlement=sulair:course-resv-admins bin/dev
   ```
 
 To load sample data:
@@ -35,5 +35,5 @@ To load sample data:
 
 Run all the tests
   ```
-  $ bundle exec rake
+  $ bin/rake
   ```
