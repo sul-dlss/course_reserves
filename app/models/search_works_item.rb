@@ -3,9 +3,10 @@
 ##
 # Utility class to fetch a SearchWorks item
 class SearchWorksItem
-  attr_reader :ckey
-  def initialize(ckey)
-    @ckey = ckey
+  attr_reader :url_or_ckey
+
+  def initialize(url_or_ckey)
+    @url_or_ckey = url_or_ckey
   end
 
   def to_h
@@ -70,5 +71,9 @@ class SearchWorksItem
 
   def url
     "https://searchworks.stanford.edu/view/#{ckey}.json"
+  end
+
+  def ckey
+    @ckey ||= url_or_ckey.strip[/(\w+)$/]
   end
 end
