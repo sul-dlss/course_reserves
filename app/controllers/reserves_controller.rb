@@ -111,7 +111,7 @@ class ReservesController < ApplicationController
     CourseWorkCourses.instance.find_by_compound_key(cid).first
   end
 
-  def reserve_mail_address reserve
+  def reserve_mail_address(reserve)
     if Settings.email.hardcoded_email_address
       Settings.email.hardcoded_email_address
     else
