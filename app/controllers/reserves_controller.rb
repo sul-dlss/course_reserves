@@ -125,10 +125,6 @@ class ReservesController < ApplicationController
     end
   end
 
-  def searchworks_ckey_url ckey
-    "https://searchworks.stanford.edu/view/#{ckey}"
-  end
-
   def reserve_params
     @reserve_params ||= begin
       reserve = params.require(:reserve).permit!
