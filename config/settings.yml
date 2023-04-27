@@ -248,3 +248,5 @@ terms:
 - term: Summer 2027
   quarter: Summer
   end_date: 2027-08-15
+
+certs_path: "../../shared/config/"

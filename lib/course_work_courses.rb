@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'terms'
+require 'json'
 class CourseWorkCourses
   class Course
     attr_reader :title, :term, :cid, :cids, :sid, :instructors
@@ -39,6 +40,16 @@ class CourseWorkCourses
   end
 
   def initialize(xml = nil)
+    #if xml
+    #  @raw_xml = [Nokogiri::XML(xml)]
+    #else
+    #  @raw_xml = load_xml_from_coursework
+    #end
+    #initialize_xml(xml)
+    initialize_json()
+  end
+
+  def initialize_xml(xml = nil)
     if xml
       @raw_xml = [Nokogiri::XML(xml)]
     else
@@ -46,8 +57,20 @@ class CourseWorkCourses
     end
   end
 
+  def initialize_json(json_file = nil)
+    if json_file
+      @json_files = [JSON.parse(json_file)]
+    else
+      @json_files = load_json_from_coursework
+    end
+  end 
+
   def raw_xml
     @raw_xml ||= self.raw_xml
+  end
+
+  def json_files
+    @json_files ||= self.json_files
   end
 
   def find_by_sunet(sunet)
@@ -88,7 +111,8 @@ class CourseWorkCourses
   # logic preserves the bottom-most course from the xml. it's unclear whether this is incidental
   # or a feature.
   def all_courses
-    @all_courses ||= process_all_courses_xml(self.raw_xml).to_a.reverse.uniq(&:key).reverse.to_a
+    #@all_courses ||= process_all_courses_xml(self.raw_xml).to_a.reverse.uniq(&:key).reverse.to_a
+    @all_courses ||= process_all_courses_json(self.json_files).to_a.reverse.uniq(&:key).reverse.to_a
   end
 
   # Efficient lookup of course data by compound key (which is used in a few places around the app)
@@ -118,6 +142,49 @@ class CourseWorkCourses
     end
   end
 
+  # Mirror xml loading by looking for all files that 
+  # This returns an array that then needs to be read in
+  def load_json_from_coursework
+    if Rails.env.test?
+      return [JSON.parse(File.open("#{Rails.root}/spec/fixtures/course_work.json", 'r'))]
+    else
+      current = Terms.process_term_for_cw(Terms.current_term)
+      next_term = Terms.process_term_for_cw(Terms.future_terms.first)
+      json_files = []
+      ["#{Rails.root}/lib/course_work_xml/courseXML_#{current}.json", "#{Rails.root}/lib/course_work_xml/courseXML_#{next_term}.json"].each do |url|
+        json_files << JSON.parse(File.open(url, 'r')) if File.exist?(url)
+      end
+      return json_files
+    end
+  end
+
+  # Process JSON generated from process
+  # Given JSON representing the information required by a Course object,
+  # initialize Course objects
+  def process_all_courses_json(json_files)
+    return to_enum(:process_all_courses_json, json) unless block_given?
+
+    # This should be an array of json files being read in
+    # For each JSON file, representing a specific quarter, read in the information
+    # and create the objects required by the model
+    json_files.each do |json_file|
+      json.each do |course|
+        if course.key?("instructors") && course["instructors"].length > 0
+          yield Course.new(
+            title: course["title"],
+            term: course["term"],
+            cid: course["cid"],
+            cids: course["cids"],
+            sid: course["sid"],
+            instructors: course["instructors"].map { |inst| inst.transform_keys(&:to_sym) }
+          )
+        end
+      end
+    end
+  end 
+
+
+  # Process XML
   def process_all_courses_xml(xml_files)
     return to_enum(:process_all_courses_xml, xml_files) unless block_given?
 
