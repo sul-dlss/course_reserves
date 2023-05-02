@@ -16,7 +16,7 @@ class CourseAPI
         quarter = root_elem.attr("quarter")
 
         courses = []
-
+        counter = 0
         root_elem.xpath(".//course").each do |course|
             course_id = course[:id]
             course_title = course[:title]
@@ -32,35 +32,55 @@ class CourseAPI
                 
                 # Get sections using the Course API, look only for sections
                 # that have instructors lister
+                # After a certain amount of calls, wait a second
+                counter += 1
+                #puts counter
+                if(counter == 10000)
+                    puts "reset counter"
+                    sleep(1)
+                    counter = 0
+                end 
                 sections = request_course_API(request_class_id)
                 sections.each do |section|
                     section_id = section[:sid]
                     instructors = section[:instructors]
                     course_hash = {"title": course_title, "term": term_display, "cid": class_id, "cids": cids, 
                     "sid":section_id, "instructors": instructors}
-                    puts course_hash.to_json
                     courses << course_hash
                 end
             end 
         end
-
-        #puts courdses.to_s
-        # return courses
         # Array of course hash objects
         courses
     end
 
     def request_course_API(request_class_id)
-        # Replace with Settings.
-        cert_file = Settings.cert_path + "sul-harvester.cert"
-        key_file = Settings.cert_path + "sul-harvester.key"
+        # Put in some time between calls to help with timeouts
+        cert_file = Settings.certs_path + "sul-harvester.cert"
+        key_file = Settings.certs_path + "sul-harvester.key"
         sections = []
         errors = []
         client_cert = OpenSSL::X509::Certificate.new File.read(cert_file)
         client_key = OpenSSL::PKey.read File.read(key_file)
         connection = Faraday::Connection.new 'https://registry.stanford.edu', :ssl => { :client_cert => client_cert, :client_key => client_key }
         spec_course = '/doc/courseclass/' + request_class_id
-        response = connection.get spec_course
+        begin
+            response = connection.get spec_course
+        # Timeout error
+        rescue Faraday::TimeoutError
+            errors << "timeout error occurred for first attempt for " + request_class_id.to_s
+            # Retry
+            begin 
+                response = connection.get spec_course
+            rescue Faraday::Error
+                errors << "retry failed for " + request_class_id.to_s
+            end
+        # Connection failed error
+        rescue Faraday::ConnectionFailed
+            errors << "Connection failed occurred for first attempt for " + request_class_id.to_s
+        rescue Faraday::ServerError
+            errors << "Server Error for " + request_class_id.to_s
+        end
         if response.status == 200
             course_response = Nokogiri::XML(response.body)
             # Does this section have instructors, if so return the instructors
@@ -80,9 +100,9 @@ class CourseAPI
         end 
 
         if errors.length > 0
+            # Find a different way to communicate errors
             puts "ERRORS:" + errors.to_s
         end
-        #puts "Sections length for " + spec_course.to_s + " - " + sections.length.to_s
         sections
     end
 
@@ -93,7 +113,7 @@ class CourseAPI
         academic_year = term_id[1, 2].to_i
         term_quarter = get_term_quarter(term_id)
         if(term_quarter == "Fall") then academic_year += 1 end
-        if(term_id[0,1] == "1") then academic_year = "20" + academic_year end
+        if(term_id[0,1] == "1") then academic_year = "20" + academic_year.to_s end
         term_display = term_quarter + " " + academic_year.to_s 
     end
 

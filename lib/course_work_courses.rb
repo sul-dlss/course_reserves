@@ -135,7 +135,7 @@ class CourseWorkCourses
       current = Terms.process_term_for_cw(Terms.current_term)
       next_term = Terms.process_term_for_cw(Terms.future_terms.first)
       xml = []
-      ["#{Rails.root}/lib/course_work_xml/courseXML_#{current}.xml", "#{Rails.root}/lib/course_work_xml/courseXML_#{next_term}.xml"].each do |url|
+      ["#{Rails.root}/lib/course_work_xml/course_#{current}.xml", "#{Rails.root}/lib/course_work_xml/course_#{next_term}.xml"].each do |url|
         xml << Nokogiri::XML(File.open(url, 'r')) if File.exist?(url)
       end
       return xml
@@ -152,7 +152,7 @@ class CourseWorkCourses
       next_term = Terms.process_term_for_cw(Terms.future_terms.first)
       json_files = []
       ["#{Rails.root}/lib/course_work_xml/courseXML_#{current}.json", "#{Rails.root}/lib/course_work_xml/courseXML_#{next_term}.json"].each do |url|
-        json_files << JSON.parse(File.open(url, 'r')) if File.exist?(url)
+        json_files << JSON.parse(File.read(url)) if File.exist?(url)
       end
       return json_files
     end
@@ -162,13 +162,13 @@ class CourseWorkCourses
   # Given JSON representing the information required by a Course object,
   # initialize Course objects
   def process_all_courses_json(json_files)
-    return to_enum(:process_all_courses_json, json) unless block_given?
+    return to_enum(:process_all_courses_json, json_files) unless block_given?
 
     # This should be an array of json files being read in
     # For each JSON file, representing a specific quarter, read in the information
     # and create the objects required by the model
     json_files.each do |json_file|
-      json.each do |course|
+      json_file.each do |course|
         if course.key?("instructors") && course["instructors"].length > 0
           yield Course.new(
             title: course["title"],

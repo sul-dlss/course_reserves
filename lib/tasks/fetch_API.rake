@@ -12,8 +12,8 @@ task fetch_api: :environment do
 
   # Use environment variable with a default value set to a relative path
   # to identify where this file should be
-  cert_file = Settings.cert_path + "sul-harvester.cert"
-  key_file = Settings.cert_path + "sul-harvester.key"
+  cert_file = Settings.certs_path + "sul-harvester.cert"
+  key_file = Settings.certs_path + "sul-harvester.key"
   client_cert = OpenSSL::X509::Certificate.new File.read(cert_file)
   client_key = OpenSSL::PKey.read File.read(key_file)
   connection = Faraday::Connection.new 'https://registry.stanford.edu', :ssl => { :client_cert => client_cert, :client_key => client_key }
@@ -21,7 +21,7 @@ task fetch_api: :environment do
   # Original XML retrieval depended on getting the current term and the very next term 
   [current_term, future_term].each do |term|
     url = courseterm_url(term)
-    file_name = Terms.process_term_for_cw(term) + ".json"
+    file_name = "course_" + Terms.process_term_for_cw(term) + ".json"
     puts url
     puts file_name
     response = connection.get(url)
@@ -29,7 +29,7 @@ task fetch_api: :environment do
       c_api = CourseAPI.new(response.body)
       courses = c_api.parse
       File.open("#{Rails.root}/lib/course_work_xml/#{file_name}", "w") do |f|
-        f.write(courses.to_s.force_encoding('UTF-8'))
+        f.write(courses.to_json.force_encoding('UTF-8'))
       end
       updated = true
     else
@@ -67,4 +67,3 @@ def get_quarter_code(quarter)
       ""
   end
 end
-
