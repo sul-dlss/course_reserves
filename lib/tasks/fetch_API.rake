@@ -7,7 +7,7 @@ desc "rake task to fetch course term and individual course information from MaIS
 task fetch_api: :environment do
   current_term = Terms.current_term
   future_term = Terms.future_terms.first
-  errors = ""
+  errors = []
   updated = false
 
   # Use environment variable with a default value set to a relative path
@@ -27,7 +27,10 @@ task fetch_api: :environment do
     response = connection.get(url)
     if response.status == 200
       c_api = CourseAPI.new(response.body)
-      courses = c_api.parse
+      courses_info = c_api.parse
+      courses = courses_info[:courses]
+      course_errors = courses_info[:errors]
+      if(course_errors.length > 0) then errors.concat(course_errors) end
       File.open("#{Rails.root}/lib/course_work_xml/#{file_name}", "w") do |f|
         f.write(courses.to_json.force_encoding('UTF-8'))
       end
@@ -37,6 +40,7 @@ task fetch_api: :environment do
     end
   end
  
+  puts errors.to_s
   #Report.msg(to: Settings.email.reports, subject: "Problem downloading CoureClass API results", message: errors).deliver_now if errors.present?
   #%x[touch tmp/restart.txt] if updated
 end

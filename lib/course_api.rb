@@ -14,7 +14,7 @@ class CourseAPI
         term = root_elem.attr("term")
         term_display = generate_term(term)
         quarter = root_elem.attr("quarter")
-
+        all_errors = []
         courses = []
         counter = 0
         root_elem.xpath(".//course").each do |course|
@@ -26,82 +26,91 @@ class CourseAPI
               end
             course.xpath(".//class").each do |class_obj|
                 request_class_id = class_obj[:id]
-                class_id = remove_class_id_prefix(request_class_id)
-                # Get all the sections for this course which have instructors
-                #puts "Getting sections for " + request_class_id.to_s
-                
+                class_id = remove_class_id_prefix(request_class_id)                
                 # Get sections using the Course API, look only for sections
                 # that have instructors lister
                 # After a certain amount of calls, wait a second
                 counter += 1
                 #puts counter
                 if(counter == 10000)
-                    puts "reset counter"
                     sleep(1)
                     counter = 0
                 end 
-                sections = request_course_API(request_class_id)
+                course_info = get_course_info(request_class_id)
+                sections = course_info[:sections]
+                all_errors.concat(course_info[:errors]) 
                 sections.each do |section|
                     section_id = section[:sid]
                     instructors = section[:instructors]
                     course_hash = {"title": course_title, "term": term_display, "cid": class_id, "cids": cids, 
                     "sid":section_id, "instructors": instructors}
+                    puts course_hash.to_json
                     courses << course_hash
                 end
             end 
         end
         # Array of course hash objects
-        courses
+       {"errors": all_errors, "courses": courses}
     end
 
-    def request_course_API(request_class_id)
-        # Put in some time between calls to help with timeouts
+    # Generate connection to course API
+    def request_course_api(request_class_id)
+        errors = []
+        certs_path =  Rails.root.join("config")
         cert_file = Settings.certs_path + "sul-harvester.cert"
         key_file = Settings.certs_path + "sul-harvester.key"
-        sections = []
-        errors = []
         client_cert = OpenSSL::X509::Certificate.new File.read(cert_file)
         client_key = OpenSSL::PKey.read File.read(key_file)
         connection = Faraday::Connection.new 'https://registry.stanford.edu', :ssl => { :client_cert => client_cert, :client_key => client_key }
         spec_course = '/doc/courseclass/' + request_class_id
+
         begin
             response = connection.get spec_course
         # Timeout error
         rescue Faraday::TimeoutError
-            errors << "timeout error occurred for first attempt for " + request_class_id.to_s
             # Retry
             begin 
                 response = connection.get spec_course
             rescue Faraday::Error
-                errors << "retry failed for " + request_class_id.to_s
+                errors << "After timeout, retry failed for " + request_class_id.to_s
             end
         # Connection failed error
         rescue Faraday::ConnectionFailed
-            errors << "Connection failed occurred for first attempt for " + request_class_id.to_s
+            errors << "Connection failed for " + request_class_id.to_s
         rescue Faraday::ServerError
-            errors << "Server Error for " + request_class_id.to_s
+            errors << "Server error for " + request_class_id.to_s
         end
-        if response.status == 200
-            course_response = Nokogiri::XML(response.body)
-            # Does this section have instructors, if so return the instructors
-            course_response.xpath("//section[.//instructor]").each do |section|
-                section_id = section[:id]
-                instructors = []
-                section.xpath(".//instructor/person").each do |person|
-                    sunetid = person[:sunetid]
-                    name = person.text
-                    instructors << {"sunet": sunetid, "name": name}
-                end
-                sections << {"sid": section_id, "instructors": instructors}
-            end
+        if errors.length > 0 then puts errors.to_s end
+        {"response": response, "errors": errors}
+    end
 
-        else
-            errors << "#{request_class_id} returned #{response.status}\n"
+    # Get course information from API request, return sections
+    def get_course_info(request_class_id)        
+        response_info = request_course_api(request_class_id)
+        response = response_info[:response]
+        errors = response_info[:errors]
+        sections = []
+        if(response.status == 200)
+            sections = parse_sections(response)
         end 
+        
+        {"sections": sections, "errors": errors}
+    end
 
-        if errors.length > 0
-            # Find a different way to communicate errors
-            puts "ERRORS:" + errors.to_s
+    # Return sections and instructor information for a particular course API response
+    def parse_sections(response)
+        sections = []
+        course_response = Nokogiri::XML(response.body)
+        # Does this section have instructors, if so return the section info and instructors sunet id and name
+        course_response.xpath("//section[.//instructor]").each do |section|
+            section_id = section[:id]
+            instructors = []
+            section.xpath(".//instructor/person").each do |person|
+                sunetid = person[:sunetid]
+                name = person.text
+                instructors << {"sunet": sunetid, "name": name}
+            end
+            sections << {"sid": section_id, "instructors": instructors}
         end
         sections
     end
