@@ -4,14 +4,15 @@ require "course_work_courses"
 RSpec.describe CourseWorkCourses do
   subject(:courses) { CourseWorkCourses.new }
 
-  describe "loading raw XML" do
-    it "is a Nokogiri XML Document" do
-      courses.raw_xml.each do |xml|
-        expect(xml).to be_a_kind_of(Nokogiri::XML::Document)
+  describe "loading JSON" do
+    it "is a JSON array where each object has a title" do
+      courses.json_files.each do |json_file|
+        expect(json_file).to_not be_empty
+        expect(json_file[0]).to have_key("title")
       end
     end
-    it "loads XML when provided on object initialization" do
-      courses = CourseWorkCourses.new('<rsponse><courseclass title="MyTitle"><class id="CLASS-ID"><section id="01"><instructors><instructor sunetid="mysunet">My Teacher</instructor></instructors></section></class></courseclass></response>').all_courses
+    it "loads JSON when provided on object initialization" do
+      courses = CourseWorkCourses.new('[{"title":"MyTitle","term":null,"cid":"CLASS-ID","cids":["CLASS-ID"],"sid":"01","instructors":[{"sunet":"mysunet","name":"My Teacher"}]}]').all_courses
       expect(courses.length).to eq(1)
       expect(courses.first.cid).to eq("CLASS-ID")
       expect(courses.first.sid).to eq("01")
@@ -21,11 +22,11 @@ RSpec.describe CourseWorkCourses do
   describe "#all_courses" do
     subject(:course_list) { courses.all_courses }
 
-    it "has all 7 courses in fixture XML" do
+    it "has all 7 courses in fixture JSON" do
       expect(course_list.length).to eq(7)
     end
 
-    it "countains the 3 different course titles from the fixture XML" do
+    it "countains the 3 different course titles from the fixture JSON" do
       course_titles = course_list.map { |c| c.title }.uniq
       expect(course_titles.length).to eq(3)
       expect(course_titles).to eq(["Residential Racial Segregation and the Education of African-American Youth", "Global Positioning Systems", "Art/Hist Cross Listed Course"])
@@ -132,20 +133,21 @@ RSpec.describe CourseWorkCourses do
     end
   end
 
-  describe "XML processing" do
+  describe "JSON processing" do
     it "does not add a course that doesn't have an instructor" do
-      expect(CourseWorkCourses.new("<response><courseclass term='WINTER'><section id='01'></section></courseclass></response>").all_courses).to be_blank
+      expect(CourseWorkCourses.new('[{"title":"MyTitle","term":"WINTER","sid":"01"}]').all_courses).to be_blank
     end
     it "removes term prefix on class id" do
       courses.all_courses.each do |c|
         expect(c.cid).not_to match(/W12/)
       end
     end
-    it "returns the intructor SUNet as name if there is no name in the XML" do
-      course = CourseWorkCourses.new('<rsponse><courseclass title="MyTitle"><class id="CLASS-ID"><section id="01"><instructors><instructor sunetid="mysunet"></instructor></instructors></section></class></courseclass></response>').all_courses.first
-      expect(course.instructors.first[:sunet]).to eq("mysunet")
-      expect(course.instructors.first[:name]).to eq("mysunet")
-    end
+    # This test should apply to course_api because course_work_courses no longer parses/decides this logic
+    #it "returns the intructor SUNet as name if there is no name in the XML" do
+    #  course = CourseWorkCourses.new('<rsponse><courseclass title="MyTitle"><class id="CLASS-ID"><section id="01"><instructors><instructor sunetid="mysunet"></instructor></instructors></section></class></courseclass></response>').all_courses.first
+    #  expect(course.instructors.first[:sunet]).to eq("mysunet")
+    #  expect(course.instructors.first[:name]).to eq("mysunet")
+    #end
     it "de-dups courses on the same class id and normalized sunets" do
       course = courses.find_by_class_id("AA-272C")
       expect(course.length).to eq(1)

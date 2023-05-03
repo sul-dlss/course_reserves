@@ -43,7 +43,7 @@ class CourseWorkCourses
     if json_file
       @json_files = [JSON.parse(json_file)]
     else
-      @json_files = load_json_from_coursework
+      @json_files = load_from_coursework
     end
   end 
 
@@ -108,7 +108,7 @@ class CourseWorkCourses
   # Previously, load_xml_from_coursework.  Now loads JSON files generated from MAIS course term and course API requests
   def load_from_coursework
     if Rails.env.test?
-      return [JSON.parse(File.open("#{Rails.root}/spec/fixtures/course_work.json", 'r'))]
+      return [JSON.parse(File.read("#{Rails.root}/spec/fixtures/course_work.json"))]
     else
       current = Terms.process_term_for_cw(Terms.current_term)
       next_term = Terms.process_term_for_cw(Terms.future_terms.first)
@@ -123,7 +123,7 @@ class CourseWorkCourses
   # Given JSON representing the information required by a Course object,
   # initialize Course objects
   def process_all_courses(json_files)
-    return to_enum(:process_all_courses_json, json_files) unless block_given?
+    return to_enum(:process_all_courses, json_files) unless block_given?
 
     # This should be an array of json files being read in
     # For each JSON file, representing a specific term, read in the information

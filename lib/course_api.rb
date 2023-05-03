@@ -8,15 +8,43 @@ class CourseAPI
     def initialize(xml)
         @course_term = Nokogiri::XML(xml)
     end
-
+    # Parse the XML returned by the CourseTerm MaIS API
     def parse
+        courses = []
+        all_errors = []
+        # Return array of course hash objects
+        courses_list = parse_courses()
+        counter = 0
+        courses_list.each do |course|
+            counter += 1
+            if(counter == 10000)
+                sleep(1)
+                counter = 0
+            end 
+            request_class_id = course[:request_class_id]
+            course_info = get_course_info(request_class_id)
+            sections = course_info[:sections]
+            all_errors.concat(course_info[:errors]) 
+            sections.each do |section|
+                section_id = section[:sid]
+                instructors = section[:instructors]
+                course_hash = {"title": course[:title], "term": course[:term], "cid": course[:cid], "cids": course[:cids], 
+                "sid":section_id, "instructors": instructors}
+                courses << course_hash
+            end
+        end
+        # Returns any errors encountered plus full list of courses
+       {"errors": all_errors, "courses": courses}
+    end
+
+    # parse the course xml to generate the list of courses for which we must make individual course requests
+    def parse_courses
         root_elem = @course_term.xpath("/CourseTerm")[0]
         term = root_elem.attr("term")
         term_display = generate_term(term)
         quarter = root_elem.attr("quarter")
         all_errors = []
         courses = []
-        counter = 0
         root_elem.xpath(".//course").each do |course|
             course_id = course[:id]
             course_title = course[:title]
@@ -27,30 +55,11 @@ class CourseAPI
             course.xpath(".//class").each do |class_obj|
                 request_class_id = class_obj[:id]
                 class_id = remove_class_id_prefix(request_class_id)                
-                # Get sections using the Course API, look only for sections
-                # that have instructors lister
-                # After a certain amount of calls, wait a second
-                counter += 1
-                #puts counter
-                if(counter == 10000)
-                    sleep(1)
-                    counter = 0
-                end 
-                course_info = get_course_info(request_class_id)
-                sections = course_info[:sections]
-                all_errors.concat(course_info[:errors]) 
-                sections.each do |section|
-                    section_id = section[:sid]
-                    instructors = section[:instructors]
-                    course_hash = {"title": course_title, "term": term_display, "cid": class_id, "cids": cids, 
-                    "sid":section_id, "instructors": instructors}
-                    puts course_hash.to_json
-                    courses << course_hash
-                end
+                courses << {"title": course_title, "term": term_display, "cid": class_id, "cids": cids, "request_class_id": request_class_id}
             end 
         end
-        # Array of course hash objects
-       {"errors": all_errors, "courses": courses}
+        # Return list of all courses with the information required from xml
+        courses
     end
 
     # Generate connection to course API
@@ -84,23 +93,23 @@ class CourseAPI
         {"response": response, "errors": errors}
     end
 
-    # Get course information from API request, return sections
+    # Get course information from API request, return sections and any errors that occurred
     def get_course_info(request_class_id)        
         response_info = request_course_api(request_class_id)
         response = response_info[:response]
         errors = response_info[:errors]
         sections = []
         if(response.status == 200)
-            sections = parse_sections(response)
+            sections = parse_sections(response.body)
         end 
         
         {"sections": sections, "errors": errors}
     end
 
     # Return sections and instructor information for a particular course API response
-    def parse_sections(response)
+    def parse_sections(response_xml)
         sections = []
-        course_response = Nokogiri::XML(response.body)
+        course_response = Nokogiri::XML(response_xml)
         # Does this section have instructors, if so return the section info and instructors sunet id and name
         course_response.xpath("//section[.//instructor]").each do |section|
             section_id = section[:id]
@@ -115,35 +124,23 @@ class CourseAPI
         sections
     end
 
-
     # Based on https://github.com/sul-dlss/registry-harvester/blob/main/Course/src/main/java/edu/stanford/BuildTermString.java
     def generate_term(term_id)
         #if 1, then year 20? what are the other options?
         academic_year = term_id[1, 2].to_i
         term_quarter = get_term_quarter(term_id)
-        if(term_quarter == "Fall") then academic_year += 1 end
-        if(term_id[0,1] == "1") then academic_year = "20" + academic_year.to_s end
+        if term_quarter == "Fall" then academic_year += 1 end
+        if term_id[0,1] == "1" then academic_year = "20" + academic_year.to_s end
         term_display = term_quarter + " " + academic_year.to_s 
     end
 
     def get_term_quarter(term_id)
+        term_quarters = {"2" => "Fall", "4" => "Winter", "6" => "Spring", "8" => "Summer"}
+        quarter = ""
         term_suffix = term_id[3,3]
-
-        #Get last digit
-        case term_suffix
-        when "2"
-            "Fall"
-        when "4"
-            "Winter"
-        when "6"
-            "Spring"
-        when "8"
-            "Summer"
-        else
-            ""
-        end
+        if term_quarters.key?(term_suffix) then quarter = term_quarters[term_suffix] end
+        quarter
     end
-
 
     def remove_class_id_prefix(class_id)
         class_id.gsub(/^\w{1,2}\d{2}-/, "")

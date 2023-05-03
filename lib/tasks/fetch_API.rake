@@ -22,8 +22,6 @@ task fetch_api: :environment do
   [current_term, future_term].each do |term|
     url = courseterm_url(term)
     file_name = "course_" + Terms.process_term_for_cw(term) + ".json"
-    puts url
-    puts file_name
     response = connection.get(url)
     if response.status == 200
       c_api = CourseAPI.new(response.body)
