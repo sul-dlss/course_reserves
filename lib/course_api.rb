@@ -37,7 +37,7 @@ class CourseAPI
        {"errors": all_errors, "courses": courses}
     end
 
-    # parse the course xml to generate the list of courses for which we must make individual course requests
+    # parse the course term xml to generate the list of courses for which we must make individual course requests
     def parse_courses
         root_elem = @course_term.xpath("/CourseTerm")[0]
         term = root_elem.attr("term")
@@ -66,8 +66,8 @@ class CourseAPI
     def request_course_api(request_class_id)
         errors = []
         certs_path =  Rails.root.join("config")
-        cert_file = Settings.certs_path + "sul-harvester.cert"
-        key_file = Settings.certs_path + "sul-harvester.key"
+        cert_file = certs_path + "sul-harvester.cert"
+        key_file = certs_path + "sul-harvester.key"
         client_cert = OpenSSL::X509::Certificate.new File.read(cert_file)
         client_key = OpenSSL::PKey.read File.read(key_file)
         connection = Faraday::Connection.new 'https://registry.stanford.edu', :ssl => { :client_cert => client_cert, :client_key => client_key }

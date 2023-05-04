@@ -12,8 +12,9 @@ task fetch_api: :environment do
 
   # Use environment variable with a default value set to a relative path
   # to identify where this file should be
-  cert_file = Settings.certs_path + "sul-harvester.cert"
-  key_file = Settings.certs_path + "sul-harvester.key"
+  certs_path = Rails.root.join("config")
+  cert_file = "sul-harvester.cert"
+  key_file = "sul-harvester.key"
   client_cert = OpenSSL::X509::Certificate.new File.read(cert_file)
   client_key = OpenSSL::PKey.read File.read(key_file)
   connection = Faraday::Connection.new 'https://registry.stanford.edu', :ssl => { :client_cert => client_cert, :client_key => client_key }
@@ -28,7 +29,7 @@ task fetch_api: :environment do
       courses_info = c_api.parse
       courses = courses_info[:courses]
       course_errors = courses_info[:errors]
-      if(course_errors.length > 0) then errors.concat(course_errors) end
+      if course_errors.length > 0 then errors.concat(course_errors) end
       File.open("#{Rails.root}/lib/course_work_xml/#{file_name}", "w") do |f|
         f.write(courses.to_json.force_encoding('UTF-8'))
       end
@@ -38,9 +39,9 @@ task fetch_api: :environment do
     end
   end
  
-  puts errors.to_s
-  #Report.msg(to: Settings.email.reports, subject: "Problem downloading CoureClass API results", message: errors).deliver_now if errors.present?
-  #%x[touch tmp/restart.txt] if updated
+  # Send error message if certain courses failing
+  Report.msg(to: Settings.email.reports, subject: "Problem retrieving course results", message: errors).deliver_now if errors.present?
+  %x[touch tmp/restart.txt] if updated
 end
 
 # Terms of format "Spring 2023", "Winter 2023", etc.

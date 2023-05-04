@@ -20,8 +20,9 @@ coverage
 # Ignoring vendorized gems
 /vendor/bundle
 
-# Ignoring CourseWork XML
+# Ignoring CourseWork XML and JSON
 /lib/course_work_xml/*.xml
+/lib/course_work_xml/*.json
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
@@ -33,3 +34,7 @@ config/environments/*.local.yml
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Ignore keys or cert files in config directory
+config/*.key
+config/*.cert
