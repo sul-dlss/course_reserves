@@ -53,13 +53,6 @@ Metrics/BlockNesting:
 Metrics/CyclomaticComplexity:
   Max: 12
 
-# Offense count: 40
-# Cop supports --auto-correct.
-# Configuration parameters: AutoCorrect, AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
-# URISchemes: http, https
-Metrics/LineLength:
-  Max: 274
-
 # Offense count: 10
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/MethodLength:

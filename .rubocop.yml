@@ -37,5 +37,5 @@ Metrics/AbcSize:
 Metrics/ClassLength:
   Max: 200
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 150
