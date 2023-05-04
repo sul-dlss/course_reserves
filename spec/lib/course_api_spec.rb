@@ -4,7 +4,7 @@ require 'course_api'
 RSpec.describe CourseAPI do
   let(:course_term) { CourseAPI.new(File.read("#{Rails.root}/spec/fixtures/course_term.xml")) }
   let(:courses) {course_term.parse_courses()}
-  let(:sections) {course_term.parse_sections(File.read("#{Rails.root}/spec/fixtures/course_individual.xml"))}
+  let(:sections) {course_term.parse_sections(File.read("#{Rails.root}/spec/fixtures/course_individual.xml"),"1236-PEDS-199")}
 
   describe "course term XML processing" do    
     it "retrieves correct number of courses from course term XML" do

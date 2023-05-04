@@ -47,10 +47,8 @@ end
 def courseterm_url(term)
   term_parts = term.split(" ")
   quarter = term_parts[0]
-  #puts quarter
   quarter_code = get_quarter_code(quarter)
   year = term_parts[1][2, 4]
-  #puts year.to_s
   if quarter == "Fall" then year = year - 1 end
   "/doc/courseterm/1" + year.to_s + quarter_code
 end

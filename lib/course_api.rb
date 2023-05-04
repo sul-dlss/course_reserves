@@ -100,18 +100,18 @@ class CourseAPI
         errors = response_info[:errors]
         sections = []
         if(response.status == 200)
-            sections = parse_sections(response.body)
+            sections = parse_sections(response.body, request_class_id)
         end 
         
         {"sections": sections, "errors": errors}
     end
 
     # Return sections and instructor information for a particular course API response
-    def parse_sections(response_xml)
+    def parse_sections(response_xml, request_class_id)
         sections = []
         course_response = Nokogiri::XML(response_xml)
         # Does this section have instructors, if so return the section info and instructors sunet id and name
-        course_response.xpath("//section[.//instructor]").each do |section|
+        course_response.xpath("//class[@id='" + request_class_id + "']//section[.//instructor]").each do |section|
             section_id = section[:id]
             instructors = []
             section.xpath(".//instructor/person").each do |person|
