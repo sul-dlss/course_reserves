@@ -1,6 +1,4 @@
 class ReserveMail < ApplicationMailer
-  default from: Settings.email.from
-
   def submit_request(reserve, address, current_user)
     @reserve = reserve
     @current_user = current_user

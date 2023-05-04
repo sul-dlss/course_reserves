@@ -22,7 +22,7 @@ RSpec.describe 'Reserve Form', type: :feature do
 
         expect(page).to have_css('h1', text: 'Course Reserves List Request')
         expect(page).to have_css('h2', text: /^AA-272C/)
-        expect(page).to have_current_path '/reserves/new'
+        expect(current_path).to eq '/reserves/new'
       end
 
       it 'redirects to the edit form of the most recently updated reserve if one exists' do
