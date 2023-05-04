@@ -22,11 +22,11 @@ class CourseWorkCourses
     end
 
     def instructor_sunets
-      instructors.map { |i| i[:sunet] }.compact.sort
+      instructors.pluck(:sunet).compact.sort
     end
 
     def instructor_names
-      instructors.map { |i| i[:name] }.compact.sort
+      instructors.pluck(:name).compact.sort
     end
 
     def cross_listings

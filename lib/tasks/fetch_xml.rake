@@ -10,9 +10,7 @@ task fetch_xml: :environment do
     response = Faraday.get(url)
     if response.status == 200
       file_name = url[/coursereserves\/(.*)$/, 1]
-      File.open("#{Rails.root}/lib/course_work_xml/#{file_name}", "w") do |f|
-        f.write(response.body.to_s.force_encoding('UTF-8'))
-      end
+      File.write("#{Rails.root}/lib/course_work_xml/#{file_name}", response.body.to_s.force_encoding('UTF-8'))
       updated = true
     else
       errors << "#{url} returned #{response.status}\n"

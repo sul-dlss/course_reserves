@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Reserve Form', type: :feature do
+RSpec.describe 'Reserve Form' do
   before do
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
   end

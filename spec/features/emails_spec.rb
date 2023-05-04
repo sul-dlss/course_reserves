@@ -2,18 +2,18 @@
 
 require 'rails_helper'
 
-RSpec.describe "Sending Emails", type: :feature, js: true do
+RSpec.describe "Sending Emails", js: true do
   before do
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(
       CurrentUser.new('123', Settings.workgroups.superuser)
     )
 
     allow(SearchWorksItem).to receive(:new).with('12345').and_return(
-      instance_double('SearchWorksItem', valid?: true, to_h: { ckey: '12345', title: 'Cats!' })
+      instance_double(SearchWorksItem, valid?: true, to_h: { ckey: '12345', title: 'Cats!' })
     )
 
     allow(SearchWorksItem).to receive(:new).with('54321').and_return(
-      instance_double('SearchWorksItem', valid?: true, to_h: { ckey: '54321', title: 'Dogs!' })
+      instance_double(SearchWorksItem, valid?: true, to_h: { ckey: '54321', title: 'Dogs!' })
     )
   end
 
@@ -21,9 +21,9 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
     it 'includes all items' do
       visit new_reserve_path(comp_key: 'AA-272C,123,456')
 
-      page.find('#sw_url').set('12345')
+      page.find_by_id('sw_url').set('12345')
       click_link 'add'
-      page.find('#sw_url').set('54321')
+      page.find_by_id('sw_url').set('54321')
       click_link 'add'
 
       expect do
@@ -42,12 +42,12 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
       it 'includes the data about the added item' do
         visit new_reserve_path(comp_key: 'AA-272C,123,456')
 
-        page.find('#sw_url').set('12345')
+        page.find_by_id('sw_url').set('12345')
         click_link 'add'
 
         click_button 'Save and SEND request'
 
-        page.find('#sw_url').set('54321')
+        page.find_by_id('sw_url').set('54321')
         click_link 'add'
 
         expect do
@@ -65,9 +65,9 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
       it 'includes the data about the removed item' do
         visit new_reserve_path(comp_key: 'AA-272C,123,456')
 
-        page.find('#sw_url').set('12345')
+        page.find_by_id('sw_url').set('12345')
         click_link 'add'
-        page.find('#sw_url').set('54321')
+        page.find_by_id('sw_url').set('54321')
         click_link 'add'
 
         click_button 'Save and SEND request'
@@ -92,9 +92,9 @@ RSpec.describe "Sending Emails", type: :feature, js: true do
       it 'includes details about the updated item' do
         visit new_reserve_path(comp_key: 'AA-272C,123,456')
 
-        page.find('#sw_url').set('12345')
+        page.find_by_id('sw_url').set('12345')
         click_link 'add'
-        page.find('#sw_url').set('54321')
+        page.find_by_id('sw_url').set('54321')
         click_link 'add'
 
         click_button 'Save and SEND request'
