@@ -31,7 +31,7 @@ module ApplicationHelper
 
   def render_term_label(term)
     if term == Terms.current_term
-      term + ' (current quarter)'
+      "#{term} (current quarter)"
     else
       term
     end

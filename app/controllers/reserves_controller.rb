@@ -29,7 +29,8 @@ class ReservesController < ApplicationController
     end
     courses.each do |course|
       cl = course.cross_listings.blank? ? "" : "(#{course.cross_listings})"
-      items << [course.cid, "<a href='/reserves/new?comp_key=#{course.comp_key.gsub('&', '%26')}'>#{course.title}</a> #{cl}", course.instructor_names.join(", ")]
+      items << [course.cid, "<a href='/reserves/new?comp_key=#{course.comp_key.gsub('&', '%26')}'>#{course.title}</a> #{cl}",
+                course.instructor_names.join(", ")]
     end
     render json: { "aaData" => items }.to_json, layout: false
   end
@@ -50,6 +51,7 @@ class ReservesController < ApplicationController
         elsif params[:sw] == 'true'
           item = SearchWorksItem.new(params[:url])
           render(js: "alert('This does not appear to be a valid item in SearchWorks'); clean_up_loading();") && return unless item.valid?
+
           @item = item.to_h.with_indifferent_access
         end
       end
@@ -69,11 +71,10 @@ class ReservesController < ApplicationController
   def update
     reserve = @reserve
     original_term = reserve.term
-    if reserve_params[:term] != reserve.term
-      if Reserve.where(compound_key: reserve.compound_key, term: reserve_params[:term]).where.not(id: reserve.id).any?
-        flash[:error] = "Course reserve list already exists for this course and term. The term has not been saved."
-        reserve_params[:term] = original_term
-      end
+    if reserve_params[:term] != reserve.term && Reserve.where(compound_key: reserve.compound_key,
+                                                              term: reserve_params[:term]).where.not(id: reserve.id).any?
+      flash[:error] = "Course reserve list already exists for this course and term. The term has not been saved."
+      reserve_params[:term] = original_term
     end
     reserve_params[:item_list] = [] unless reserve_params.key?(:item_list)
     reserve.update(reserve_params)
@@ -120,7 +121,8 @@ class ReservesController < ApplicationController
 
   def send_course_reserve_request(reserve)
     ReserveMail.submit_request(reserve, reserve_mail_address(reserve), current_user).deliver_now.tap do
-      reserve.update(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list], sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
+      reserve.update(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list],
+                                          sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
     end
   end
 

@@ -14,7 +14,7 @@ class SearchWorksItem
       ckey: ckey,
       title: title,
       imprint: imprint,
-      online: online,
+      online: online
     }.merge(media_fields)
   end
 
@@ -63,7 +63,7 @@ class SearchWorksItem
   def document
     @document ||= begin
       JSON.parse(Faraday.get(url).body).dig('response', 'document') || {}
-    rescue => e
+    rescue StandardError => e
       Honeybadger.notify("SearchWorks request failed for #{url} with #{e}")
       {}
     end

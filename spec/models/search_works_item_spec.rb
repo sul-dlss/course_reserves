@@ -4,8 +4,9 @@ require 'rails_helper'
 
 RSpec.describe SearchWorksItem do
   subject(:item) { described_class.new(url_or_ckey) }
+
   let(:document) { {} }
-  let(:json) { { 'response' => { 'document' => document} } }
+  let(:json) { { 'response' => { 'document' => document } } }
 
   describe '#valid?' do
     let(:url_or_ckey) { '6490288' }
@@ -14,7 +15,7 @@ RSpec.describe SearchWorksItem do
       expect(Faraday).to(
         receive(:get).with('https://searchworks.stanford.edu/view/6490288.json')
       ).and_return(double('FaradayResponse', body: json.to_json))
-    end  
+    end
 
     context 'without a title' do
       it { expect(item).not_to be_valid }
@@ -79,7 +80,7 @@ RSpec.describe SearchWorksItem do
         receive(:get).with('https://searchworks.stanford.edu/view/6490288.json')
       ).and_return(double('FaradayResponse', body: json.to_json))
     end
-    
+
     it { expect(item.to_h).to include(ckey: '6490288') }
   end
 
@@ -91,7 +92,7 @@ RSpec.describe SearchWorksItem do
         receive(:get).with('https://searchworks.stanford.edu/view/abc111222.json')
       ).and_return(double('FaradayResponse', body: json.to_json))
     end
-    
+
     it { expect(item.to_h).to include(ckey: 'abc111222') }
   end
 end
