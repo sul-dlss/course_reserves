@@ -120,7 +120,7 @@ class ReservesController < ApplicationController
   end
 
   def send_course_reserve_request(reserve)
-    ReserveMail.submit_request(reserve, reserve_mail_address(reserve), current_user).deliver_now.tap do
+    ReserveMailer.submit_request(reserve, reserve_mail_address(reserve), current_user).deliver_now.tap do
       reserve.update(reserve_params.merge(has_been_sent: true, sent_item_list: reserve_params[:item_list],
                                           sent_date: DateTime.now.strftime("%m-%d-%Y %I:%M%p").gsub("AM", "am").gsub("PM", "pm")))
     end
