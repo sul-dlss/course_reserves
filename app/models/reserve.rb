@@ -21,9 +21,9 @@ class Reserve < ActiveRecord::Base
   end
 
   def instructor_sunets
-    if self.instructor_sunet_ids.present?
-      self.instructor_sunet_ids.split(/,/).map(&:strip).select(&:present?)
-    end
+    return if self.instructor_sunet_ids.blank?
+
+    self.instructor_sunet_ids.split(/,/).map(&:strip).select(&:present?)
   end
 
   def item_list

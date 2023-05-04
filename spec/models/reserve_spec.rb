@@ -84,7 +84,8 @@ RSpec.describe Reserve do
     end
 
     it "generates editor relationships from instructor_sunet_ids & editor_sunet_ids fields for multiple sunet_ids" do
-      reserve = Reserve.create(reserve_params.merge(editor_sunet_ids: 'asmith, bjones', instructor_sunet_ids: 'jlavigne, jkeck', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
+      reserve = Reserve.create(reserve_params.merge(editor_sunet_ids: 'asmith, bjones', instructor_sunet_ids: 'jlavigne, jkeck', cid: 'test_cid',
+                                                    item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve.editors.length).to eq(4)
       editors = reserve.editors.map { |e| e[:sunetid] }
@@ -104,7 +105,8 @@ RSpec.describe Reserve do
     end
 
     it "ignores blank values" do
-      reserve = Reserve.create(reserve_params.merge(instructor_sunet_ids: 'jlavigne, jkeck, , ,', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
+      reserve = Reserve.create(reserve_params.merge(instructor_sunet_ids: 'jlavigne, jkeck, , ,', cid: 'test_cid',
+                                                    item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve.editors.length).to eq(2)
     end
@@ -118,7 +120,9 @@ RSpec.describe Reserve do
     end
 
     it "throws an error for TypeMismatch when we serialize the item list with a hash" do
-      expect { Reserve.create(reserve_params.merge(cid: 'test_cid', item_list: { title: 'My Title' })) }.to raise_error(ActiveRecord::SerializationTypeMismatch)
+      expect do
+        Reserve.create(reserve_params.merge(cid: 'test_cid', item_list: { title: 'My Title' }))
+      end.to raise_error(ActiveRecord::SerializationTypeMismatch)
     end
   end
 end

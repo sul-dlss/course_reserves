@@ -2,6 +2,7 @@ require:
   - rubocop-rails
   - rubocop-rspec
   - rubocop-performance
+  - rubocop-capybara
 
 inherit_from: .rubocop_todo.yml
 
@@ -31,11 +32,8 @@ Style/WordArray:
   EnforcedStyle: percent
   MinSize: 5
 
-Metrics/AbcSize:
-  Max: 20
-
 Metrics/ClassLength:
   Max: 200
 
-Metrics/LineLength:
-  Max: 150
+Capybara/CurrentPathExpectation:
+  Enabled: false # https://github.com/rubocop/rubocop-rspec/issues/1636
