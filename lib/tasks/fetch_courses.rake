@@ -4,7 +4,7 @@ require 'openssl'
 require 'course_api'
 
 desc "rake task to fetch course term and individual course information from MaIS APIs"
-task fetch_api: :environment do
+task fetch_courses: :environment do
   current_term = Terms.current_term
   future_term = Terms.future_terms.first
   errors = []
