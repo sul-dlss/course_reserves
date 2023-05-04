@@ -45,7 +45,7 @@ class CourseWorkCourses
     else
       @json_files = load_from_coursework
     end
-  end 
+  end
 
   def json_files
     @json_files ||= self.json_files
@@ -130,7 +130,7 @@ class CourseWorkCourses
     # and create the objects required by the model
     json_files.each do |json_file|
       json_file.each do |course|
-        if course.key?("instructors") && course["instructors"].length > 0
+        if course.key?("instructors") && !course["instructors"].empty?
           yield Course.new(
             title: course["title"],
             term: course["term"],
@@ -143,5 +143,4 @@ class CourseWorkCourses
       end
     end
   end 
-
 end

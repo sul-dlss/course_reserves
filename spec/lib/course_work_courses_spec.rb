@@ -7,10 +7,11 @@ RSpec.describe CourseWorkCourses do
   describe "loading JSON" do
     it "is a JSON array where each object has a title" do
       courses.json_files.each do |json_file|
-        expect(json_file).to_not be_empty
+        expect(json_file).not_to be_empty
         expect(json_file[0]).to have_key("title")
       end
     end
+
     it "loads JSON when provided on object initialization" do
       courses = CourseWorkCourses.new('[{"title":"MyTitle","term":null,"cid":"CLASS-ID","cids":["CLASS-ID"],"sid":"01","instructors":[{"sunet":"mysunet","name":"My Teacher"}]}]').all_courses
       expect(courses.length).to eq(1)
