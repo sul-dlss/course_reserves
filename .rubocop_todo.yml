@@ -355,6 +355,6 @@ Style/SymbolProc:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-Style/UnneededCondition:
+Style/RedundantCondition:
   Exclude:
     - 'app/controllers/reserves_controller.rb'

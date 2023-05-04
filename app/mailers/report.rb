@@ -1,4 +1,4 @@
-class Report < ActionMailer::Base
+class Report < ApplicationMailer
   default from: Settings.email.from
 
   def msg(opts = {})

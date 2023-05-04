@@ -40,7 +40,7 @@ RSpec.describe 'Copying a reserve list', js: true do
 
     visit '/'
 
-    within(('#my-reserves tbody')) do
+    within('#my-reserves tbody') do
       within(page.all('tr').last) do
         click_link 'Copy'
       end

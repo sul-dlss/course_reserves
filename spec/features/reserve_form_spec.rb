@@ -22,7 +22,7 @@ RSpec.describe 'Reserve Form', type: :feature do
 
         expect(page).to have_css('h1', text: 'Course Reserves List Request')
         expect(page).to have_css('h2', text: /^AA-272C/)
-        expect(current_path).to eq '/reserves/new'
+        expect(page).to have_current_path '/reserves/new'
       end
 
       it 'redirects to the edit form of the most recently updated reserve if one exists' do
@@ -30,7 +30,7 @@ RSpec.describe 'Reserve Form', type: :feature do
         visit new_reserve_path(comp_key: 'AA-272C,123,456')
         expect(page).to have_css('h1', text: 'Course Reserves List Request')
 
-        expect(current_path).to eq "/reserves/#{reserve.id}/edit"
+        expect(page).to have_current_path "/reserves/#{reserve.id}/edit"
       end
     end
   end
@@ -61,7 +61,7 @@ RSpec.describe 'Reserve Form', type: :feature do
           visit clone_reserve_path(reserve, term: reserve.term)
 
           expect(page).to have_css('.alert-danger', text: 'Course reserve list already exists for this course and term.')
-          expect(current_path).to eq "/reserves/#{reserve.id}/edit"
+          expect(page).to have_current_path "/reserves/#{reserve.id}/edit"
         end
       end
     end
