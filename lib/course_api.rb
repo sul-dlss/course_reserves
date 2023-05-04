@@ -65,9 +65,8 @@ class CourseAPI
     # Generate connection to course API
     def request_course_api(request_class_id)
         errors = []
-        certs_path =  Rails.root.join("config")
-        cert_file = certs_path + "sul-harvester.cert"
-        key_file = certs_path + "sul-harvester.key"
+        cert_file = Rails.root.join("config", "sul-harvester.cert")
+        key_file = Rails.root.join("config", "sul-harvester.key")
         client_cert = OpenSSL::X509::Certificate.new File.read(cert_file)
         client_key = OpenSSL::PKey.read File.read(key_file)
         connection = Faraday::Connection.new 'https://registry.stanford.edu', :ssl => { :client_cert => client_cert, :client_key => client_key }
@@ -98,6 +97,10 @@ class CourseAPI
         response_info = request_course_api(request_class_id)
         response = response_info[:response]
         errors = response_info[:errors]
+        if errors.length > 0
+            puts "Errors that have come back to get course info"
+            puts errors.length
+        end
         sections = []
         if(response.status == 200)
             sections = parse_sections(response.body, request_class_id)
@@ -111,6 +114,7 @@ class CourseAPI
         sections = []
         course_response = Nokogiri::XML(response_xml)
         # Does this section have instructors, if so return the section info and instructors sunet id and name
+        # The same course request can return cross listed courses, so we will need to get a specific id
         course_response.xpath("//class[@id='" + request_class_id + "']//section[.//instructor]").each do |section|
             section_id = section[:id]
             instructors = []
@@ -124,9 +128,9 @@ class CourseAPI
         sections
     end
 
-    # Based on https://github.com/sul-dlss/registry-harvester/blob/main/Course/src/main/java/edu/stanford/BuildTermString.java
+    # Based on logic https://github.com/sul-dlss/registry-harvester/blob/main/Course/src/main/java/edu/stanford/BuildTermString.java
     def generate_term(term_id)
-        #if 1, then year 20? what are the other options?
+        #if 1, then year 20
         academic_year = term_id[1, 2].to_i
         term_quarter = get_term_quarter(term_id)
         if term_quarter == "Fall" then academic_year += 1 end
