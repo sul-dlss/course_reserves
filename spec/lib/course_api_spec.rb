@@ -33,4 +33,16 @@ RSpec.describe CourseAPI do
       expect(sections[0][:instructors][0][:name]).to eq("Instructor, Test")
     end
   end
+
+  describe "processing term info" do
+    it "converts a string term to the correct course term API URL" do
+      expect(course_term.courseterm_url("Spring 2023")).to eq("/doc/courseterm/1236")
+      expect(course_term.courseterm_url("Fall 2017")).to eq("/doc/courseterm/1182")
+    end
+
+    it "parses a term id to get the string term" do
+      expect(course_term.generate_term("1236")).to eq("Spring 2023")
+      expect(course_term.generate_term("1182")).to eq("Fall 2017")
+    end
+  end
 end

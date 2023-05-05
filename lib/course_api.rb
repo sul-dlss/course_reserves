@@ -30,7 +30,7 @@ class CourseAPI
     term_parts = term.split
     quarter = term_parts[0]
     quarter_code = get_quarter_code(quarter)
-    year = term_parts[1][2, 4]
+    year = term_parts[1][2, 4].to_i
     year += 1 if quarter == "Fall"
     "/doc/courseterm/1#{year}#{quarter_code}"
   end
@@ -182,6 +182,7 @@ class CourseAPI
     quarter
   end
 
+  # Class ids will look like 1236-ECON-1235. We want to remove the "1236" which is the term id
   def remove_class_id_prefix(class_id)
     class_id.gsub(/^\w{1,2}\d{2}-/, "")
   end
