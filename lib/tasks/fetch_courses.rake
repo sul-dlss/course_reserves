@@ -10,6 +10,7 @@ task fetch_courses: :environment do
   errors = []
   updated = false
   c_api = CourseAPI.new
+  c_api.setup_connection
 
   # Get the current term and the very next term
   [current_term, future_term].each do |term|
@@ -31,7 +32,7 @@ task fetch_courses: :environment do
       errors << "request for #{term} returned #{response.status}\n"
     end
   end
-
+  puts errors.to_s
   # Send error message if certain courses failing
   Report.msg(to: Settings.email.reports, subject: "Problem retrieving course results", message: errors).deliver_now if errors.present?
   `touch tmp/restart.txt` if updated

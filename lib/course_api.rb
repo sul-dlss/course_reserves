@@ -6,7 +6,7 @@ require 'faraday'
 # Get course term information and then parse
 class CourseAPI
   def initialize
-    @connection = setup_connection
+    @connection = nil
   end
 
   # Set up Faraday connection
@@ -15,7 +15,7 @@ class CourseAPI
     key_file = Rails.root.join("config/sul-harvester.key")
     client_cert = OpenSSL::X509::Certificate.new File.read(cert_file)
     client_key = OpenSSL::PKey.read File.read(key_file)
-    Faraday::Connection.new 'https://registry.stanford.edu', ssl: { client_cert: client_cert, client_key: client_key }
+    @connection = Faraday::Connection.new 'https://registry.stanford.edu', ssl: { client_cert: client_cert, client_key: client_key }
   end
 
   # Methods for retrieving and parsing course term information
