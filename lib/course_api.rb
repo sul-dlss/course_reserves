@@ -49,14 +49,11 @@ class CourseAPI
     all_errors = []
     # Return array of course hash objects
     courses_list = parse_courses(course_term_xml)
-    counter = 0
-    courses_list.each do |course|
-      counter += 1
-      if counter == 10_000
-        sleep(1)
-        counter = 0
-      end
+    courses_list.each_with_index do |course, index|
+      # Build in a wait of a second after every 10,000 requests to the course API
+      sleep(1) if (index % 10_000).zero?
       request_class_id = course[:request_class_id]
+      # Call the individual Course API to get sections and instructors for this course
       course_info = get_course_info(request_class_id)
       sections = course_info[:sections]
       all_errors.concat(course_info[:errors])
@@ -105,7 +102,6 @@ class CourseAPI
   def request_course_api(request_class_id)
     errors = []
     spec_course = "/doc/courseclass/#{request_class_id}"
-
     begin
       response = @connection.get spec_course
     # Timeout error
@@ -122,7 +118,6 @@ class CourseAPI
     rescue Faraday::ServerError
       errors << "Server error for #{request_class_id}"
     end
-    # if ! errors.empty? then puts errors end
     { response: response, errors: errors }
   end
 
@@ -131,12 +126,9 @@ class CourseAPI
     response_info = request_course_api(request_class_id)
     response = response_info[:response]
     errors = response_info[:errors]
-    # if errors.length > 0
-    #   puts "Errors that have come back to get course info"
-    #   puts errors.length
-    # end
     sections = []
     # Get sections and instructors for this course if the response status is successful
+    errors << "#{request_class_id} returned error #{response.status}" if response.status != 200
     sections = parse_sections(response.body, request_class_id) if response.status == 200
     { sections: sections, errors: errors }
   end
