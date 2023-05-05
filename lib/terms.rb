@@ -15,7 +15,7 @@ module Terms
                              terms.index { |t| t[:term] == term }
                            end
 
-      terms.slice(current_term_index + 1, 2).map { |t| t[:term] }
+      terms.slice(current_term_index + 1, 2).pluck(:term)
     end
 
     def process_term_for_cw(term)

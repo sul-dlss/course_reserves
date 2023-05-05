@@ -53,9 +53,9 @@ RSpec.describe Reserve do
       reserve = Reserve.create(reserve_params.merge(editor_sunet_ids: 'jlavigne, jkeck', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve.editors.length).to eq(2)
-      editors = reserve.editors.map { |e| e[:sunetid] }
-      expect(editors.include?('jlavigne')).to eq(true)
-      expect(editors.include?('jkeck')).to eq(true)
+      editors = reserve.editors.pluck(:sunetid)
+      expect(editors.include?('jlavigne')).to be(true)
+      expect(editors.include?('jkeck')).to be(true)
     end
 
     it "generates editor relationships from instructor_sunet_ids field for single sunet_id" do
@@ -69,9 +69,9 @@ RSpec.describe Reserve do
       reserve = Reserve.create(reserve_params.merge(instructor_sunet_ids: 'jlavigne, jkeck', cid: 'test_cid', item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve.editors.length).to eq(2)
-      editors = reserve.editors.map { |e| e[:sunetid] }
-      expect(editors.include?('jlavigne')).to eq(true)
-      expect(editors.include?('jkeck')).to eq(true)
+      editors = reserve.editors.pluck(:sunetid)
+      expect(editors.include?('jlavigne')).to be(true)
+      expect(editors.include?('jkeck')).to be(true)
     end
 
     it "udpateds editors when we save an item too." do
@@ -88,7 +88,7 @@ RSpec.describe Reserve do
                                                     item_list: [{ title: 'My Title' }]))
       reserve.save!
       expect(reserve.editors.length).to eq(4)
-      editors = reserve.editors.map { |e| e[:sunetid] }
+      editors = reserve.editors.pluck(:sunetid)
       expect(editors).to eq(['jlavigne', 'jkeck', 'asmith', 'bjones'])
     end
 

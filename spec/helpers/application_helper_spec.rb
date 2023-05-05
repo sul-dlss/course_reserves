@@ -26,15 +26,15 @@ RSpec.describe ApplicationHelper do
     end
 
     it 'is true if there exists a reserve for the course in the given term' do
-      expect(helper.has_existing_reserve_for_term?(reserve, 'Winter')).to eq true
+      expect(helper.has_existing_reserve_for_term?(reserve, 'Winter')).to be true
     end
 
     it 'is false if there is not a reserve for the course in the given term' do
-      expect(helper.has_existing_reserve_for_term?(reserve, 'Spring')).to eq false
+      expect(helper.has_existing_reserve_for_term?(reserve, 'Spring')).to be false
     end
 
     it 'is false if there existing reserve is for the current course' do
-      expect(helper.has_existing_reserve_for_term?(other_reserve, 'Spring')).to eq false
+      expect(helper.has_existing_reserve_for_term?(other_reserve, 'Spring')).to be false
     end
   end
 

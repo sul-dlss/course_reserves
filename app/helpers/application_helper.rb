@@ -5,11 +5,7 @@ module ApplicationHelper
   end
 
   def item_in_searchworks?(item)
-    if (params[:sw] == "true") || (item.key?("ckey") && item["ckey"].present?)
-      true
-    else
-      false
-    end
+    (params[:sw] == "true") || (item.key?("ckey") && item["ckey"].present?)
   end
 
   def current_term

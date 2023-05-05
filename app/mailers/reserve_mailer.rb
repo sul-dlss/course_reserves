@@ -1,4 +1,4 @@
-class ReserveMail < ApplicationMailer
+class ReserveMailer < ApplicationMailer
   def submit_request(reserve, address, current_user)
     @reserve = reserve
     @current_user = current_user
