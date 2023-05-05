@@ -20,16 +20,14 @@ class CourseAPI
 
   # Methods for retrieving and parsing course term information
   def course_term_response(term)
-    puts term
     url = courseterm_url(term)
-    puts url
     @connection.get(url)
   end
 
   # Given the text for a term, i.e. "Spring 2023", generate the term id required by the CourseTerm API
   # Spring 2023 = 1 (year starts with 20) 23 (year) 6(id for quarter) = 1236
   def courseterm_url(term)
-    term_parts = term.split(" ")
+    term_parts = term.split
     quarter = term_parts[0]
     quarter_code = get_quarter_code(quarter)
     year = term_parts[1][2, 4]
@@ -65,13 +63,13 @@ class CourseAPI
       sections.each do |section|
         section_id = section[:sid]
         instructors = section[:instructors]
-        course_hash = { "title": course[:title], "term": course[:term], "cid": course[:cid], "cids": course[:cids],
-                        "sid": section_id, "instructors": instructors }
+        course_hash = { title: course[:title], term: course[:term], cid: course[:cid], cids: course[:cids],
+                        sid: section_id, instructors: instructors }
         courses << course_hash
       end
     end
     # Returns any errors encountered plus full list of courses
-    { "errors": all_errors, "courses": courses }
+    { errors: all_errors, courses: courses }
   end
 
   # parse the course term xml to generate the list of courses for which we must make individual course requests
@@ -87,7 +85,7 @@ class CourseAPI
       course.xpath(".//class").each do |class_obj|
         request_class_id = class_obj[:id]
         class_id = remove_class_id_prefix(request_class_id)
-        course_hash = { "title": course_title, "term": term_display, "cid": class_id, "cids": cids, "request_class_id": request_class_id }
+        course_hash = { title: course_title, term: term_display, cid: class_id, cids: cids, request_class_id: request_class_id }
         courses << course_hash
       end
     end
@@ -125,7 +123,7 @@ class CourseAPI
       errors << "Server error for #{request_class_id}"
     end
     # if ! errors.empty? then puts errors end
-    { "response": response, "errors": errors }
+    { response: response, errors: errors }
   end
 
   # Get course information from API request, return sections and any errors that occurred
@@ -140,7 +138,7 @@ class CourseAPI
     sections = []
     # Get sections and instructors for this course if the response status is successful
     sections = parse_sections(response.body, request_class_id) if response.status == 200
-    { "sections": sections, "errors": errors }
+    { sections: sections, errors: errors }
   end
 
   # Return sections and instructor information for a particular course API response
@@ -155,9 +153,9 @@ class CourseAPI
       section.xpath(".//instructor/person").each do |person|
         sunetid = person[:sunetid]
         name = person.text
-        instructors << { "sunet": sunetid, "name": name }
+        instructors << { sunet: sunetid, name: name }
       end
-      sections << { "sid": section_id, "instructors": instructors }
+      sections << { sid: section_id, instructors: instructors }
     end
     sections
   end
@@ -175,7 +173,7 @@ class CourseAPI
     "#{term_quarter} #{academic_year}"
   end
 
-  # Term ids are of the form: 1236.  The last digit represents the quarter 
+  # Term ids are of the form: 1236.  The last digit represents the quarter
   def get_term_quarter(term_id)
     term_quarters = { "2" => "Fall", "4" => "Winter", "6" => "Spring", "8" => "Summer" }
     quarter = ""

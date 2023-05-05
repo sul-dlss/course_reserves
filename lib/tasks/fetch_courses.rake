@@ -25,9 +25,7 @@ task fetch_courses: :environment do
       # Keep errors if they occurred
       errors.concat(course_errors) unless course_errors.empty?
       # Write the JSON to the folder where the app will pick it up later
-      File.open("#{Rails.root}/lib/course_work_xml/#{file_name}", "w") do |f|
-        f.write(courses.to_json.force_encoding('UTF-8'))
-      end
+      File.write("#{Rails.root}/lib/course_work_xml/#{file_name}", courses.to_json.force_encoding('UTF-8'))
       updated = true
     else
       errors << "request for #{term} returned #{response.status}\n"
@@ -35,6 +33,6 @@ task fetch_courses: :environment do
   end
 
   # Send error message if certain courses failing
-  # Report.msg(to: Settings.email.reports, subject: "Problem retrieving course results", message: errors).deliver_now if errors.present?
+  Report.msg(to: Settings.email.reports, subject: "Problem retrieving course results", message: errors).deliver_now if errors.present?
   `touch tmp/restart.txt` if updated
 end
