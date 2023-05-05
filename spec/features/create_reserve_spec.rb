@@ -2,18 +2,18 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Creating Reserves', type: :feature, js: true do
+RSpec.describe 'Creating Reserves', js: true do
   before do
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(
       CurrentUser.new('123', Settings.workgroups.superuser)
     )
 
     allow(SearchWorksItem).to receive(:new).with('12345').and_return(
-      instance_double('SearchWorksItem', valid?: true, to_h: { ckey: '12345', title: 'Cats!' })
+      instance_double(SearchWorksItem, valid?: true, to_h: { ckey: '12345', title: 'Cats!' })
     )
 
     allow(SearchWorksItem).to receive(:new).with('54321').and_return(
-      instance_double('SearchWorksItem', valid?: true, to_h: { ckey: '54321', title: 'Dogs!' })
+      instance_double(SearchWorksItem, valid?: true, to_h: { ckey: '54321', title: 'Dogs!' })
     )
   end
 
@@ -24,7 +24,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
       expect(page).to have_button('Save draft', disabled: false)
       expect(page).to have_button('Save and SEND request', disabled: true)
 
-      page.find('#sw_url').set('12345')
+      page.find_by_id('sw_url').set('12345')
       click_link 'add'
 
       expect(page).to have_button('Save draft', disabled: false)
@@ -41,14 +41,14 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
     it 'persists items' do
       visit new_reserve_path(comp_key: 'AA-272C,123,456')
 
-      page.find('#sw_url').set('12345')
+      page.find_by_id('sw_url').set('12345')
       click_link 'add'
-      page.find('#sw_url').set('54321')
+      page.find_by_id('sw_url').set('54321')
       click_link 'add'
 
       click_button 'Save and SEND request'
 
-      ckeys = Reserve.last.item_list.map { |item| item['ckey'] }
+      ckeys = Reserve.last.item_list.pluck('ckey')
       expect(ckeys).to eq(%w[12345 54321])
     end
   end
@@ -57,9 +57,9 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
     it 'allows items to be added and removed' do
       visit new_reserve_path(comp_key: 'AA-272C,123,456')
 
-      page.find('#sw_url').set('12345')
+      page.find_by_id('sw_url').set('12345')
       click_link 'add'
-      page.find('#sw_url').set('54321')
+      page.find_by_id('sw_url').set('54321')
       click_link 'add'
 
       within('#item_list') do
@@ -81,7 +81,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
     it 'does not allow the same item to be added twice' do
       visit new_reserve_path(comp_key: 'AA-272C,123,456')
 
-      page.find('#sw_url').set('12345')
+      page.find_by_id('sw_url').set('12345')
       click_link 'add'
 
       within('#item_list') do
@@ -89,7 +89,7 @@ RSpec.describe 'Creating Reserves', type: :feature, js: true do
         expect(page).to have_link(href: 'https://searchworks.stanford.edu/view/12345', count: 1)
       end
 
-      page.find('#sw_url').set('12345')
+      page.find_by_id('sw_url').set('12345')
       click_link 'add'
 
       within('#item_list') do

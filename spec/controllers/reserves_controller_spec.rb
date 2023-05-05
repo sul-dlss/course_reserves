@@ -7,9 +7,9 @@ RSpec.describe ReservesController do
     { library: "Green", term: Terms.current_term, contact_name: "John Doe", contact_phone: "(555)555-5555", contact_email: "jdoe@example.com" }
   end
 
-  let(:user) { instance_double('CurrentUser', sunetid: 'user_sunet', superuser?: false) }
-  let(:user_456) { instance_double('CurrentUser', sunetid: '456', superuser?: false) }
-  let(:superuser) { instance_double('CurrentUser', sunetid: 'super-user', superuser?: true) }
+  let(:user) { instance_double(CurrentUser, sunetid: 'user_sunet', superuser?: false) }
+  let(:user_456) { instance_double(CurrentUser, sunetid: '456', superuser?: false) }
+  let(:superuser) { instance_double(CurrentUser, sunetid: 'super-user', superuser?: true) }
 
   describe "GET new" do
     it "redirects to an existing course list if it exists and the current user is an editor" do
@@ -41,7 +41,7 @@ RSpec.describe ReservesController do
       course = assigns(:course)
       expect(course.cid).to eq("EDUC-237X")
       expect(course.title).to eq("Residential Racial Segregation and the Education of African-American Youth")
-      expect(course.instructors.map { |i| i[:sunet] }).to include("456")
+      expect(course.instructors.pluck(:sunet)).to include("456")
     end
 
     it "lets you create a new course if you are the professor" do
@@ -50,7 +50,7 @@ RSpec.describe ReservesController do
       expect(response).to be_successful
       course = assigns(:course)
       expect(course.cid).to eq("AA-272C")
-      expect(course.instructors.map { |i| i[:sunet] }).to include("456")
+      expect(course.instructors.pluck(:sunet)).to include("456")
     end
 
     it "does not let you create a course that you don't have permisisons to" do
@@ -154,7 +154,7 @@ RSpec.describe ReservesController do
       r.save!
       expect(r.sent_item_list).to be_blank
       get :update, params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: item_list) }
-      expect(Reserve.find(r[:id]).sent_item_list).to match_array([hash_including({ "ckey" => "12345" })])
+      expect(Reserve.find(r[:id]).sent_item_list).to contain_exactly(hash_including({ "ckey" => "12345" }))
     end
 
     it "properlies assign the sent_item-list for sent items" do
@@ -166,7 +166,7 @@ RSpec.describe ReservesController do
       get :update,
           params: { id: r[:id], send_request: "true",
                     reserve: res.merge(item_list: { 0 => { "ckey" => "12345" }, 'whatever' => { "ckey" => "54321" } }) }
-      expect(Reserve.find(r[:id]).sent_item_list).to match_array([hash_including({ "ckey" => "12345" }), hash_including({ "ckey" => "54321" })])
+      expect(Reserve.find(r[:id]).sent_item_list).to contain_exactly(hash_including({ "ckey" => "12345" }), hash_including({ "ckey" => "54321" }))
     end
 
     it 'allows superusers to update any record' do
@@ -177,7 +177,7 @@ RSpec.describe ReservesController do
       r.save!
       get :update,
           params: { id: r[:id], send_request: "true", reserve: res.merge(item_list: { 0 => { "ckey" => "12345" }, '42' => { "ckey" => "54321" } }) }
-      expect(Reserve.find(r[:id]).sent_item_list).to match_array([hash_including({ "ckey" => "12345" }), hash_including({ "ckey" => "54321" })])
+      expect(Reserve.find(r[:id]).sent_item_list).to contain_exactly(hash_including({ "ckey" => "12345" }), hash_including({ "ckey" => "54321" }))
     end
 
     it 'does not allow you to update a record you are not an editor of' do
@@ -223,7 +223,7 @@ RSpec.describe ReservesController do
       cloned_reserve = Reserve.find((r[:id] + 1).to_s)
       expect(cloned_reserve.term).to eq(Terms.future_terms.first)
       expect(cloned_reserve.editors.length).to eq(1)
-      expect(cloned_reserve.editors.map { |e| e[:sunetid] }).to eq(["user_sunet"])
+      expect(cloned_reserve.editors.pluck(:sunetid)).to eq(["user_sunet"])
     end
 
     it "redirects you to an existing course if you try to clone a course w/ the same term" do
@@ -279,7 +279,7 @@ RSpec.describe ReservesController do
       allow(controller).to receive(:current_user).and_return(superuser)
       get :all_courses_response
       expect(response).to be_successful
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(body.keys.length).to eq(1)
       expect(body).to have_key("aaData")
       expect(body["aaData"].length).to eq(7)
@@ -292,7 +292,7 @@ RSpec.describe ReservesController do
       allow(controller).to receive(:current_user).and_return(user_456)
       get :all_courses_response
       expect(response).to be_successful
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(body.keys.length).to eq(1)
       expect(body).to have_key("aaData")
       expect(body["aaData"].length).to eq(2)
@@ -304,7 +304,7 @@ RSpec.describe ReservesController do
     it "does not return any courses if you are not a super user and you don't have any courses in the XML" do
       get :all_courses_response
       expect(response).to be_successful
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(body.keys.length).to eq(1)
       expect(body).to have_key("aaData")
       expect(body["aaData"]).to be_blank

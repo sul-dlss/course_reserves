@@ -128,7 +128,7 @@ RSpec.describe CourseWorkCourses do
         expect(course.first.title).to eq("Residential Racial Segregation and the Education of African-American Youth")
         expect(course.first.cid).to eq("EDUC-237X")
         expect(course.first.sid).to eq("01")
-        expect(course.first.instructors.map { |i| i[:sunet] }).to include("123")
+        expect(course.first.instructors.pluck(:sunet)).to include("123")
       end
 
       it "returns blank when the class id does not exist" do

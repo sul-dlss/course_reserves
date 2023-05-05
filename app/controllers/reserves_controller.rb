@@ -35,6 +35,10 @@ class ReservesController < ApplicationController
     render json: { "aaData" => items }.to_json, layout: false
   end
 
+  def show
+    @reserve = Reserve.find(params[:id])
+  end
+
   def new
     @course = course_for_compound_key(params[:comp_key])
     @reserve = Reserve.new(compound_key: params[:comp_key])
@@ -58,6 +62,8 @@ class ReservesController < ApplicationController
     end
   end
 
+  def edit; end
+
   # Raising our own CanCan::AccessDenied here because we also let courses be created by the SUNet IDs in the course XML
   def create
     @reserve.save!
@@ -66,14 +72,12 @@ class ReservesController < ApplicationController
     redirect_to edit_reserve_path(@reserve[:id])
   end
 
-  def edit; end
-
   def update
     reserve = @reserve
     original_term = reserve.term
     if reserve_params[:term] != reserve.term && Reserve.where(compound_key: reserve.compound_key,
                                                               term: reserve_params[:term]).where.not(id: reserve.id).any?
-      flash[:error] = "Course reserve list already exists for this course and term. The term has not been saved."
+      flash[:error] = "Course reserve list already exists for this course and term. The term has not been saved." # rubocop:disable Rails/I18nLocaleTexts
       reserve_params[:term] = original_term
     end
     reserve_params[:item_list] = [] unless reserve_params.key?(:item_list)
@@ -89,7 +93,7 @@ class ReservesController < ApplicationController
 
   def clone
     if Reserve.where(compound_key: @reserve.compound_key, term: params[:term]).any?
-      flash[:error] = "Course reserve list already exists for this course and term."
+      flash[:error] = "Course reserve list already exists for this course and term." # rubocop:disable Rails/I18nLocaleTexts
       redirect_to(edit_reserve_path(@reserve)) && return
     end
     reserve = @reserve.dup
@@ -99,10 +103,6 @@ class ReservesController < ApplicationController
     reserve.term = params[:term]
     reserve.save!
     redirect_to(edit_reserve_path(reserve[:id]))
-  end
-
-  def show
-    @reserve = Reserve.find(params[:id])
   end
 
   protected
