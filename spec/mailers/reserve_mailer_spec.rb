@@ -8,7 +8,7 @@ RSpec.describe ReserveMailer do
 
   describe ".first_request" do
     it "returns the correct main info" do
-      email = ReserveMailer.submit_request(Reserve.create(reserve_params), "test@example.com", "jdoe")
+      email = described_class.submit_request(Reserve.create(reserve_params), "test@example.com", "jdoe")
       body = email.body.raw_source
       expect(email.subject).to  eq("New Reserve Form: CID1-SID1 - Spring 2010")
       expect(email.to).to include("test@example.com")
@@ -22,7 +22,7 @@ RSpec.describe ReserveMailer do
     end
 
     it "returns the item list formatted correctly" do
-      email = ReserveMailer.submit_request(
+      email = described_class.submit_request(
         Reserve.create(reserve_params.merge(item_list: [{ "ckey" => "12345", "title" => "SW Item", 'imprint' => '1st ed. - Mordor', "copies" => "2",
                                                           "loan_period" => "4 hours", "online" => true }])), "test@example.com", "jdoe"
       )
@@ -30,26 +30,24 @@ RSpec.describe ReserveMailer do
       expect(body).to match(/1. SW Item/)
       expect(body).to match(/1st ed\. - Mordor/)
       expect(body).to match(/Full text available online/)
-      expect(body).to match(/https:\/\/searchworks.stanford.edu\/view\/12345/)
+      expect(body).to match(%r{https://searchworks.stanford.edu/view/12345})
     end
 
     it "has the full edit URL in the email" do
-      email = ReserveMailer.submit_request(
+      email = described_class.submit_request(
         Reserve.create(reserve_params.merge(item_list: [{ "ckey" => "12345", "title" => "SW Item", "copies" => "2",
                                                           "loan_period" => "4 hours" }])), "test@example.com", "jdoe"
       )
-      expect(email.body.raw_source).to match(/http:\/\/reserves.stanford.edu\/reserves\/1\/edit/)
+      expect(email.body.raw_source).to match(%r{http://reserves.stanford.edu/reserves/1/edit})
     end
 
     context 'with an updated request' do
       it "uses the correct title info for an updated request" do
-        email = ReserveMailer.submit_request(
+        email = described_class.submit_request(
           Reserve.create(reserve_params.merge(has_been_sent: true,
                                               item_list: [{ "ckey" => "12345", "title" => "SW Item", 'imprint' => '1st ed. - Mordor', "copies" => "2", "loan_period" => "4 hours",
                                                             "online" => true }])), "test@example.com", "jdoe"
         )
-        body = email.body.raw_source
-
         expect(email.subject).to eq("Updated Reserve Form: CID1-SID1 - Spring 2010")
       end
     end
