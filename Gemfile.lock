@@ -168,6 +168,8 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
+    faraday-retry (2.1.0)
+      faraday (~> 2.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
     honeybadger (5.2.1)
@@ -219,6 +221,8 @@ GEM
     net-ssh (7.1.0)
     newrelic_rpm (9.2.0)
     nio4r (2.5.9)
+    nokogiri (1.14.3-arm64-darwin)
+      racc (~> 1.4)
     nokogiri (1.14.3-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.14.3-x86_64-linux)
@@ -331,6 +335,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    sqlite3 (1.6.2-arm64-darwin)
     sqlite3 (1.6.2-x86_64-darwin)
     sqlite3 (1.6.2-x86_64-linux)
     sshkit (1.21.4)
@@ -367,6 +372,8 @@ GEM
     zeitwerk (2.6.8)
 
 PLATFORMS
+  arm64-darwin-21
+  arm64-darwin-22
   x86_64-darwin-20
   x86_64-darwin-22
   x86_64-linux
@@ -384,6 +391,7 @@ DEPENDENCIES
   debug
   dlss-capistrano (~> 3.0)
   faraday
+  faraday-retry
   honeybadger
   importmap-rails
   jbuilder

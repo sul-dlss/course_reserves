@@ -33,6 +33,6 @@ task fetch_courses: :environment do
     end
   end
   # Send error message if certain courses failing
-  Report.msg(to: Settings.email.reports, subject: "Problem retrieving course results", message: errors).deliver_now if errors.present?
+  ReportMailer.msg(to: Settings.email.reports, subject: "Problem retrieving course results", message: errors).deliver_now if errors.present?
   `touch tmp/restart.txt` if updated
 end

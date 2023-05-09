@@ -2,6 +2,7 @@ require 'terms'
 require 'json'
 require 'nokogiri'
 require 'faraday'
+require 'faraday/retry'
 
 # Get course term information and then parse
 class CourseAPI
@@ -15,7 +16,14 @@ class CourseAPI
     key_file = Rails.root.join("config/sul-harvester.key")
     client_cert = OpenSSL::X509::Certificate.new File.read(cert_file)
     client_key = OpenSSL::PKey.read File.read(key_file)
-    @connection = Faraday::Connection.new 'https://registry.stanford.edu', ssl: { client_cert: client_cert, client_key: client_key }
+    @connection = Faraday.new(url: "https://registry.stanford.edu") do |faraday|
+      faraday.use Faraday::Response::RaiseError
+      faraday.ssl[:client_cert] = client_cert
+      faraday.ssl[:client_key] = client_key
+      # By default, picks up timeout exceptions, but more exceptions can be added by specifying
+      # exceptions:[] in the retry options hash
+      faraday.request :retry, { max: 2, interval: 1 }
+    end
   end
 
   # Methods for retrieving and parsing course term information
@@ -104,19 +112,8 @@ class CourseAPI
     spec_course = "/doc/courseclass/#{request_class_id}"
     begin
       response = @connection.get spec_course
-    # Timeout error
-    rescue Faraday::TimeoutError
-      # Retry
-      begin
-        response = @connection.get spec_course
-      rescue Faraday::Error
-        errors << "After timeout, retry failed for #{request_class_id}"
-      end
-    # Connection failed error
-    rescue Faraday::ConnectionFailed
-      errors << "Connection failed for #{request_class_id}"
-    rescue Faraday::ServerError
-      errors << "Server error for #{request_class_id}"
+    rescue Faraday::Error => e
+      errors << "#{e.class.name}, #{e} for course id #{request_class_id}"
     end
     { response: response, errors: errors }
   end
@@ -128,8 +125,7 @@ class CourseAPI
     errors = response_info[:errors]
     sections = []
     # Get sections and instructors for this course if the response status is successful
-    errors << "#{request_class_id} returned error #{response.status}" if response.status != 200
-    sections = parse_sections(response.body, request_class_id) if response.status == 200
+    sections = parse_sections(response.body, request_class_id) if !response.nil? && response.status == 200
     { sections: sections, errors: errors }
   end
 
