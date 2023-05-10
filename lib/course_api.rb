@@ -6,9 +6,25 @@ require 'faraday/retry'
 
 # Get course term information and then parse
 class CourseAPI
-  def initialize
-    @connection = nil
+  # Called on CourseAPI.new
+  # Providing parameter for connection enables testing with Faraday connection stub
+  def initialize(connection = nil)
+    @connection = connection || setup_connection
   end
+
+  # For a given term, retrieve the courses json
+  # If there is an error with course term retrieval, an empty array will be returned
+  # If there are errors at the individual course API level, the returned object
+  # will be { errors: errors, courses: courses }
+  def courses_for_term(term)
+    # Get the course term information from the API
+    response = course_term_response(term)
+    # If the response succeeds, return parsed list of courses with additional info
+    # from Course API for each individual course
+    !response.nil? && response.status == 200 ? parse_term(response.body) : []
+  end
+
+  private
 
   # Set up Faraday connection
   def setup_connection
@@ -22,7 +38,7 @@ class CourseAPI
       faraday.ssl[:client_key] = client_key
       # By default, picks up timeout exceptions, but more exceptions can be added by specifying
       # exceptions:[] in the retry options hash
-      faraday.request :retry, { max: 2, interval: 1 }
+      faraday.request :retry, { max: 1, interval: 0.5 }
     end
   end
 
@@ -59,7 +75,7 @@ class CourseAPI
     courses_list = parse_courses(course_term_xml)
     courses_list.each_with_index do |course, index|
       # Build in a wait of a second after every 10,000 requests to the course API
-      sleep(1) if (index % 10_000).zero?
+      sleep(1) if index.positive? && (index % 10_000).zero?
       request_class_id = course[:request_class_id]
       # Call the individual Course API to get sections and instructors for this course
       course_info = get_course_info(request_class_id)

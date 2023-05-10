@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE CourseClass SYSTEM "https://registry.stanford.edu/xml/courseclass/1.0/CourseClass.dtd">
-<CourseClass courseid="98765" id="1236-98765" shorttitle="UNDERGRAD DIR RDNG/RESEARCH" source="academic" term="1236" title="Undergraduate Directed Reading/Research">Prerequisite: consent of instructor.
-	<class catalognum="199" id="1236-PEDS-199" offering="1" subject="PEDS" term="1236">
-		<section classnum="56789" enrollment="yes" id="345" maxunits="18" minunits="1" status="open">
+<CourseClass courseid="100824" id="1236-100824" shorttitle="Growth and Stabilization" source="academic" term="1236" title="Growth and Stabilization in the Global Economy">Prerequisite: consent of instructor.
+	<class catalognum="199" id="1236-MGTECON-300" offering="1" subject="MGTECON" term="1236">
+		<section classnum="56789" enrollment="yes" id="412" maxunits="18" minunits="1" status="open">
 			<meeting number="1">
 				<instructor type="primary">
-					<person  sunetid="test instructor">Instructor, Test</person>
+					<person  sunetid="best professor">Professor, Best</person>
 				</instructor>
 				<schedule startdate="04/03/2023" starttime="00:00" stopdate="06/07/2023" stoptime="00:00"/>
 			</meeting>
 		</section>
-		<section classnum="31421" enrollment="yes" id="224" maxunits="18" minunits="1" status="open">
+		<section classnum="31421" enrollment="yes" id="424" maxunits="18" minunits="1" status="open">
 			<meeting number="1">
 			</meeting>
 		</section>
