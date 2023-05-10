@@ -1,15 +1,9 @@
-require 'terms'
-require 'faraday'
-require 'openssl'
-require 'course_api'
-
 desc "rake task to fetch course term and individual course information from MaIS APIs"
 task fetch_courses: :environment do
   current_term = Terms.current_term
   future_term = Terms.future_terms.first
   errors = []
-  updated = false
-  c_api = CourseAPI.new
+  c_api = CourseApi.new
 
   # Get the current term and the very next term
   [current_term, future_term].each do |term|
@@ -25,10 +19,8 @@ task fetch_courses: :environment do
       errors = courses_info[:errors]
       # Write the JSON to the folder where the app will pick it up later
       File.write("#{Rails.root}/lib/course_work_xml/#{file_name}", courses.to_json.force_encoding('UTF-8'))
-      updated = true
     end
   end
   # Send error message if certain courses failing
   ReportMailer.msg(to: Settings.email.reports, subject: "Problem retrieving course results", message: errors).deliver_now if errors.present?
-  `touch tmp/restart.txt` if updated
 end

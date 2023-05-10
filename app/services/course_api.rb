@@ -1,11 +1,5 @@
-require 'terms'
-require 'json'
-require 'nokogiri'
-require 'faraday'
-require 'faraday/retry'
-
 # Get course term information and then parse
-class CourseAPI
+class CourseApi
   # Called on CourseAPI.new
   # Providing parameter for connection enables testing with Faraday connection stub
   def initialize(connection = nil)
@@ -73,9 +67,7 @@ class CourseAPI
     all_errors = []
     # Return array of course hash objects
     courses_list = parse_courses(course_term_xml)
-    courses_list.each_with_index do |course, index|
-      # Build in a wait of a second after every 10,000 requests to the course API
-      sleep(1) if index.positive? && (index % 10_000).zero?
+    courses_list.each do |course|
       request_class_id = course[:request_class_id]
       # Call the individual Course API to get sections and instructors for this course
       course_info = get_course_info(request_class_id)
