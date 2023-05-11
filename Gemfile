@@ -52,6 +52,7 @@ gem 'jquery-rails'
 gem 'nokogiri'
 
 gem 'faraday'
+gem 'faraday-retry'
 
 gem 'whenever', "~> 1.0"
 

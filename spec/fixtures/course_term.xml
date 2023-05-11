@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CourseTerm SYSTEM "https://registry.stanford.edu/xml/courseterm/1.0/CourseTerm.dtd">
+<CourseTerm term="1236" year="2022-2023" quarter="Spring"> 
+   <course id="100704" title="Graduation Quarter">
+      <class offering="1" id="1236-SPEC-802">
+         <section id="01" classnum="18019">
+            <component code="T/D" value="value"/>
+         </section>
+      </class>
+   </course>
+   <course id="100824" title="Growth and Stabilization in the Global Economy">
+      <class offering="1" id="1236-MGTECON-300">
+         <section id="01" classnum="32941">
+            <component code="SEM" value="value"/>
+         </section>
+         <section id="02" classnum="32942">
+            <component code="SEM" value="value"/>
+         </section>
+         <section id="03" classnum="32943">
+            <component code="SEM" value="value"/>
+         </section>
+         <section id="04" classnum="32944">
+            <component code="SEM" value="value"/>
+         </section>
+         <section id="05" classnum="32945">
+            <component code="SEM" value="value"/>
+         </section>
+         <section id="06" classnum="32946">
+            <component code="SEM" value="value"/>
+         </section>
+      </class>
+   </course>
+</CourseTerm>
