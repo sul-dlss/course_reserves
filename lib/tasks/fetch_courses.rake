@@ -7,18 +7,15 @@ task fetch_courses: :environment do
 
   # Get the current term and the very next term
   [current_term, future_term].each do |term|
-    # The file to which the JSON resulting from CourseTerm and Course API calls will be written
-    file_name = "course_#{Terms.process_term_for_cw(term)}.json"
     # Get the courses information for this particular term
     # The return object has errors and the list of courses
     courses_info = c_api.courses_for_term(term)
     if courses_info.empty?
       errors << "Courses not returned for #{term}"
     else
-      courses = courses_info[:courses]
+      # Write the JSON resulting from CourseTerm and Course API calls to the appropriate directory
+      CourseOutputWriter.new(Terms.process_term_for_cw(term), courses_info[:courses]).write
       errors = courses_info[:errors]
-      # Write the JSON to the folder where the app will pick it up later
-      File.write("#{Rails.root}/lib/course_work_xml/#{file_name}", courses.to_json.force_encoding('UTF-8'))
     end
   end
   # Send error message if certain courses failing
