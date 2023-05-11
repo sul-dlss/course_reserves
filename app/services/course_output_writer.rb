@@ -10,6 +10,6 @@ class CourseOutputWriter
   def write
     file_name = "course_#{@file_term}.json"
     # Write the JSON to the course_work_content folder where the app will pick it up later
-    File.write("#{Rails.root}/lib/course_work_content/#{file_name}", @courses.to_json)
+    Rails.root.join("lib/course_work_content", file_name).write(@courses.to_json)
   end
 end
