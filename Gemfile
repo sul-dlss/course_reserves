@@ -54,7 +54,7 @@ gem 'nokogiri'
 gem 'faraday'
 gem 'faraday-retry'
 
-gem 'whenever', "~> 1.0"
+gem 'whenever', "~> 1.0", require: false # Work around https://github.com/javan/whenever/issues/831
 
 # Use honeybadger for exception reporting
 gem 'honeybadger'
