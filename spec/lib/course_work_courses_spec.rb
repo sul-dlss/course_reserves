@@ -3,26 +3,25 @@ require "course_work_courses"
 # This has been updated to focus on JSON loading and not XML
 RSpec.describe CourseWorkCourses do
   before do
-    allow(Settings).to receive(:use_course_json).and_return(true)
+    Settings.use_course_json = true
   end
 
   let(:courses) { CourseWorkCourses.new }
 
-  describe "loading JSON" do
-    it "is a JSON array where each object has a title" do
-      puts "What is the setting"
-      puts Settings.use_course_json.to_s
+  describe "loading JSON from fixture file" do
+    it "is an array of JSON arrays where each object has certain attributes" do
       courses.json_files.each do |json_file|
         expect(json_file).not_to be_empty
-        expect(json_file[0]).to have_key("title")
+        json_file.each do |j_obj|
+          expect(j_obj).to include("title", "cid", "cids", "sid", "instructors")
+        end
       end
     end
 
     it "loads JSON when provided on object initialization" do
-      courses = CourseWorkCourses.new('[{"title":"MyTitle","term":null,"cid":"CLASS-ID","cids":["CLASS-ID"],"sid":"01","instructors":[{"sunet":"mysunet","name":"My Teacher"}]}]').all_courses
-      expect(courses.length).to eq(1)
-      expect(courses.first.cid).to eq("CLASS-ID")
-      expect(courses.first.sid).to eq("01")
+      init_courses = CourseWorkCourses.new('[{"title":"MyTitle","term":null,"cid":"CLASS-ID","cids":["CLASS-ID"],"sid":"01","instructors":[{"sunet":"mysunet","name":"My Teacher"}]}]').all_courses
+      expect(init_courses.length).to eq(1)
+      expect(init_courses[0]).to have_attributes(title: "MyTitle", cid: "CLASS-ID", cids: ["CLASS-ID"], sid: "01", instructors: [hash_including(sunet: "mysunet", name: "My Teacher")])
     end
   end
 
@@ -135,7 +134,7 @@ RSpec.describe CourseWorkCourses do
         expect(course.first.title).to eq("Residential Racial Segregation and the Education of African-American Youth")
         expect(course.first.cid).to eq("EDUC-237X")
         expect(course.first.sid).to eq("01")
-        expect(course.first.instructors.map { |i| i[:sunet] }).to include("123")
+        expect(course.first.instructors.pluck(:sunet)).to include("123")
       end
 
       it "returns blank when the class id does not exist" do
