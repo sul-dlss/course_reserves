@@ -1,0 +1,144 @@
+[
+  {
+     "title":"Residential Racial Segregation and the Education of African-American Youth",
+     "term":"Winter 2012",
+     "cid":"EDUC-237X",
+     "cids":[
+        "EDUC-237X",
+        "ETHICSOC-165E",
+        "AFRICAAM-165E"
+     ],
+     "sid":"01",
+     "instructors":[
+        {
+           "sunet":"123",
+           "name":"instructor's display name"
+        },
+        {
+           "sunet":"456",
+           "name":"instructor's display name"
+        }
+     ]
+  },
+  {
+     "title":"Residential Racial Segregation and the Education of African-American Youth",
+     "term":"Winter 2012",
+     "cid":"EDUC-237X",
+     "cids":[
+        "EDUC-237X",
+        "ETHICSOC-165E",
+        "AFRICAAM-165E"
+     ],
+     "sid":"02",
+     "instructors":[
+        {
+           "sunet":"123",
+           "name":"instructor's display name"
+        }
+     ]
+  },
+  {
+     "title":"Residential Racial Segregation and the Education of African-American Youth",
+     "term":"Winter 2012",
+     "cid":"ETHICSOC-165E",
+     "cids":[
+        "EDUC-237X",
+        "ETHICSOC-165E",
+        "AFRICAAM-165E"
+     ],
+     "sid":"01",
+     "instructors":[
+        {
+           "sunet":"123",
+           "name":"instructor's display name"
+        }
+     ]
+  },
+  {
+     "title":"Residential Racial Segregation and the Education of African-American Youth",
+     "term":"Winter 2012",
+     "cid":"AFRICAAM-165E",
+     "cids":[
+        "EDUC-237X",
+        "ETHICSOC-165E",
+        "AFRICAAM-165E"
+     ],
+     "sid":"01",
+     "instructors":[
+        {
+           "sunet":"123",
+           "name":"instructor's display name"
+        }
+     ]
+  },
+  {
+     "title":"Global Positioning Systems",
+     "term":"Winter 2012",
+     "cid":"AA-272C",
+     "cids":[
+        "AA-272C"
+     ],
+     "sid":"02",
+     "instructors":[
+        {
+           "sunet":"123",
+           "name":"instructor 1's display name"
+        },
+        {
+           "sunet":"456",
+           "name":"instructor 2's display name"
+        }
+     ]
+  },
+  {
+     "title":"Global Positioning Systems",
+     "term":"Winter 2012",
+     "cid":"AA-272C",
+     "cids":[
+        "AA-272C"
+     ],
+     "sid":"01",
+     "instructors":[
+        {
+           "sunet":"123",
+           "name":"instructor 1's display name"
+        },
+        {
+           "sunet":"456",
+           "name":"instructor 2's display name"
+        }
+     ]
+  },
+  {
+     "title":"Art/Hist Cross Listed Course",
+     "term":"Summer 2012",
+     "cid":"ART-102",
+     "cids":[
+        "ART-102",
+        "HIST-201"
+     ],
+     "sid":"01",
+     "instructors":[
+        {
+           "sunet":"789",
+           "name":"instructor 1's display name"
+        }
+     ]
+  },
+  {
+     "title":"Art/Hist Cross Listed Course",
+     "term":"Summer 2012",
+     "cid":"HIST-201",
+     "cids":[
+        "ART-102",
+        "HIST-201"
+     ],
+     "sid":"01",
+     "instructors":[
+        {
+           "sunet":"789",
+           "name":"instructor 1's display name"
+        }
+     ]
+  }
+]
