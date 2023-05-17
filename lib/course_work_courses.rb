@@ -48,7 +48,7 @@ class CourseWorkCourses
 
   # These two initialize methods are broken out to enable both approaches
   # until we switch over completely to JSON
-  def initialize_xml(xml = nil)
+  def initialize_xml(xml)
     if xml
       @raw_xml = [Nokogiri::XML(xml)]
     else
@@ -61,7 +61,7 @@ class CourseWorkCourses
   end
 
   # Handling JSON
-  def initialize_json(json_file = nil)
+  def initialize_json(json_file)
     if json_file
       @json_files = [JSON.parse(json_file)]
     else
@@ -212,17 +212,10 @@ class CourseWorkCourses
     # and create the objects required by the model
     json_files.each do |json_file|
       json_file.each do |course|
-        course = course.with_indifferent_access
-        if course.key?(:instructors) && !course[:instructors].empty?
-          yield Course.new(
-            title: course[:title],
-            term: course[:term],
-            cid: course[:cid],
-            cids: course[:cids],
-            sid: course[:sid],
-            instructors: course[:instructors]
-          )
-        end
+        # Deep transform will also convert the nested instructor hash keys to symbols
+        # Symbolized keys are required for the hash to map to the keyword arguments for Course
+        course.deep_transform_keys!(&:to_sym)
+        yield Course.new(**course) if course[:instructors].present?
       end
     end
   end
