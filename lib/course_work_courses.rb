@@ -212,14 +212,15 @@ class CourseWorkCourses
     # and create the objects required by the model
     json_files.each do |json_file|
       json_file.each do |course|
-        if course.key?("instructors") && !course["instructors"].empty?
+        course = course.with_indifferent_access
+        if course.key?(:instructors) && !course[:instructors].empty?
           yield Course.new(
-            title: course["title"],
-            term: course["term"],
-            cid: course["cid"],
-            cids: course["cids"],
-            sid: course["sid"],
-            instructors: course["instructors"].map { |inst| inst.transform_keys(&:to_sym) }
+            title: course[:title],
+            term: course[:term],
+            cid: course[:cid],
+            cids: course[:cids],
+            sid: course[:sid],
+            instructors: course[:instructors]
           )
         end
       end
