@@ -145,13 +145,14 @@ class CourseApi
     # The same course request can return cross listed courses, so we will need to get a specific id
     course_response.xpath("//class[@id='#{request_class_id}']//section[.//instructor]").each do |section|
       section_id = section[:id]
-      instructors = []
+      # We do not want to duplicate instructor names even if multiple meetings have same instructor
+      instructor_sunets = {}
       section.xpath(".//instructor/person").each do |person|
         sunetid = person[:sunetid]
         name = person.text
-        instructors << { sunet: sunetid, name: name }
+        instructor_sunets[sunetid] = name unless instructor_sunets.key?(sunetid)
       end
-      sections << { sid: section_id, instructors: instructors }
+      sections << { sid: section_id, instructors: instructor_sunets.map { |k, v| { sunet: k, name: v } } }
     end
     sections
   end
