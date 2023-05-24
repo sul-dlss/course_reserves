@@ -1,3 +1,3 @@
-every :day, :at => '4:30am', :roles => [:app] do
-  rake "fetch_xml"
+every :day, :at => '3:30am', :roles => [:app] do
+  rake "fetch_courses"
 end

@@ -2,10 +2,6 @@ require 'rails_helper'
 require "course_work_courses"
 # This has been updated to focus on JSON loading and not XML
 RSpec.describe CourseWorkCourses do
-  before do
-    Settings.use_course_json = true
-  end
-
   let(:courses) { CourseWorkCourses.new }
 
   describe "loading JSON from fixture file" do

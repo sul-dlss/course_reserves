@@ -13,7 +13,7 @@ class Reserve < ActiveRecord::Base
   serialize :sent_item_list, Array
 
   def course
-    @course ||= CourseWorkCourses.instance.find_by_compound_key(compound_key).first
+    @course ||= CourseWorkCourses.new.find_by_compound_key(compound_key).first
   end
 
   def course_title
