@@ -34,11 +34,6 @@ class CourseWorkCourses
     end
   end
 
-  def self.instance
-    # This used to be memoized, i.e. ||= but we want the JSON loaded each time without restarting
-    @instance = CourseWorkCourses.new
-  end
-
   def initialize(json_file = nil)
     if json_file
       @json_files = [JSON.parse(json_file)]
@@ -85,12 +80,30 @@ class CourseWorkCourses
     end
   end
 
-  # TODO: We have tests that are highly sensitive to the order of the courses; this unfortunate
-  # logic preserves the bottom-most course from the xml. it's unclear whether this is incidental
-  # or a feature.
+  # We have tests that are highly sensitive to the order of the courses.
+  # We use the dedup_courses method to preserve the original order while removing duplicates
   def all_courses
-    # Process
-    @all_courses ||= process_all_courses(self.json_files).to_a.reverse.uniq(&:key).reverse.to_a
+    @all_courses ||= dedup_courses(process_all_courses(self.json_files).to_a)
+  end
+
+  # Given two sections with the same CIDs and instructor sunet ids, preserve only the lower numbered section
+  # Keep the original order of courses
+  def dedup_courses(courses)
+    course_hash = {}
+    key_order = []
+    courses.each do |course|
+      ckey = course.key
+      sid = course.sid.to_i
+      key_order << ckey unless course_hash.key?(ckey)
+      # If we have not encountered this course and instructor set before
+      # or if the section id that is saved is greater than the one being processed
+      # save this section as the one to save for this course and instructor set
+      if !course_hash.key?(ckey) ||
+         (course_hash.key?(ckey) && course_hash[ckey].sid.to_i > sid)
+        course_hash[ckey] = course
+      end
+    end
+    key_order.map { |k| course_hash[k] }
   end
 
   # Efficient lookup of course data by compound key (which is used in a few places around the app)

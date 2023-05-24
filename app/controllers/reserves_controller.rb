@@ -23,9 +23,9 @@ class ReservesController < ApplicationController
   def all_courses_response
     items = []
     if current_user.superuser?
-      courses = CourseWorkCourses.instance.all_courses
+      courses = CourseWorkCourses.new.all_courses
     else
-      courses = CourseWorkCourses.instance.find_by_sunet(current_user.sunetid)
+      courses = CourseWorkCourses.new.find_by_sunet(current_user.sunetid)
     end
     courses.each do |course|
       cl = course.cross_listings.blank? ? "" : "(#{course.cross_listings})"
@@ -108,7 +108,7 @@ class ReservesController < ApplicationController
   protected
 
   def course_for_compound_key(cid)
-    CourseWorkCourses.instance.find_by_compound_key(cid).first
+    CourseWorkCourses.new.find_by_compound_key(cid).first
   end
 
   def reserve_mail_address(reserve)
