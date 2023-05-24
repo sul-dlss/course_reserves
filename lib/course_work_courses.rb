@@ -35,7 +35,7 @@ class CourseWorkCourses
   end
 
   def self.instance
-    # @instance ||= CourseWorkCourses.new
+    # This used to be memoized, i.e. ||= but we want the JSON loaded each time without restarting
     @instance = CourseWorkCourses.new
   end
 
@@ -89,6 +89,7 @@ class CourseWorkCourses
   # logic preserves the bottom-most course from the xml. it's unclear whether this is incidental
   # or a feature.
   def all_courses
+    # Process
     @all_courses ||= process_all_courses(self.json_files).to_a.reverse.uniq(&:key).reverse.to_a
   end
 
