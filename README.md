@@ -27,9 +27,8 @@ Start the rails app with an admin user logged in
   ```
 
 To load sample data:
-1. [Download course data XML](https://consul.stanford.edu/display/SYSTEMS/Registry+Course+Harvesting)
-2. Move files to `/lib/course_work_xml/`
-3. Restart the rails server
+1. To generate the JSON files under lib/course_work_content, run the "rake fetch_courses" task locally. This process will take a few hours.  Alternatively, you can copy JSON files from "lib/course_work_content" from an existing staging or production system. 
+2. Restart the rails server
 
 ## Testing
 
