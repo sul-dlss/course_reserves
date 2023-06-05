@@ -58,7 +58,7 @@ class ReserveItem
     text << "  (WAS: #{previous_entry.required ? 'Required' : 'Recommended'})" if previous_entry && previous_entry.required != required
     text << ""
     text << "Comment: #{comment}"
-    text << "(WAS: #{previous_entry.comment})" if previous_entry&.comment&.present? && previous_entry&.comment != comment
+    text << "(WAS: #{previous_entry.comment})" if previous_entry&.comment.present? && previous_entry&.comment != comment
 
     text.join("\n    ")
   end
