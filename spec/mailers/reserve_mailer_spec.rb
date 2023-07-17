@@ -10,7 +10,7 @@ RSpec.describe ReserveMailer do
     it "returns the correct main info" do
       email = described_class.submit_request(Reserve.create(reserve_params), "test@example.com", "jdoe")
       body = email.body.raw_source
-      expect(email.subject).to  eq("New Reserve Form: CID1-SID1 - Spring 2010")
+      expect(email.subject).to eq("New Reserve Form: CID1-SID1 - Spring 2010")
       expect(email.to).to include("test@example.com")
       expect(body).to match(/CID1-SID1/)
       expect(body).to match(/Instructor Name\(s\): Doe, John, Doe, Jon/)
