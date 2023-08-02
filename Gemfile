@@ -84,7 +84,6 @@ end
 group :test do
   gem 'capybara', ">= 2.15"
   gem 'selenium-webdriver', '!= 3.13.0'
-  gem 'webdrivers'
   gem 'simplecov', require: false
   gem 'database_cleaner'
   gem 'rails-controller-testing'

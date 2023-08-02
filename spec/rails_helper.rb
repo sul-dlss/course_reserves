@@ -29,10 +29,6 @@ ActiveRecord::Migration.maintain_test_schema!
 require 'capybara/rails'
 require 'selenium-webdriver'
 
-# We may be able to remove this line when selenium 4.11 is released
-# See https://github.com/titusfortner/webdrivers/issues/247#issuecomment-1648154088
-Webdrivers::Chromedriver.required_version = '114.0.5735.90'
-
 Capybara.javascript_driver = :selenium_chrome_headless
 
 RSpec.configure do |config|
