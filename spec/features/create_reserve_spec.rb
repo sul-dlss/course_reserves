@@ -73,7 +73,7 @@ RSpec.describe 'Creating Reserves', js: true do
         end
 
         expect(page).to have_css('.reserve:not(#add_row)', count: 1)
-        expect(page).not_to have_link('Cats!')
+        expect(page).to have_no_link('Cats!')
         expect(page).to have_link('Dogs!', href: 'https://searchworks.stanford.edu/view/54321')
       end
     end
