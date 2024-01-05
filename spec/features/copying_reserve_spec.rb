@@ -49,7 +49,7 @@ RSpec.describe 'Copying a reserve list', js: true do
     expect(page).to have_css('.clone-reserve-list', visible: true) # make sure modal renders
 
     within '#modal' do
-      expect(page).not_to have_css('a', text: /#{Terms.future_terms.first}/)
+      expect(page).to have_no_css('a', text: /#{Terms.future_terms.first}/)
       expect(page).to have_content("#{Terms.future_terms.first} (reserve list already exists)")
       expect(page).to have_css('a', text: Terms.future_terms.last)
     end
@@ -63,11 +63,11 @@ RSpec.describe 'Copying a reserve list', js: true do
     visit '/'
 
     within(first('#my-reserves tbody tr')) do
-      expect(page).not_to have_link('Copy')
+      expect(page).to have_no_link('Copy')
 
       click_link 'Edit'
     end
 
-    expect(page).not_to have_link 'Copy this list for a new quarter'
+    expect(page).to have_no_link 'Copy this list for a new quarter'
   end
 end
