@@ -28,9 +28,9 @@ braces@~3.0.2:
     fill-range "^7.0.1"
 
 "chokidar@>=3.0.0 <4.0.0":
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.3.tgz#1cf37c8707b932bd1af1ae22c0432e2acd1903bd"
-  integrity sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.6.0.tgz#197c6cc669ef2a8dc5e7b4d97ee4e092c3eb0d5b"
+  integrity sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==
   dependencies:
     anymatch "~3.1.2"
     braces "~3.0.2"
@@ -43,9 +43,9 @@ braces@~3.0.2:
     fsevents "~2.3.2"
 
 datatables.net-bs4@^1.13.1:
-  version "1.13.8"
-  resolved "https://registry.yarnpkg.com/datatables.net-bs4/-/datatables.net-bs4-1.13.8.tgz#7a28023437bd86c85070f373f96c87cf54e7012c"
-  integrity sha512-9LQ4UMb28balB2xK9MhxbsDjUzAUjc0bNjxvtkysdMbb9FhNOTDkmt1I4ZzfiJiDMN8CH1vzZsgCh835LkX7SQ==
+  version "1.13.10"
+  resolved "https://registry.yarnpkg.com/datatables.net-bs4/-/datatables.net-bs4-1.13.10.tgz#fa3970d1e57daa64ce8df444517bf3c1df14d435"
+  integrity sha512-t6zTyuoUhOwr7ONJGYQdN57st/G3iA6Ju9A56Q2vtoJO03XBeFjpAK3sZ0R02Yz35qtzZXgBtSU8bdOiXL2xwA==
   dependencies:
     datatables.net "1.13.8"
     jquery ">=1.7"
