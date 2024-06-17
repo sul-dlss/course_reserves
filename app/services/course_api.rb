@@ -22,8 +22,8 @@ class CourseApi
 
   # Set up Faraday connection
   def setup_connection
-    cert_file = Rails.root.join("config/sul-harvester.cert")
-    key_file = Rails.root.join("config/sul-harvester.key")
+    cert_file = Rails.root.join("config/sul_harvester.cert")
+    key_file = Rails.root.join("config/sul_harvester.key")
     client_cert = OpenSSL::X509::Certificate.new File.read(cert_file)
     client_key = OpenSSL::PKey.read File.read(key_file)
     @connection = Faraday.new(url: "https://registry.stanford.edu") do |faraday|
