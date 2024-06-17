@@ -107,11 +107,9 @@ class CourseApi
   end
 
   def extract_cids(course)
-    cids = []
-    course.xpath(".//class").each do |cl|
-      cids << remove_class_id_prefix(cl[:id])
+    course.xpath(".//class").map do |cl|
+      remove_class_id_prefix(cl[:id])
     end
-    cids
   end
 
   # Generate connection to course API

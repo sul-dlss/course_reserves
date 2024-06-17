@@ -47,7 +47,7 @@ RSpec.describe CourseWorkCourses do
         'ART-102,HIST-201,789'
       ]
 
-      expect(course_map.values.flatten).to all(be_a_kind_of(CourseWorkCourses::Course))
+      expect(course_map.values.flatten).to all(be_a(CourseWorkCourses::Course))
       expect(course_map['AA-272C,123,456'].length).to eq 1
       expect(course_map['ART-102,HIST-201,789'].length).to eq 2
     end
