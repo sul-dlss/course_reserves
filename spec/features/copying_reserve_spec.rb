@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Copying a reserve list', js: true do
+RSpec.describe 'Copying a reserve list', :js do
   before do
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(
       CurrentUser.new('123')

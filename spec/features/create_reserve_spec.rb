@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Creating Reserves', js: true do
+RSpec.describe 'Creating Reserves', :js do
   before do
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(
       CurrentUser.new('123', Settings.workgroups.superuser)

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe "Sending Emails", js: true do
+RSpec.describe "Sending Emails", :js do
   before do
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(
       CurrentUser.new('123', Settings.workgroups.superuser)
