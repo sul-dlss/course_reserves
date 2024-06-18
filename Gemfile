@@ -107,3 +107,5 @@ gem 'config'
 gem 'newrelic_rpm'
 
 gem "cssbundling-rails", "~> 1.1"
+gem "ed25519"
+gem "bcrypt_pbkdf"
