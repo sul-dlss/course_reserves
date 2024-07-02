@@ -13,6 +13,9 @@ block_emails?: false
 courseworks:
   coursexml_url: "https://bodoni.stanford.edu/coursereserves/courseXML_%{term}.xml"
 
+courses:
+  cert_name: sul-course-test
+
 email:
   from: "no-reply@reserves.stanford.edu"
   reports: "searchworks-reports@lists.stanford.edu"
