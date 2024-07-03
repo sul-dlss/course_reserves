@@ -83,7 +83,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara', ">= 2.15"
+  gem 'capybara', '~> 3.0'
   gem 'selenium-webdriver', '!= 3.13.0'
   gem 'simplecov', require: false
   gem 'database_cleaner'
@@ -97,10 +97,11 @@ end
 
 group :deployment do
   gem 'capistrano', '~> 3.0'
+  gem 'capistrano-rvm'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-passenger'
-  gem 'dlss-capistrano', '~> 3.0'
+  gem 'dlss-capistrano'
 end
 
 gem 'config'
