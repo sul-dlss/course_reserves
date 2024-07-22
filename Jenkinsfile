@@ -23,7 +23,7 @@ pipeline {
           export DEPLOY=1
 
           # Load RVM
-          rvm use 3.0.3@reserves --create
+          rvm use 3.3.1@reserves --create
           gem install bundler
 
           bundle install --without production
@@ -67,7 +67,7 @@ pipeline {
           export DEPLOY=1
 
           # Load RVM
-          rvm use 3.0.3@reserves --create
+          rvm use 3.3.1@reserves --create
           gem install bundler
 
           bundle install --without production
@@ -94,13 +94,13 @@ pipeline {
       }
     }
 
-    stage('Prod deploy (on release)') {
+    stage('Prod deploy') {
       environment {
         DEPLOY_ENVIRONMENT = 'prod'
       }
 
       when {
-        tag "v*"
+        branch 'main'
       }
 
       steps {
@@ -112,7 +112,7 @@ pipeline {
           export REVISION=$TAG_NAME
 
           # Load RVM
-          rvm use 3.0.3@reserves --create
+          rvm use 3.3.1@reserves --create
           gem install bundler
 
           bundle install --without production
