@@ -1,5 +1,4 @@
 // Adapted from https://github.com/projectblacklight/blacklight/blob/master/app/javascript/blacklight/modal.js
-//= require bootstrap
 
 Reserves = {};
 
@@ -27,9 +26,7 @@ Reserves.modal.modalAjaxClickLink = function(e) {
 Reserves.modal.onFailure = function(data) {
   var contents =  '<div class="modal-header">' +
             '<div class="modal-title">Network Error</div>' +
-            '<button type="button" class="Reserves-modal-close close" data-dismiss="modal" aria-label="Close">' +
-            '  <span aria-hidden="true">&times;</span>' +
-            '</button>';
+            '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
   $(Reserves.modal.modalSelector).find('.modal-content').html(contents);
   $(Reserves.modal.modalSelector).modal('show');
 }

@@ -1,0 +1,109 @@
+:root {
+  --stanford-fog-dark: #b6b1a9;
+  --stanford-cardinal-rgb: 143, 20, 20;
+}
+.bg-cardinal {
+  --bs-dark-rgb: var(--stanford-cardinal-rgb);
+}
+
+.bg-fog {
+  --bs-table-bg: var(--stanford-fog-dark);
+}
+
+.bg-dark.navbar .nav-item {
+  color: var(--bs-navbar-color);
+}
+
+#main-container {
+  /* keep the footer at the bottom */
+  min-height: calc(100vh - 441px);
+}
+
+#list-management {
+  min-width: 354px;
+}
+
+#item_list {
+  counter-reset: section;
+
+  background-color: var(--bs-table-bg);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  .header {
+    height: 1rem;
+    background-color: var(--stanford-fog-dark);
+  }
+
+  .reserve {
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+  }
+
+  .reserve:nth-child(even) {
+    background-color: rgba(var(--bs-emphasis-color-rgb), 0.05);
+  }
+
+  .num_copies {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width: 12ch;
+  }
+
+  .loan-period {
+    width: auto;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+}
+
+.enumerator {
+  font-size: 2rem;
+  line-height: 2rem;
+  color: var(--stanford-fog-dark);
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  .counter {
+    &::before {
+      content: counter(section);
+      counter-increment: section;
+    }
+  }
+}
+
+#libraries {
+  width: 35ch;
+}
+
+.sent_date {
+  color: var(--stanford-cardinal);
+  font-size: 1.2em;
+}
+
+.changed {
+  border-left: 2px solid var(--stanford-cardinal);
+  border-right: 2px solid var(--stanford-cardinal);
+  border-bottom: 2px solid var(--bs-border-color);
+}
+
+#sw_url {
+  width: 400px;
+}
+
+#introduction {
+  border-left: 5px solid var(--stanford-fog-dark);
+  padding-left: 1rem;
+  max-width: 45em;
+}
+
+#all_courses {
+  width: 100%;
+}
+
+#all_courses #course_id {
+  white-space: nowrap;
+}
+#all_courses #instructor {
+  width: 35%;
+}

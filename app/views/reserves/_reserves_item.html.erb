@@ -50,7 +50,7 @@
 						<%= f.hidden_field :loan_period %>
 					<% end %>
 
-					<%= f.select :loan_period, Settings.loan_periods.to_h.values, {}, class: "loan-period form-control loan-select #{"media" if ActiveModel::Type::Boolean.new.cast(item["media"])}", disabled: ActiveModel::Type::Boolean.new.cast(item["media"]) %>
+					<%= f.select :loan_period, Settings.loan_periods.to_h.values, {}, class: "loan-period form-select loan-select #{"media" if ActiveModel::Type::Boolean.new.cast(item["media"])}", disabled: ActiveModel::Type::Boolean.new.cast(item["media"]) %>
 				</div>
 
 				<div class="form-group d-flex flex-column flex-md-row mb-2">

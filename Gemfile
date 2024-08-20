@@ -106,5 +106,3 @@ end
 
 gem 'config'
 gem 'newrelic_rpm'
-
-gem "cssbundling-rails", "~> 1.1"

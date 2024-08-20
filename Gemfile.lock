@@ -130,8 +130,6 @@ GEM
       deep_merge (~> 1.2, >= 1.2.1)
     connection_pool (2.4.1)
     crass (1.0.6)
-    cssbundling-rails (1.4.1)
-      railties (>= 6.0.0)
     database_cleaner (2.0.2)
       database_cleaner-active_record (>= 2, < 3)
     database_cleaner-active_record (2.2.0)
@@ -412,7 +410,6 @@ DEPENDENCIES
   capistrano-rvm
   capybara (~> 3.0)
   config
-  cssbundling-rails (~> 1.1)
   database_cleaner
   debug
   dlss-capistrano
