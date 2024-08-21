@@ -30,7 +30,7 @@
 
 		<div class="section mb-3">
       Reserve for this quarter:
-			<div id="reserve-timing" class="ml-4">
+			<div id="reserve-timing" class="ms-4">
 			  <%- if @reserve and @reserve.has_been_sent -%>
 			    <%= @reserve.term %>
 			  <%- else -%>
@@ -50,13 +50,13 @@
       <div class="section mb-3">
         <div class="sent_date">Request sent <%= @reserve.sent_date %></div>
 
-        <%= link_to('Copy this list for a new quarter', reserve_terms_path(@reserve), class: 'btn btn-cardinal-red', data: { modal: 'trigger' }) %>
+        <%= link_to('Copy this list for a new quarter', reserve_terms_path(@reserve), class: 'btn btn-secondary', data: { modal: 'trigger' }) %>
       </div>
     <% end %>
 
 		<div class="section">
-		  <label for="libraries" class="required">Send request to <span aria-hidden="true" class="badge badge-warning text-white">Required</span></label>
-			<select id="libraries" name="reserve[library]" class="form-control ml-4" autocomplete="off">
+		  <label for="libraries" class="required mb-1">Send request to <span aria-hidden="true" class="badge text-bg-warning text-white">Required</span></label>
+			<select id="libraries" name="reserve[library]" class="form-select ms-4" autocomplete="off">
 				<option disabled selected hidden value="">(select library)</option>
 				<% Settings.reserve_libraries.each do |code, library| %>
 					<option value="<%= code -%>" <%= "selected='selected'" if @reserve.library.to_s == code.to_s -%> ><%= library -%></option>
@@ -69,24 +69,35 @@
 		<div class="card-body">
 			<p>Who should the library contact about this list?</p>
 			<div class="form-group row">
-				<label for="contact_name" class="col-3 col-form-label" >Name</label> <input class="col-7 form-control" name="reserve[contact_name]" value="<%= @reserve.contact_name if @reserve -%>" id="contact_name" type="text" />
+				<label for="contact_name" class="col-3 col-form-label" >Name</label>
+			  <div class="col-9">
+					<input class="form-control" name="reserve[contact_name]" value="<%= @reserve.contact_name if @reserve -%>" id="contact_name" type="text" />
+				</div>
 			</div>
 			<div class="form-group row">
-				<label for="contact_phone" class="col-3 col-form-label" >Phone</label> <input class="col-7 form-control" name="reserve[contact_phone]"  value="<%= @reserve.contact_phone if @reserve -%>" id="contact_phone" type="tel"/>
+				<label for="contact_phone" class="col-3 col-form-label" >Phone</label>
+				<div class="col-9">
+				  <input class="form-control" name="reserve[contact_phone]"  value="<%= @reserve.contact_phone if @reserve -%>" id="contact_phone" type="tel"/>
+				</div>
 			</div>
 			<div class="form-group row">
-				<label for="contact_email" class="col-3 col-form-label" >Email</label> <input class="col-7 form-control" name="reserve[contact_email]" value="<%= @reserve.contact_email if @reserve -%>"  id="contact_email" type="email"/>
+				<label for="contact_email" class="col-3 col-form-label" >Email</label>
+				<div class="col-9">
+				  <input class="form-control" name="reserve[contact_email]" value="<%= @reserve.contact_email if @reserve -%>"  id="contact_email" type="email"/>
+				</div>
 			</div>
 				<label for="editor_sunet_ids" id="editors-list" class="col-form-label">Who can edit this list?</label>
-				<div class="form-inline row mb-1 align-items-end">
-					<span class="form-label col-3 text-right">
+				<div class="row mb-1 align-items-end">
+					<div class="form-label col-3 text-right">
 						<% ((params[:action] == "new" ? @course.instructor_sunets : @reserve.instructor_sunets) || []).each do |sunet| %>
 							<span class="text-nowrap"><%= sunet %>,</span>
 						<% end %>
-					</span>
-					<input class="form-control col-7" name="reserve[editor_sunet_ids]" value="<%= @reserve.editor_sunet_ids if @reserve -%>" id="editor_sunet_ids" type="text"/><br/>
+					</div>
+					<div class="col-9">
+					 <input class="form-control" name="reserve[editor_sunet_ids]" value="<%= @reserve.editor_sunet_ids if @reserve -%>" id="editor_sunet_ids" type="text"/>
+					</div>
 				</div>
-				<small class="form-text text-muted">(SUNet IDs, separated by commas)</small>
+				<div class="form-text text-muted">(SUNet IDs, separated by commas)</div>
 		</div>
 	</fieldset>
 </div>
@@ -107,9 +118,7 @@
 				<div class="d-flex align-items-center mt-1">
 					<div class="input-group w-auto">
 						<input class="form-control" type="text" id="sw_url" />
-						<div class="input-group-append">
-              <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item btn btn-cardinal-red") -%>
-						</div>
+            <%= link_to("add", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'true' }, :remote => true, :class => "add-sw-item btn btn-secondary") -%>
 					</div>
 					<div>
             &nbsp; - or - <%= link_to("Reserve an item that's not in SearchWorks", { :controller => 'reserves', :action => 'add_item', :format => 'js', :sw => 'false' }, :id=>"add_custom", :remote => true ) %>

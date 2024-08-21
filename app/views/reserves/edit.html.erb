@@ -2,11 +2,11 @@
 	<%= form_with model: @reserve, method: 'patch', html: { id: "reserve_form" } do |f| -%>
 		<%= render :partial => "reserves_form", :locals => {:f => f} -%>
 		<%- unless @reserve.disabled -%>
-  		<input type="submit" id="save" value="Save draft" class="btn btn-cardinal-red">
+  		<input type="submit" id="save" value="Save draft" class="btn btn-secondary">
   		<%- if @reserve.has_been_sent -%>
-  		  <input type="submit" name="send_request" value="Sent <%= @reserve.sent_date %>" class="btn btn-cardinal-red" id="send" disabled>
+  		  <input type="submit" name="send_request" value="Sent <%= @reserve.sent_date %>" class="btn btn-secondary" id="send" disabled>
   		<%- else -%>
-    	  <input type="submit" name="send_request" value="Save and SEND request" class="btn btn-cardinal-red" id="send" disabled>
+    	  <input type="submit" name="send_request" value="Save and SEND request" class="btn btn-secondary" id="send" disabled>
     	<%- end -%>
     	<%= link_to "Cancel [discard changes]", root_url, class: 'btn btn-link' -%>
 		<%- end -%>

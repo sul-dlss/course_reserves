@@ -1,13 +1,11 @@
 <div class="modal-header">
   <h1 class="modal-title h3">Select a course</h1>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 
 <div class="modal-body">
 	<table id="all_courses" data-href="<%= all_courses_response_path %>" class="table">
-		<thead class="thead-dark">
+		<thead class="bg-fog">
 			<tr>
 				<th id="course_id">Course ID</th>
 				<th id="description">Description</th>
@@ -20,12 +18,11 @@
 	</table>
 </div>
 <script type="text/javascript">
-  // data tables
-  $("#all_courses").dataTable({
-    "bProcessing": true,
-    "sAjaxSource": $("#all_courses").attr("data-href"),
-    "language": {
-      "emptyTable": "No courses found. You may not be authorized for any courses or the course list has not been released yet."
+  new DataTable("#all_courses", {
+    processing: true,
+    ajax: document.getElementById("all_courses").dataset.href,
+    language: {
+      emptyTable: "No courses found. You may not be authorized for any courses or the course list has not been released yet."
     }
   });
 </script>

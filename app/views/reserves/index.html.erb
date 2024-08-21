@@ -23,7 +23,7 @@
   </p>
 </div>
 
-<%= link_to "Create a new reserve list", all_courses_path, class: 'dialog btn btn-cardinal-red my-3', data: { modal: 'trigger' }  -%>
+<%= link_to "Create a new reserve list", all_courses_path, class: 'dialog btn btn-secondary my-3', data: { modal: 'trigger' }  -%>
 <%- unless flash[:error].blank? -%>
   <div class="error"><%=  flash[:error] %></div>
 <%- end -%>
@@ -31,7 +31,7 @@
   <% unless @reserves.blank? %>
     <h2>Modify an existing reserve list</h2>
   	<table id="my-reserves" class="table table-striped">
-  		<thead class="thead-dark">
+  		<thead class="bg-fog">
   			<tr>
   				<th id="course_id" class="text-nowrap">Course ID</th>
   				<th id="term">Term</th>
@@ -48,10 +48,10 @@
   					<td data-sort='<%= sortable_term_value(course.term) %>'><%= course.term -%></td>
             <td class="text-nowrap">
               <%= link_to edit_reserve_path(course) do %>
-                Edit <span class='sr-only'><%= "#{course.cid} - #{course.term}" %></span>
+                Edit <span class='visually-hidden'><%= "#{course.cid} - #{course.term}" %></span>
               <% end %>
-              <%= link_to reserve_terms_path(course), class: 'copy-link dialog ml-4', data: { modal: 'trigger' } do %>
-                Copy <span class='sr-only'><%= "#{course.cid} - #{course.term}" %>
+              <%= link_to reserve_terms_path(course), class: 'copy-link dialog ms-4', data: { modal: 'trigger' } do %>
+                Copy <span class='visually-hidden'><%= "#{course.cid} - #{course.term}" %>
               <% end if course.has_been_sent %>
             </td>
             <td><%= course.course_title -%></td>
@@ -65,7 +65,7 @@
   	</table>
     <script>
       $(document).ready(function() {
-        $("#my-reserves").dataTable({
+        new DataTable("#my-reserves", {
           order: [
             [ 1, "desc" ]
           ],
