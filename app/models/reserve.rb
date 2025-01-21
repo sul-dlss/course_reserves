@@ -9,8 +9,8 @@ class Reserve < ActiveRecord::Base
   # validates :contact_phone, :presence => true
   # validates :contact_email, :presence => true
 
-  serialize :item_list, Array
-  serialize :sent_item_list, Array
+  serialize :item_list, type: Array, coder: YAML
+  serialize :sent_item_list, type: Array, coder: YAML
 
   def course
     @course ||= CourseWorkCourses.new.find_by_compound_key(compound_key).first
