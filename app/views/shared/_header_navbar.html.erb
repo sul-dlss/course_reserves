@@ -5,7 +5,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse justify-content-md-end" id="user-util-collapse">
+    <div class="d-md-block d-none">
       <ul class="navbar-nav">
         <li class="nav-item">
           <%= current_user %> <span>(close browser to logout)</span>
@@ -22,5 +22,13 @@
         <div class="h1 my-3"><a href="/">Course Reserves</a></div>
       </div>
     </div>
+    <nav class="navbar collapse navbar-collapse"
+      aria-label="browse" id="user-util-collapse">
+      <ul class="navbar-nav">
+        <li class="nav-item d-md-none text-white">
+          <%= current_user %> <span>(close browser to logout)</span>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
