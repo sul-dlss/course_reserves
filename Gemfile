@@ -63,7 +63,7 @@ gem 'okcomputer'
 
 # to be run on machines w/ sqlite3
 group :development, :test do
-  gem 'sqlite3', '~> 1.4'
+  gem 'sqlite3', '~> 2.5'
   gem 'rubocop'
   gem 'rubocop-capybara'
   gem 'rubocop-factory_bot'
