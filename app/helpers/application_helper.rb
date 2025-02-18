@@ -8,9 +8,7 @@ module ApplicationHelper
     (params[:sw] == "true") || (item.key?("ckey") && item["ckey"].present?)
   end
 
-  def current_term
-    Terms.current_term
-  end
+  delegate :current_term, to: :Terms
 
   def future_terms(*args)
     Terms.future_terms(*args)
