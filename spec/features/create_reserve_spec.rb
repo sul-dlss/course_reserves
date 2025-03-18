@@ -47,6 +47,7 @@ RSpec.describe 'Creating Reserves', :js do
       click_link 'add'
 
       click_button 'Save and SEND request'
+      expect(page).to have_content 'Course Reserves List Request'
 
       ckeys = Reserve.last.item_list.pluck('ckey')
       expect(ckeys).to eq(%w[12345 54321])

@@ -28,6 +28,7 @@ RSpec.describe "Sending Emails", :js do
 
       expect do
         click_button 'Save and SEND request'
+        expect(page).to have_content 'Request sent'
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
       body = ActionMailer::Base.deliveries.last.body.to_s
@@ -52,6 +53,7 @@ RSpec.describe "Sending Emails", :js do
 
         expect do
           click_button 'Save and SEND request'
+          expect(page).to have_content 'Request sent'
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         body = ActionMailer::Base.deliveries.last.body.to_s
@@ -71,6 +73,7 @@ RSpec.describe "Sending Emails", :js do
         click_link 'add'
 
         click_button 'Save and SEND request'
+        expect(page).to have_content 'Request sent'
 
         within(first('.reserve')) do
           click_link '[delete]'
@@ -78,6 +81,7 @@ RSpec.describe "Sending Emails", :js do
 
         expect do
           click_button 'Save and SEND request'
+          expect(page).to have_content 'Request sent'
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         body = ActionMailer::Base.deliveries.last.body.to_s
@@ -89,6 +93,7 @@ RSpec.describe "Sending Emails", :js do
     end
 
     context 'when an item is edited' do
+      # rubocop:disable RSpec/ExampleLength
       it 'includes details about the updated item' do
         visit new_reserve_path(comp_key: 'AA-272C,123,456')
 
@@ -98,6 +103,7 @@ RSpec.describe "Sending Emails", :js do
         click_link 'add'
 
         click_button 'Save and SEND request'
+        expect(page).to have_content 'Request sent'
 
         within(first('.reserve')) do
           fill_in 'copies', with: 5
@@ -109,6 +115,7 @@ RSpec.describe "Sending Emails", :js do
 
         expect do
           click_button 'Save and SEND request'
+          expect(page).to have_content 'Request sent'
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         body = ActionMailer::Base.deliveries.last.body.to_s
@@ -118,6 +125,7 @@ RSpec.describe "Sending Emails", :js do
         expect(body).to include('Loan period: 1 day (WAS: 2 hours)')
         expect(body).not_to include('Dogs!') # Item not edited
       end
+      # rubocop:enable RSpec/ExampleLength
     end
   end
 
@@ -126,6 +134,7 @@ RSpec.describe "Sending Emails", :js do
       visit new_reserve_path(comp_key: 'AA-272C,123,456')
 
       click_link "Reserve an item that's not in SearchWorks"
+      expect(page).to have_content 'Course Reserves List Request'
 
       within(first('.reserve:not(#add_row)')) do
         expect(page).to have_css('textarea[name$="[title]"]', visible: true)
@@ -134,6 +143,7 @@ RSpec.describe "Sending Emails", :js do
 
       expect do
         click_button 'Save and SEND request'
+        expect(page).to have_content 'Request sent'
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
       body = ActionMailer::Base.deliveries.last.body.to_s
