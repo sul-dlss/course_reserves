@@ -45,9 +45,6 @@ gem 'cancancan'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
 gem 'jquery-rails'
 gem 'nokogiri'
 
@@ -73,7 +70,7 @@ group :development, :test do
   gem 'rubocop-rspec_rails'
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: [:mri, :mingw, :x64_mingw]
+  gem "debug"
   gem 'rspec-rails', '~> 6.0'
 end
 
