@@ -37,6 +37,9 @@ set :linked_files, %w{config/database.yml config/secrets.yml config/honeybadger.
 # Default value for linked_dirs is []
 set :linked_dirs, %w{log config/settings lib/course_work_xml lib/course_work_content tmp/pids tmp/cache tmp/sockets vendor/bundle public/system config/certs}
 
+# See https://github.com/capistrano/bundler/pull/137
+set :bundle_version, 4
+
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
