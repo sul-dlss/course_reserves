@@ -3,7 +3,7 @@
 
 [![CI](https://github.com/sul-dlss/course_reserves/actions/workflows/ruby.yml/badge.svg)](https://github.com/sul-dlss/course_reserves/actions/workflows/ruby.yml)
 
-[https://searchworks.stanford.edu/reserves](https://searchworks.stanford.edu/reserves)
+[https://reserves.stanford.edu/](https://reserves.stanford.edu/)
 
 ## Requirements
 1. Ruby & bundler
