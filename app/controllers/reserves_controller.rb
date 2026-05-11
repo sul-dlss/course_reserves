@@ -36,7 +36,7 @@ class ReservesController < ApplicationController
   end
 
   def show
-    @reserve = Reserve.find(params[:id])
+    @reserve = Reserve.find(params.expect(:id))
   end
 
   def new
