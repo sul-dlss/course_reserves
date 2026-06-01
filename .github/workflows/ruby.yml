@@ -22,4 +22,4 @@ jobs:
       - name: Run rubocop
         run: bundle exec rubocop
       - name: Run tests
-        run: bundle exec rake
+        run: bundle exec bin/ci
