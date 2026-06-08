@@ -36,5 +36,7 @@ module CourseReserves
       Symbol,
       Time
     ]
+
+    config.active_storage.variant_processor = :disabled
   end
 end
