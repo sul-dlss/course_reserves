@@ -6,7 +6,7 @@
 			<div class="d-flex justify-content-between mb-2">
 				<div class="">
 					<% if item_in_searchworks?(item) %>
-			      <p class="h5">
+			      <p class="h3">
 			        <%= link_to item['title'], "https://searchworks.stanford.edu/view/#{item['ckey']}", rel: 'noopener', target: '_blank' %>
 			      </p>
 			      <% if item['imprint'] %>
