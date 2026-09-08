@@ -103,3 +103,6 @@ end
 
 gem 'config'
 gem 'newrelic_rpm'
+
+# Pin for https://stanfordlib.slack.com/archives/C060ZTZRV/p1788872608537449
+gem 'json', '< 3'
